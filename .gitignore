@@ -1,0 +1,23 @@
+# Never commit proprietary binary content
+*.zip
+*.img
+*.mbn
+*.mdt
+*.b[0-9][0-9]
+*.elf
+*.so
+*.dll
+*.bin
+downloads/
+blobs/
+vendor/
+
+# Big raw data lives outside git (regenerable from scripts)
+*.parquet
+*.fits
+track-b-sky-mining/data/raw/
+
+# Analysis scratch
+*.pyc
+__pycache__/
+.ipynb_checkpoints/

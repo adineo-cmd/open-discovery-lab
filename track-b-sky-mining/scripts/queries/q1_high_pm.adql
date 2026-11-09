@@ -1,0 +1,12 @@
+-- q1_high_pm.adql — first-pass high proper motion search (Track B niche)
+-- Criteria: total PM > 150 mas/yr, G < 20, parallax measured.
+-- Rationale: uncatalogued ultracool dwarfs & nearby M/L/T dwarfs are faint,
+-- red, and move fast. Professional catalogs miss many (Backyard Worlds 2026).
+SELECT TOP 150000
+  source_id, ra, dec, pmra, pmdec, parallax, parallax_error,
+  phot_g_mean_mag, phot_bp_mean_mag, phot_rp_mean_mag, bp_rp, ruwe
+FROM gaiadr3.gaia_source
+WHERE (pmra*pmra + pmdec*pmdec) > 22500
+  AND phot_g_mean_mag < 20
+  AND parallax IS NOT NULL
+  AND ruwe < 1.4

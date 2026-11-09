@@ -1,0 +1,7 @@
+legacy all_high_pm.csv: 64181 rows kept, 0 malformed dropped
+part_1803_2262.csv: 17006 new rows, 1801 duplicates skipped, 0 malformed dropped
+part_2262_2720.csv: 17377 new rows, 0 duplicates skipped, 0 malformed dropped
+part_2720_3178.csv: 16849 new rows, 0 duplicates skipped, 0 malformed dropped
+part_3178_3636.csv: 14905 new rows, 0 duplicates skipped, 0 malformed dropped
+part_3636_4096.csv: 0 new rows, 0 duplicates skipped, 0 malformed dropped
+MERGED total: 130318 rows -> track-b-sky-mining/results/chunks/all_high_pm.csv (header restored, sorted by source_id)

@@ -1,23 +1,35 @@
 #!/bin/bash
-# download_known.sh — pull known-object catalogs (CFA VizieR mirror) into
-# results/known/ as plain source-id lists for vetting.
-# Sources: GCNS (J/A+A/649/A6), Kirkpatrick 20pc BD census (J/ApJS/253/7),
-# Kirkpatrick full 20pc census (J/ApJS/271/55).
-# NB: CFA mirror had transient DB outages on 2026-11-09; retry as needed.
+# download_known.sh — build known-object exclusion sets into results/known/.
+# The heavy lifting is in build_known.py; this wrapper runs it and reports.
+#
+# Routes that WORKED on 2026-11-09/10 (keep these first):
+#   GCNS main catalogue (331,312 ids):
+#     - vizier.cfa.harvard.edu catalog I/364/gcns  (NOT J/A+A/649/A6 — that
+#       catalog only carries supplementary tables table1c/table1r/progwd/
+#       table3/maglim/missing; its /ftp/ paths 404 on CFA)
+#     - MIRROR THAT WORKED: dc.g-vo.org TAP, table gcns.main, keyset-paginated
+#       with "SELECT TOP 19999 source_id FROM gcns.main WHERE source_id > N
+#       ORDER BY source_id" (G-VO caps sync at 20k rows; no LIMIT, use TOP)
+#   Kirkpatrick 2024 20-pc census:
+#     - exoplanetarchive.ipac.caltech.edu hosts the paper table as CSV
+#       (kirkpatrick2024_table4.csv already fetched); ids extracted from the
+#       'Gaia' column ("Gaia EDR3 <id>")
+#   Simbad ultracool/subdwarf/WD otypes (43,397 ids):
+#     - simbad.cfa.harvard.edu sim-tap/sync via GET (POST returns HTTP 400)
+#       with "SELECT ... FROM basic AS b JOIN ids AS i ON i.oidref=b.oid
+#       WHERE b.otype IN ('LM*','BD*','SD*','WD*') AND i.ids LIKE 'Gaia DR3 %'"
+#       (note: ids table column is `ids`, not `id`)
+#
+# Routes that FAILED on 2026-11-09/10 (do not bother):
+#   - vizier.cfa.harvard.edu: transient Postgres outage ('metaviz@CFA' no
+#     connection) for hours; retry asu-tsv if you like
+#   - vizier.nao.ac.jp, vizier.china-vo.org: connection timeouts
+#   - CDS Strasbourg (cds.unistra.fr, cdsarc): unreachable from this host
+#   - Kirkpatrick 2021 J/ApJS/253/7 tablea1: carries NO Gaia source ids
+#     (CatWISE astrometry only) — its objects are covered by the Simbad
+#     otype set and the (superseding) Kirkpatrick 2024 census
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
-K="$HERE/../results/known"
-mkdir -p "$K"
-
-fetch_tsv () {  # $1 = vizier cat path, $2 = output file, $3 = column with source id
-  echo "fetching $1 ..."
-  curl -sS -m 300 "https://vizier.cfa.harvard.edu/viz-bin/asu-tsv?-source=$1&-out=$3&-out.max=unlimited" -o /tmp/viz.tsv
-  # VizieR TSV: '#' comments, header line, then rows. Extract the id column.
-  awk -F'\t' 'BEGIN{n=0} /^#/{next} {n++; if(n==2){for(i=1;i<=NF;i++) if($i ~ /Source|Name/) c=i; next} if(c && $c ~ /^[0-9]+$/) print $c}' /tmp/viz.tsv > "$2"
-  echo "  -> $(wc -l < "$2") ids"
-}
-
-fetch_tsv "J/A%2BA/649/A6/gcns"      "$K/gcns_sources.txt"           "Source"
-fetch_tsv "J/ApJS/253/7/table1"      "$K/kirkpatrick2021_sources.txt" "Source"
-fetch_tsv "J/ApJS/271/55/table1"     "$K/kirkpatrick2024_sources.txt" "Source"
-echo "done."
+python3 -I "$HERE/build_known.py" "$@"
+echo "exclusion sets in results/known/:"
+wc -l "$HERE"/../results/known/*.txt 2>/dev/null || echo "  (none)"

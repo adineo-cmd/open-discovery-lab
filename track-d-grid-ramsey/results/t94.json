@@ -1,0 +1,6 @@
+{"m": 4, "n": 9, "model": "count", "status": "OPTIMAL", "objective": 6.0, "bound": 6.0, "wall_s": 0.1, "workers": 3, "independent_count": 6, "grid": [
+  [0, 0, 1, 1, 1, 1, 0, 1, 0],
+  [1, 1, 0, 0, 1, 1, 1, 0, 0],
+  [0, 1, 0, 1, 0, 0, 0, 0, 1],
+  [1, 0, 1, 0, 0, 0, 1, 1, 1]
+]}

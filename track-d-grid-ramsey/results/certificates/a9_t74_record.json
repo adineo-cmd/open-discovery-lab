@@ -1,0 +1,15 @@
+{
+ "what": "CP-SAT feasibility attempt at the aggregation lower bound: any 9x9 coloring with <= 74 monochromatic rectangles would close a(9)=74; INFEASIBLE would raise the lower bound to 75",
+ "model": "count model v2 (per-row-pair a00/a11, exact C(a,2) linearization), lb=74 constraint + hard ub_target=74 (objective pinned to 74), symmetry breaking x[0][0]=0 + row-lex",
+ "status": "UNKNOWN (session budget expired; run killed at ~870 s of the planned 1450 s)",
+ "config": {
+  "workers": 12,
+  "seed": 5,
+  "time_limit_s_planned": 1450,
+  "time_run_s_approx": 870
+ },
+ "witness_found": false,
+ "note": "no incumbent was ever reported in ~870 s x 12 workers (solution callback prints any obj=74 grid immediately) — negative evidence, NOT an infeasibility proof",
+ "repro": "python3 results/cpsat_a9_ub.py --hint results/sq9.json --lb 74 --ub-target 74 --time-limit 1450 --workers 12 --seed 5 --out /tmp/incT74.json --final /tmp/finT74.json",
+ "date": "2026-11-10"
+}

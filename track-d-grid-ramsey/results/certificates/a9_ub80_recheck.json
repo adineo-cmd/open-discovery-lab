@@ -1,0 +1,136 @@
+{
+ "what": "independent recheck of existing 9x9 UB witness (lab results/sq9.json)",
+ "claim": "witness has exactly 80 monochromatic rectangles",
+ "counter": "fresh pure-Python corner counter (this session, independent of solver)",
+ "independent_count": 80,
+ "solver_objective_in_file": 80.0,
+ "pair_profile": {
+  "pairs_agree4_00_2_11_2": 20,
+  "pairs_agree3": 8,
+  "pairs_agree5": 8
+ },
+ "row_weights": [
+  4,
+  4,
+  5,
+  4,
+  5,
+  4,
+  5,
+  5,
+  5
+ ],
+ "col_weights": [
+  5,
+  4,
+  5,
+  4,
+  4,
+  5,
+  4,
+  5,
+  5
+ ],
+ "grid": [
+  [
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   1,
+   1,
+   1
+  ],
+  [
+   0,
+   0,
+   1,
+   0,
+   1,
+   0,
+   0,
+   1,
+   1
+  ],
+  [
+   1,
+   0,
+   1,
+   1,
+   0,
+   1,
+   0,
+   0,
+   1
+  ],
+  [
+   1,
+   1,
+   0,
+   0,
+   1,
+   0,
+   0,
+   0,
+   1
+  ],
+  [
+   0,
+   1,
+   0,
+   1,
+   1,
+   1,
+   0,
+   1,
+   0
+  ],
+  [
+   1,
+   0,
+   0,
+   1,
+   0,
+   0,
+   1,
+   1,
+   0
+  ],
+  [
+   1,
+   0,
+   1,
+   0,
+   1,
+   1,
+   1,
+   0,
+   0
+  ],
+  [
+   1,
+   1,
+   1,
+   0,
+   0,
+   1,
+   0,
+   1,
+   0
+  ],
+  [
+   0,
+   1,
+   1,
+   1,
+   0,
+   0,
+   1,
+   0,
+   1
+  ]
+ ],
+ "date": "2026-11-10"
+}

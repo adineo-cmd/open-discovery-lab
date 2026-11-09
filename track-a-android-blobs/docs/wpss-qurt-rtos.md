@@ -73,3 +73,22 @@ content).
   and the kernel's iccnss/ipci drivers.
 - Look for the BMI/HTC boot handshake constants inside wpss.b07 code
   (immediate operands matching `ath11k` message IDs).
+
+## First XREF attempt — documented negative result (2026-11-09)
+
+Two passes to find ath11k's HTC service/message IDs inside the firmware:
+
+1. Raw LE16/LE32 byte scan of wpss.b07/b08 (tools/xref_constants.py): hits
+   everywhere — useless, small values collide with ordinary data.
+2. Immediate-operand scan of decoded RV32+RVC instructions
+   (tools/xref_immediates.py; 1,355 instructions decoded from the b07 entry
+   segment): HTC IDs 1–4 appear only as colliding small immediates
+   (`c.lui t0,2`, `c.andi a0,4`…). No meaningful match.
+
+Interpretation: the boot protocol constants are not naked immediates in the
+decoded region — they are either in literal pools (capstone stopped at the
+segment boundary; the driver-facing logic likely lives in wpss.b08's
+262 KB ucode segment), constructed arithmetically, or the firmware uses a
+different HTC dialect. **Queued:** literal-pool sweep of wpss.b08, and
+cross-referencing the IPC/WAKE strings against the kernel's iccnss/ipci
+drivers instead of ath11k's HTC layer.

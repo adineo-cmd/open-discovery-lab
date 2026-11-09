@@ -181,7 +181,7 @@ Root: `/home/aditya/.zcode/workspace/draft-6b0eaffc-c308-4302-94d4-244a23b47158/
 | `modem/image/adsp.b42` | 238,807 | - | - | `cc9e97034f17fdae` |
 | `modem/image/adsp.b43` | 12,280 | - | - | `6a0da0055192d5bb` |
 | `modem/image/adsp.b44` | 22,632 | - | - | `72d0125b539c2d9f` |
-| `modem/image/adsp.b45` | 559,104 | - | - | `92aeefb6894d553` |
+| `modem/image/adsp.b45` | 559,104 | - | - | `92aeefb68594d553` |
 | `modem/image/adsp.b47` | 6,056 | - | - | `e85f05e3c9f17fdb` |
 | `modem/image/adsp.mdt` | 7,644 | ELF | QDSP6 / Hexagon | `e0b45b296ff4e73e` |
 | `modem/image/adsp_dtb.b00` | 148 | ELF | UNKNOWN(1) | `a9302afe357e81b0` |

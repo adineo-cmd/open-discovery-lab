@@ -14,6 +14,7 @@ and raw derived data all live here.
 | **A — Android Blobs** | Reverse engineering for [LibrePhone](https://www.fsf.org/news/librephone-project) (FSF, upstream: [Codeberg/rsavoye/librephone](https://codeberg.org/rsavoye/librephone)) | No free public documentation exists for Qualcomm Hexagon/qdsp6 & WCN6750 wpss firmware internals; upstream is in analysis phase with thin per-segment docs | 🟡 active |
 | **B — Sky Mining** | Mining public astronomical survey data (Gaia DR3 / ZTF / WISE) | Public-data mining demonstrably discovers uncatalogued objects (3,006 new brown dwarfs via Backyard Worlds, May 2026); uncatalogued high-proper-motion sources remain | 🟡 active |
 | **C — Discovery Engine** | Finding *what* to research | No systematic tool cross-references open-problem registries (unsolved file formats, RE challenge spaces, open-data sets) against documented work to surface unique contribution targets | 🟢 bootstrapping |
+| **D — Grid Ramsey Minima** | Combinatorial enumeration: minimum #monochromatic rectangles in 2-colorings of grids (OEIS [A399620](https://oeis.org/A399620) / [A399621](https://oeis.org/A399621)) | OEIS entries (2026-09-05) stop at n=8 with the `more` keyword; no paper or public code computes a(9) or row 9 — first exact values and bounds landed here | 🟡 active |
 
 Writeups that mature into standalone documents go in [`papers/`](papers/).
 Running findings are logged in [`FINDINGS.md`](FINDINGS.md). Dated lab entries

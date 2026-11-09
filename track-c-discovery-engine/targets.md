@@ -34,6 +34,7 @@ Total = N+F+V (max 15). Queue order by total.
 | T-10 | FP6 sensors (SLPI/sns) firmware documentation | Android blob RE | 5 | 5 | 4 | Zero public docs | → Track A queue |
 | T-11 | Bioacoustics: open acoustic-monitoring dataset contributions | Ecology | 3 | 4 | 4 | Field open but needs hardware/recorders — deprioritized for this box | 💤 parked |
 | T-12 | Combinatorics/tiling open problems (independent-discovery friendly) | Math | 4 | 3 | 4 | Viable per Works in Progress Oct 2025; needs deep specialist time | 💤 parked |
+| T-13 | Min monochromatic rectangles in grid 2-colorings: a(9) of OEIS A399620, rows 9+ of A399621 | Math / combinatorial enumeration | 5 | 5 | 5 | OEIS entry 2026-09-05 tagged `more`; no paper/code computes a(9) (checked 2026-11-09). Track D adopted: T(9,3..6) certified, a(9) bracketed [74,80] | → Track D (kickoff done) |
 
 ## Method note
 

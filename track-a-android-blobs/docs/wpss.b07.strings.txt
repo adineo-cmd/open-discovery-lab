@@ -1,0 +1,534 @@
+YF	Ecf
+$2E9(	
+u$	E#(
+opp,opP-
+op0Lop0OA
+%F1hMc
+F1XU\Y
+F1LA}Uc
+ 	J7EB
+%E1hMo
+<o@P[o@p\o@
+do@03o@p1o@P/A
+o 0`"D
+PEao `)9q
+0 z"E}
+PEaoP?
+WU7733
+WU7733
+Dog Bark ISR fired %d 
+Dog defer_kick_timer def failed
+Dog defer_kick_timer set failed
+Dog failed to register with interrupt controller
+dog_hal_moselle_riscv.c
+EIC timer set failed
+err_inject.c
+err_inject_task stack malloc failed
+EIC timer def failed
+err_inject_task
+Error fatal injection RISCV %d
+Could not register qurt fatal notification handler
+EXCEPTION:tid=0x%x:PC=0x%x:mcause:0x%x
+Failed to register exception handler
+SOL GPIO status read failure
+err_sol.c
+SOL GPIO ISR triggered
+err_sol
+%x%x Trying to destroy nonexistent or locked mutex: 0x%x
+%x%x NOT a holder TCB: 0x%X for mutex!: 0x%X
+Signal queue set to FREE MAGIC
+Two threads waiting for same signal
+%x%x Thread start utcb=0x%X
+%x%x Thread stop utcb=0x%X
+%x%x control reached after QURTK_thread_stop. TCB: 0x%x
+qurt_lib
+%x%x futex LIFO exhausted; last node: 0x%X
+%x%x invalid futex object: 0x%X
+%x%x futex object out of bound: 0x%X
+%x%x tcb 0x%X blocked on futex 0x%X
+%x%x tcb 0x%X unblocked on futex 0x%X
+%x%x main task reached end
+%x%x Int%d not in xml
+%x%x Int%d not registered
+%x%x ISR already set for int%d
+%x%x ISR%d registered
+%x%x ISR%d already deregistered
+%x%x ISR%d deregistered
+%x%x ISR%d cleared
+%x%x Int%d enable failed
+%x%x Int%d enabled
+%x%x Int%d disable failed
+%x%x Int%d disabled
+%x%x error in setup root thread
+%x%x error in setup idle thread
+%x%x kernel tcb resource out of bound
+%x%x stack overflow in task: 0x%x
+%x%x candidate task null
+(null)
+Unable to disable the interrupt wcss_mssq6_wakeup_irq from ISR
+core_platform_riscv.c
+Unable to enable the interrupt wcss_mssq6_wakeup_irq
+Unable to disable the interrupt wcss_mssq6_wakeup_irq from disable call
+qurt_interrupt_status returned error
+GPIO attach fail with error code %d
+GPIO register fail with error code %d
+GPIO config fail with error code %d
+wcss_mssq6_wakeup interrupt registration failed
+Unable to disable the interrupt wcss_mssq6_wakeup_irq
+AONInt_Init failed
+AONIntRISCV.c
+timetick_Init: Qurt save/restore registration failed
+timetick.c
+QC_IMAGE_VERSION_STRING=WLAN.MSL.3.0.1-00591-QCAMSLSWPLZ-1
+IMAGE_VARIANT_STRING=moselle.core.prodQ
+OEM_IMAGE_VERSION_STRING=ip-10-195-200-170
+OEM_IMAGE_UUID_STRING=Q_SENTINEL_{C5C70BE7-F7ED-42DF-B7C5-BF6FCE5BA2A9}_20260306_0633
+main_task stack malloc failed
+main.c
+main_task
+Failed to allocate MHI Context
+mhi_init: Fatal error occurred
+Malloc memregion failed
+mhi_osal.c
+mhi_osal_uloginit: Null Config
+mhi_osal_uloginit: Failed to allocate mhi ulog
+mhi_osal_uloginit: Failed to allocate mhi int ulog
+MHI_INT_CTXT
+mhi_mmio_clearint_checkstate: MHI_SYS_ERR triggered by Host
+mhi_mmio.c
+mhi_mmio_set_mhistate: Invalid M state %d
+mhi_link_notifications: Unknown notification received %x          in mhiState %d
+mhi_link.c
+mhi_link_init: Failed to alloc context
+mhi_link_dstate_ack: Invalid D state: %d
+mhi_sm_process_d_state_change: Unexpected D state transition             to %d in M state: %d
+mhi_pm.c
+mhi_pm_process_d_state_change: D3cold unexpected, pending SYSERR!
+mhi_pm_process_d_state_change: Invalid D state received
+mhi_pm_enter_sleep_mode: Unidentified sleep mode %d
+mhi_sm_init: Failed to malloc rtime
+mhi_sm.c
+Received invalid MHI State from host, fatal error
+mhi_sm_run_state_machine: Unexpected state M state %d
+MHI CORE
+mhi_core_isr: Cannot mask interrupts, mhi link hw disabled
+mhi_core.c
+mhi_core_thread_entry: Worker thread couldn't create event. Fatal error
+Invalid Channel Id %d
+mhi_core_sys_error: SYSERR attempted while link hw disabled
+--------------MHI system error------------
+mhi_util_record_time_stats_ms: time_stats is NULL
+mhi_util.c
+MHI clients already disabled
+mhi_misc.c
+Couldn't malloc memregion for pcie_ctx
+pcie.c
+pcie postlinkup failed
+pcie linkup failed
+Enumeration did not happen within timeout with LTSSM state %d enum_status %d
+GCC_SNOC_PCIE_AXI_CBCR clk_off!
+GCC_PCIE_MSTR_AHB_SOC_CBCR clk_off!
+GCC_PCIE_MSTR_AHB_PCIE_CBCR clk_off! 
+GCC_PCIE_SLV_AXI_PCIE_CBCR clk_off!
+Failed to allocate pcie ulog
+pcie_osal.c
+Failed to allocate pcie int ulog
+PCIE_INT_CTXT
+Unable to create event
+Error: pcie_dev is NULL
+pcie_core.c
+Link is in l1sub with time elapsed = %d
+L1 exit timed out. LTSSM STATE = %d with time elapsed = %d
+pcie_core_control_l0s_inact_timeout : Error: pcie_dev is NULL
+pcie_core_init failed
+pcie_exit_l1ss_sleep: Fatal error for debug purpose
+Forward enable bit not high within timeout
+Did not exit from l1ss within timeout
+pcie_dev is NULL
+Unhandled SW interrupt with id %d
+Could not allocate memory for pcie_dev_info
+pcie_tgt.c
+DAL_DeviceAttach with DALDEVICEID_TLMM failed for gpio %d
+pcie_gpio.c
+unused
+Allocation failed for pcie_gpio_handle
+GPIOInt_SetTrigger failed for gpio %d
+GPIOInt_RegisterIsr failed for gpio %d
+GPIOInt_DeregisterIsr failed for gpio %d
+Timeout : PCIe PHY ready %d | pcs_status:0x%x & PLL Lock Status: %d
+pcie_res.c
+PCIe linkdown interrupt done
+pcie_i.c
+Couldn't create event for d0_wait_signal. Fatal error
+pcie_phy_init failed
+Couldn't malloc memregion for pcie_dev->pcie_coredump
+Couldn't malloc memory for internal coredump datastructure
+PCIE CoreDump Internal Initialization Failed
+Error Configuring PHY. More writes than needed
+pcie_phy.c
+Error Configuring PHY updates. More writes than needed
+osal.c : platform_osal_fatal()
+osal.c
+nSleep_lpr.c
+Light Sleep
+Deep Sleep
+nSleep_os.c
+nSleep
+nSleep_log_init.c
+cpu_vdd_lpr.c
+ABT_Init: Qurt save/restore registration failed
+ABTimeout.c
+ABTimeout: AHB Bus hang is detected, Number of bus hang detected := %d !!!
+ABT_dal.c
+ABTimeout: AHB Bus hang is detected, Name : %s Interrupt status:= %d !!!
+PC_NOC
+SYSTEM_NOC
+NOC ERROR DETECTED. PCNOCADDR 0x%x SNOCADDR 0x%x NOCMAP 0x%x
+NOC_error.c
+PCNOC_0_BUS_TIMEOUT
+PCNOC_1_BUS_TIMEOUT
+PCNOC_2_BUS_TIMEOUT
+PCNOC_3_BUS_TIMEOUT
+PCNOC_4_BUS_TIMEOUT
+PCNOC_5_BUS_TIMEOUT
+WCSS_WAHB_TSLV
+WCSS_APB_TSLV
+SNOC_TIMEOUT0_PCIE_XS
+SNOC_TIMEOUT1_QDSS_STM
+SNOC_TIMEOUT5_WCSS_MAC
+ABTimeout: Failed to register interrupt %d
+ABT_qurt_interrupt.c
+PMU_NOC
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+%X%X TCB 0x%X schedules TCB 0x%X
+ $(,04
+mhi_init: Initializing
+Failed to allocate MHI Context
+mhi_init: Failed to retrieve target info
+mhi_init: Failed to initialize MMIO
+mhi_init: MHI Core initialization failed
+mhi_init: Initialization complete
+mhi_init: Fatal error occurred
+mhi_channel_open: MHI is not yet initialized, mhiCtx is NULL
+mhi_channel_open: Invalid channel passed to channel open
+mhi_channel_open: cb or cbFunc is NULL
+mhi_channel_open: MHI is not yet initialized
+mhi_channel_open: Channel already opened
+mhi_channel_open: Failed to allocate logical channel context
+mhi_channel_read: MHI is not yet initialized, mhiCtx is NULL
+mhi_channel_read : Invalid channel %d passed to channel open
+mhi_channel_read : Client attempting to read a channel %d that wasn't opened
+mhi_channel_read : MHI channel not opened %d
+mhi_channel_read : MHI channel %d CHDB read 0x%llx
+Malloc memregion failed
+mhi_osal_uloginit: Null Config
+mhi_osal_uloginit: Failed to allocate mhi ulog
+mhi_osal_uloginit: Failed to allocate mhi int ulog
+mhi_mmio_clearint_checkstate: MHI_SYS_ERR triggered by Host
+mhi_mmio_reset: Initializing mmio complete
+mhi_mmio_init: Initializing mmio
+mhi_mmio_init: Could not allocate memory for context 
+mhi_mmio_get_mhictrlinterrupts: Clearing bits %u
+mhi_mmio_set_mhistate: Invalid M state %d
+mhi_link_map_pcie_notification_to_mhi: Received notification %x
+mhi_link_map_pcie_notification_to_mhi: Unknown notification received %x
+mhi_link_notifications: Received PCIE_PM_DEVICE_STATE_IN_D3_COLD          in mhiState %d
+mhi_link_notifications: Received PCIE_PM_DEVICE_STATE_IN_D0          in mhiState %d
+mhi_link_notifications: Received PCIE_LINK_UP          in mhiState %d
+mhi_link_notifications: Received PCIE_LINK_DOWN          in mhiState %d
+mhi_link_notifications: Received PCIE_PM_L1_INACT_TIMEOUT          in mhiState %d
+mhi_link_notifications: Received PCIE_CLKREQ_ASSERTED          in mhiState %d
+mhi_link_notifications: Unknown notification received %x          in mhiState %d
+mhi_link_init: Enter
+mhi_link_init: Failed to alloc context
+mhi_link_disable_inactivity_intr: Disarm the link inactivity timer interrupt
+mhi_link_enable_inactivity_intr: Arm the link inactivity timer interrupt
+mhi_link_enable_inactivity_intr: inact_time=0x%x timer enabled
+mhi_link_enable_inactivity_intr: timer already running
+mhi_link_release_hw_resources: Enter
+mhi_link_release_hw_resources: Device wake is high. Cannot go to LPM
+mhi_link_release_hw_resources: Core work is pending. Cannot go to LPM
+mhi_link_acquire_hw_resources: Enter
+mhi_link_dstate_ack: Invalid D state: %d
+mhi_link_suspend: Enter
+mhi_pm_init
+mhi_pm_core_wakeup
+mhi_sm_process_d_state_change: Unexpected D state transition             to %d in M state: %d
+mhi_pm_process_d_state_change: Change to MHI_LINK_D0 complete
+mhi_pm_process_d_state_change: MHI_LINK_D1 Not Supported
+mhi_pm_process_d_state_change: MHI_LINK_D2 Not Supported
+mhi_pm_process_d_state_change: Change to MHI_LINK_D3hot complete
+mhi_pm_process_d_state_change: D3cold recieved in M state %d
+mhi_pm_process_d_state_change: D3cold unexpected, pending SYSERR!
+mhi_pm_process_d_state_change: Change to MHI_LINK_D3cold complete
+mhi_pm_process_d_state_change: Invalid D state received
+mhi_pm_wakeup_host: WAKE# issued in D3cold
+mhi_pm_wakeup_host: Wake up request deferred.                       Current D state = %d
+mhi_pm_enter_sleep_mode: already in mode %d
+mhi_pm_enter_sleep_mode: Entering sleep mode %d
+mhi_pm_enter_sleep_mode : mhi_clients_disable Failed
+mhi_pm_enter_sleep_mode: Unidentified sleep mode %d
+mhi_pm_enter_sleep_mode : mhi_clients_disable Failed
+mhi_pm_exit_sleep_mode: Nothing to do already exited sleep
+mhi_pm_exit_sleep_mode: Exiting sleep mode %d
+mhi_pm_enter_sleep_mode: Unidentified sleep mode %d
+mhi_pm_set_d_state: %d
+mhi_pm_get_d_state: %d
+mhi_pm_get_device_wake_gpio_state: %d
+mhi_sm_init: Enter
+mhi_sm_init: Failed to malloc rtime
+mhi_sm_set_runtime_variables: MHI SM trigs pending bitmask: %x
+mhi_sm_set_runtime_variables: Received sm_trig:%d,         manual state machine trigger in M State = %d
+mhi_sm_set_runtime_variables: Received sm_trig:%d,         M state change event. New M State = %d
+Received invalid MHI State from host, fatal error
+mhi_sm_set_runtime_variables: Received sm_trig:%d,         D state change event. New D State = %d
+mhi_sm_set_runtime_variables: Received sm_trig:%d,         wake up request from MHI CORE
+mhi_sm_set_runtime_variables: Received sm_trig:%d,       device_wake state change
+mhi_sm_set_runtime_variables: Device wake Doorbell Deasserted, M2 Wakeup timer stopped
+mhi_sm_set_runtime_variables: Received sm_trig:%d,         link inactivity interrupt
+mhi_sm_set_runtime_variables:Received sm_trig:%d,       link up event
+mhi_sm_set_runtime_variables: Received sm_trig:%d,       link down event
+mhi_sm_set_runtime_variables: Received sm_trig:%d,         link activity event
+mhi_sm_set_runtime_variables: sm_trig = %d not handled
+mhi_sm_set_runtime_variables: No sm_trigs_pending
+mhi_sm_run_state_machine: Enter
+mhi_sm_run_state_machine: mhi_reset
+mhi_sm_run_state_machine: SYSERR in mhi_pm_process_d_state_change
+mhi_sm_run_state_machine: State transition Ready -> M0
+mhi_sm_run_state_machine: Nothing to do in READY
+mhi_sm_run_state_machine: link inactivity intr fired but device_wake asserted
+mhi_sm_run_state_machine: Work pending, don't suspend MHI
+Trying to enter M1 < %dms from last arming
+mhi_sm_run_state_machine: State transition M0 -> M1
+mhi_sm_run_state_machine: Nothing to do in M0
+mhi_sm_run_state_machine: State transition M1 -> M2
+mhi_sm_run_state_machine: exit M2 now:: device_wake %d, wakeup_pending %d, core_work_pending %d
+mhi_sm_run_state_machine: Wake up received in M1
+mhi_sm_run_state_machine: Nothing to do in M1
+mhi_sm_run_state_machine: mhi_core_requested_wakeup
+mhi_sm_run_state_machine: link_inact_intr_received
+mhi_sm_run_state_machine: Could not enter sleep mode:LPM
+mhi_sm_run_state_machine: mhi_core_requested_wakeup
+mhi_sm_run_state_machine: MHI Interrupt is set in M2
+mhi_sm_run_state_machine: Failed to exit sleep mode
+mhi_sm_run_state_machine: link_act_event_received
+mhi_sm_run_state_machine: Failed to exit sleep mode
+mhi_sm_run_state_machine: Nothing to do in M2
+mhi_sm_run_state_machine: MHI_STATE_SYSERR Nothing to do
+mhi_sm_run_state_machine: Unexpected state M state %d
+mhi_sm_run_state_machine: mhi_reset
+mhi_sm_set_trig_pending: requested : %d, configured : %d
+mhi_sm_clear_trig_pending: requested : %d, configured : %d
+mhi_sm_wakeup_from_M2: State transition M2 -> M1
+mhi_sm_wakeup_from_M2: State transition M1 -> M0
+mhi_sm_wakeup_from_M2: Cleared stale link inactivity event
+mhi_core_reset: Resetting MHI Core
+mhi_core_reset: Reset complete
+pcie exit l1ss sleep executed successfully
+pcie exit from l1 (in STM) executed successfully
+mhi_core_sys_error: Device not in D0, unable to send notification to host
+mhi_core_sys_error: Failed to generate MSI interrupt
+MSI sent to Host
+System notification registration begin
+Could not register err fatal early callback
+mhi_init: Failed to initialize MHI power management
+mhi_core_init: Could not allocate local channel context
+mhi_core_init: Could not spawn worker thread
+mhi_core_isr: Cannot mask interrupts, mhi link hw disabled
+mhi_core_thread_entry: Worker thread couldn't create event. Fatal error
+mhi_core_ack_interrupts: State of ctrl = %x
+mhi_core_ack_interrupts: device_wake db is pending
+mhi_core_ack_interrupts: Received PCIe suspend doorbell, val:0x%x
+mhi_core_ack_interrupts: CHDB is pending for %d %d 0x%x
+Invalid Channel Id %d
+mhi_core_ch_pendingclear : channel pending cleared for %d 0x%x
+Invalid Channel Id %d
+mhi_core_ch_pendingset : channel pending set for %d 0x%x
+mhi_core_process_pending_channeldb_reads: Issuing MHI_READ_DB callback to channel %d
+mhi_core_process_pending_channeldb_reads: mhi channel %d not opened
+mhi_core_scheduler: Enter
+mhi_core_scheduler: mhi_core_process_pending_channeldb_reads done
+mhi_core_scheduler: mhi_core_ack_interrupts done
+mhi_core_scheduler: mhi_core_process_idle_tasks done
+mhi_core_scheduler: Exit
+mhi_core_sys_error: SYSERR attempted while link hw disabled
+--------------MHI system error------------
+mhi_core_sys_error: Device not in D0, unable to send notification to host
+mhi_core_sys_error: Failed to generate MSI interrupt
+mhi_util_record_time_stats_ms: time_stats is NULL
+mhi_clients_enable : IE_Enabled
+mhi_clients_enable : deep sleep vote FALSE
+MHI clients already disabled
+mhi_clients_disable : IE_Disabled %d
+mhi_clients_disable : deep sleep vote TRUE %d
+mhi_request_link_resume: lpm exit cb
+mhi_clients_pending: IE interrupt pending
+Couldn't malloc memregion for pcie_ctx
+pcie postlinkup failed
+Exit: XMLH_LINK_UP
+pcie linkup failed
+Poll on linkup and BME
+Enumeration did not happen within timeout with LTSSM state %d enum_status %d
+Established PCIe link
+Registered Power management callback
+Handle is NULL
+Wakeup MSI for L1SS Sleep sent to HOST
+PERST pin high
+PERST pin low
+ltr_msg passed is NULL
+Incorrect size passed for LTR
+counters passed is NULL
+GCC_SNOC_PCIE_AXI_CBCR clk_off!
+GCC_PCIE_MSTR_AHB_SOC_CBCR clk_off!
+GCC_PCIE_MSTR_AHB_PCIE_CBCR clk_off! 
+GCC_PCIE_SLV_AXI_PCIE_CBCR clk_off!
+Requesting L1 entry
+Requesting L1 exit
+link down as part of pcie_set_debug_scenario API
+Failed to allocate pcie ulog
+Failed to allocate pcie int ulog
+Unable to create event
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Link is in l1sub with time elapsed = %d
+L1 exit timed out. LTSSM STATE = %d with time elapsed = %d
+pcie_core_req_exit_l1_stm : Enter
+Error: pcie_dev is NULL
+pcie_core_req_exit_l1_stm : pcie link down 0x%x
+Link is in l1sub with time elapsed = %d
+L1 exit timed out. LTSSM STATE = %d with time elapsed = %d
+pcie_core_req_exit_l1_stm: Exit. Brought back the link to L0
+pcie_core_control_l0s_inact_timeout : Error: pcie_dev is NULL
+L1_INACTIVITY_TIME set to 32us
+L0s_INACTIVITY_TIME set to 6us
+Error: pcie_dev is NULL
+Link is up. Errata done. Exit
+pcie_core_init failed
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Enabling PCIe Core LTSSM
+Checking if link is in l1ss with pm_stts = 0x%x pm_stts_1= 0x%x
+pcie_exit_l1ss_sleep: Fatal error for debug purpose
+L1ss Sleep Mode bit set to %d
+Forward enable bit not high within timeout
+Forward enable bit not high within timeout
+Error: pcie_dev is NULL
+LTR bit not enabled
+LTR usec was too high to fit in a message : %d
+Waiting not to send more than 2 LTRs within 500us
+Did not exit from l1ss within timeout
+LTR Msg = 0x%X 
+Error: pcie_dev (0x%X) or atu_config(0x%X) is NULL
+PCIe in ATU Bar Matched Mode
+PCIe in ATU Address Matched Mode
+Error: pcie_dev or bar_config is NULL
+bar_reg_offset = 0x%x , bar_type_val = 0x%x
+pcie_dev is NULL
+Error: pcie_dev or bar_config is NULL
+Dumping PCIe Core testbus
+Dumping PCIe PHY testbus
+Link is not up. Skipping coredump
+Dumping PCIe PHY testbus
+Dumping PCIe Core testbus
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Handled SW interrupt with id %d
+Unhandled SW interrupt with id %d
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Error: pcie_dev is NULL
+Setting the NOC handshake bit to 1
+Triggering link down as part of debug scenario
+Setting the NOC handshake bit to 0
+Could not allocate memory for pcie_dev_info
+DAL_DeviceAttach with DALDEVICEID_TLMM failed for gpio %d
+Allocation failed for pcie_gpio_handle
+Configured gpio index %d
+GPIOInt_SetTrigger failed for gpio %d
+GPIOInt_RegisterIsr failed for gpio %d
+GPIOInt_DeregisterIsr failed for gpio %d
+pcie_res_prepare_for_l2_exit 0x%x
+PHY is ready and PLL got locked
+Timeout : PCIe PHY ready %d | pcs_status:0x%x & PLL Lock Status: %d
+pcie_res_prepare_for_l2_exit : pcie_core_config_started 0x%x
+pcie_i_l1_inact_timeout_handler : Calling registered callback function!!!!!!
+PCIE link down interrupt is firing with PCIE LTSSM state = %d
+linkstatus %d. checking linkup again
+False linkdown.Not fataling.Not notifying clients
+PCIe linkdown interrupt done
+PCIE link up interrupt is firing with PCIE LTSSM state = %d
+Link is not up. Skipping coredump
+Coredump Internal Malloc Failed
+No memory allocated for pcie_dev->pcie_coredump
+Trying to collect PCIe core dump
+Trying to collect PCIe mini internal core dump
+PCIe CoreDump Internal not Initialized
+Link currently in D3cold
+Suspending PCIe
+Recovering PCIe link
+Link enumerated
+Couldn't create event for d0_wait_signal. Fatal error
+GPIO line is HIGH. Not asserting WAKE#, CHECK D3 State
+Endpoint assert WAKE#
+Endpoint deassert WAKE
+pcie_i_clkreq_isr: ENTER and clkreq gpio state : 0x%d
+pcie_i_clkreq_isr: EXIT and clkreq gpio state : 0x%d
+GPIO line is HIGH
+GPIO line is LOW
+Perst doesnt match expected nothing to do, possiblespurious interrupt or line toggled too fast
+No memory allocated for pcie_dev->pcie_coredump
+Collecting PCIe core dump while PERST assert 
+GPIO PERST# is asserted
+Cannot register for notification. Max clients reached
+System notification registration begin
+Could not register err fatal early callback
+System notification registration end
+pcie_link_info is NULL
+Link is already up. Exit
+pcie_phy_init failed
+Starting enumeration
+Started Link Training
+Couldn't malloc memregion for pcie_dev->pcie_coredump
+Saving inital PCIe core dump
+Couldn't malloc memory for internal coredump datastructure
+PCIE CoreDump Internal Initialization Failed
+Failed to enter LPM
+Error Configuring PHY. More writes than needed
+Error Configuring PHY updates. More writes than needed
+Exit: PHY INIT FAILED
+Error Configuring PHY updates. More writes than needed
+Install ISRs begin
+Install ISRs end
+nSleepLPR_setModeStatus %d 
+ nSleepos_getSolverInput : ( wakeupDeadline : 0x%llx) 
+nsleep init start
+nsleep init complete
+nSleep cycle start
+ Simple Solver 
+ Solver bypass (Hard Deadline in past: 0x%llx) 
+ Mode skipped (Name: %s) (Reason: Close to threshold) 
+Solver : mode chosen (Mode: %s) 
+nSleepTarget_setRpmHandshake %d 
+nSleepTarget_programWakeupTimer : (wakeupTime : 0x%11x) 
+nSleepTarget_disableWakeupTimer 
+nSleepTarget_programSubsystemWakeupTimer :  (aonWakeup : 0x%11x) 
+nSleepTarget_disableWakeupTimer 
+nSleepLPR_lightSleepEnter :( wakeupTime: 0x%11x ) 
+nSleepLPR_lightSleepExit:
+nSleepLPR_deepSleepEnter: (wakeupTime: 0x%11x) 
+nSleepLPR_deepSleepExit:  
+rv32i2p0_m2p0_a2p0_c2p0
+.rddm.post.text
+.rddm.pre.text
+.riscv.attributes
+.shstrtab
+.sdata
+DIAG_NON_LOAD.rodata
+.sfr.metadata

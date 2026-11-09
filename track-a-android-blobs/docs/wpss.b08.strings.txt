@@ -1,0 +1,466 @@
+WLAN_UCODE_MOSELLE_4.2.0-00000
+2025/12/15 10:55:51
+2*`bh*`
+h*`"i*`bi*`
+i*`"j*`bj*`
+PHY_noc_tout
+* *!*"
+PHY_ON:Invalid Chip ID
+(h `hh``
+`(i chi
+M3 exception triggered
+IRQ detach
+irq.cpp
+h `)hB
+4 ?!?"
+8`8h1h	
+G8h(C `
+DMA_IS_NOT_FINISHED_IN_TIME
+PRECODE_DONE_ISR_FORCE_CRASH
+bad num_radar_seg_
+bad fftReports
+DFS: Inv dst_addr
+9 ,L,^n
+@! FH"
+MURX: INV_RU_TYPE
+ERR_MU_RX_MIS_RU_AND_PBW
+h>h,h`
+ERR_CBF_DONE_CNT_MISMATCH
+ERR_PEER_ID_MISMATCH
+TXFD WrmRst:TX_in_Off
+: !T h
+TXFD: PBW>CBW
+|!bP"h
+r hBPA
+2 hBPA
+r hBPh J
+!k`*`G
+!k`*`A
+BF_PARAMS_COMMON_FORCE_CRASH
+PREFETCH_CV_COMMON_FORCE_CRASH
+CRASH_PREFET0
+TX_PKT_END_FORCE_CRASH
+CRASH_IBF_STR_PKT_END
+STEER_BF_PARAMS_CHECK_CRASH
+ )`!PC
+#!D"D2
+:@&T8x
+l1xj`P
+h1`T kG
+ERR_TXFD_INV_DMA_DONE2
+p.!%\O
+q DCXA
+ERR_MACTX_CBF_COMM_TLV
+ CpT8!
+ERR_MACTX_CBF_USR_COUNT
+ERR_MACTX_CBF_SS_PER_USER
+ERR_MACTX_CBF_PER_USR_TLV_TAG
+ERR_NOT_VALID_PHY_CV_IDX
+ERR_NO_CBF_STORAGE_IN_DDR&CVMEM
+I!a\R\
+!"X!PC
+ERR_receive_cbf_start_or_done
+ 4%	&!X
+la D`P j
+0C(` j
+ERR_ZERO_IPC_BUFFER
+ERR_append_ipc_buf_in_flight
+). D`P
+@1!P h
+@0`P!h
+@0`P!h
+PHY_SM_INV_TLV
+TT:inv MU-TX
+bad pktType 11BA_E
+bad 11BA_E in scaling
+TT:inv cp_setting
+TT:inv pkt type
+26--  
+PMI:Invld TLV tag
+pmi_sw.cpp
+ (`(h 
+rfctrl_err
+Loop_index_200
+@ *!@"
+#edpd_isr>edpd_chunks,Vreg
+DF:mu_user_pos==255-2
+"*uhuB
+ERR_DEMF_INVALID_RU_TYPE
+QA\!)	
+}A	x1p@
+F6x.pG
+Q Z`P@
+p@pGpG
+READ ALIGN
+WR ALIGN
+Q D@VO
+	@%T  
+PBS0 En w/CH capture!
+ F)FJFCF
+ F)FJFCF
+Q Z`P@
+DF:mu_user_pos==255
+F' F)F2F
+rx_num_chain greater than 2
+rx_num_chain 0
+I@	%%T
+f D	xI
+s \`TB
+uH" D)F
+4 *!*"
+@'T0hg
+Ia	hYCaSC
+4 *!*"
+DF CfgDCN:invld ch_bw
+DF:DMA d_addr not 64b align
+@(`(ha
+E'DgQL
+\Q D`PB
+c@hPc@
+Ia Z	hHCB
+A)`0pC
+ @ \`TB
+!!R i8`D
+ @ \`TB
+1	hQ`E
+F&DfQB
+$%!DaQB
+T! D`PB
+l! D`PB
+XFQF:F
+DF:inv dma_desc_pbs_ sz
+XPP8 R
+xA@&	x9pE
+h	h.`C
+P !!TB
+P`!!TB
+p`!&PO
+4 *!*"
+4 '!'"
+4 '!'"
+h	h.`O
+h	h.`@
+*!*".`
+*!*".`
+* e m 
+`B!e!m
+`R!e!m
+K`-x6x
+xA?x-x6x
+XFQF:F
+XFQF:F
+XF:FKF
+<XF2F;F
+DB:Force crash at PktEnd
+1@2@3@
+a	h7`K
+9@:@;@
+h	hHCL
+4 6!6"
+q aPP@
+4 #!#"
+>`W&:ha
+*!@"/`
+*!@"/`
+TD:Invld 1st sizing
+0F)F"F
+h	hfQO
+h	hfQA
+A	hQCL
+DC_SUB_ACTIVE_NOT_VALID
+HT>` p@
+TF tx2rx findnxtframe true
+1!R0x`
+ERROR_PHY_RTT_HDR_SIZE
+0/SD+D
+bad descr_idx
+TD:inv bw_mode
+IxWEQD
+@pG8!@
+f"!P!Xe
+N"!P!Xe
+"!P!Xb
+!g"!PA
+O"!P!Xo
+"!P!Xb
+4 D!D"
+ a!R F
+}A	xEF
+i+`Sik`
+j+aSjka
+k+bSkkb
+;F3uqu
+BF:inv Ng
+F?h4xG
+INIT fail
+global_sw.cpp
+!0`0h 
+CRASH_PREFET3
+CRASH_PREFET1
+ERR:ABORT_ACK missing
+PHY_ERR_ACTION_ASSERT
+ERR_ACT_ASYNC_RST
+PF*!F"
+1F"F+F
+PxQ8h 
+r	h)`O
+SYS:inv Q6 cmd
+SYS:VERG ver mismatch
+SYS:IPC loc-1
+SYS:IPC loc-2
+!4& pG
+!8p0F*F#F
+9x*F#F
+(0F*F#F
+(0F*F#F
+(0F*F#F
+(0F*F#F
+(0F*F#F
+NMI triggered by Q6
+CRASH_STRM_HANG_ERR
+BF_WT_NOT_READY_FORCE_CRASH
+TXFD_ZERO_ERRC
+RX_TXBF_ERR_DURING_TX
+q"`!`O
+]]]]]]]111o]
+]]]]]]]]]]]]]]]]]]]]
+CRSH:TXFDhung
+t@H!%PC
+xPH! D
+| "P"h
+q XPPE
+4 *!*"
+l0!!!PA
+01F D8dC
+! DxdC
+a#h!PA
+1 D`PA
+U D`QA
+Q@"`PA
+dQ D`P
+Q hbPA
+8V'h;D
+Q hEPA
+q hEPA
+q hEPA
+q hEPA
+q hEPA
+q hEPA
+q hEPA
+q hEPO
+Q hEPA
+q hEPA
+q hEPA
+q hEPA
+Q hEPA
+q hEPA
+q hEPO
+Q hEPA
+q hEPA
+q hEPA
+q hEPA
+q hEPA
+q hEPA
+q hEPA
+q hEPO
+Q hEPA
+q hEPA
+q hEPA
+q hEPA
+q hEPA
+TYM`(!O
+! DxaC
+! DxcC
+;ifQ&PA
+Q D`PA
+ERR_NOT_RECEIVED_EXPECT_CBF
+BF_PARAMS_USER_FORCE_CRASH
+@RF@D@
+" f8bO
+obb@@   
+7?'Q-?'
+<Q-?'Q-
+rxtd_sw.cpp
+fw_dfs.cpp
+fw_txfd.cpp
+ERR_CBF_START_CNT_MISMATCH
+SND_CBF_COMMON_FORCE_CRASH
+ERR_CBF_PER_USR_TLV_CRASH
+fw_txfd_txbfer_sounding.cpp
+PREFETCH_CV_PERUSR_FORCE_CRASH
+fw_txfd_txbfer_steering.cpp
+fw_txtd.cpp
+dispatch.cpp
+fw_err_handler.cpp
+demf_sw.cpp
+fw_dmac.cpp
+DMAC: Wait idle timeout
+fw_phyrf.cpp
+MuRx:bw_info_valid==0
+MuRx:inv ru_width
+mu_rx.cpp
+robe_sw.cpp
+system_fw.cpp
+txbf_sw.cpp
+ring_if.cpp
+=?}?}C
+_binary_padded_pcss_m3_tx_rx_bin_end
+_binary_padded_pcss_m3_tx_rx_bin_start
+_binary_padded_pcss_m3_tx_rx_bin_size
+.symtab
+.strtab
+.shstrtab
+_ADSPPM_CLK_SET
+clk set,clkId=%d reqfreq=%d grantedfreq=%d
+_ADSPPM_CLK_ENABLE
+clk enable, clkid=%d
+_ADSPPM_CLK_DISABLE
+clk disable, clkid=%d
+_ADSPPM_PWR_REQ
+PWR Req, pwrDomain=%d
+_ADSPPM_PWR_REL
+PWR Rel, pwrDomain=%d
+_ADSPPM_BW_REQ
+BW req, master=%d, slave=%d, ib=%d, ab=%d
+_ADSPPM_BW_REL
+BW rel, mater=%d, slave=%d
+_ADSPPM_DCG_ENABLE
+DCG enable, clkId=%d
+_ADSPPM_DCG_DISABLE
+DCG disable, clkId=%d
+_ADSPPM_LPASS_CORE_PWR
+LPASS CORE POWER=%d
+_ADSPPM_XPU_PROG
+XPU prog=%d
+_ADSPPM_MEM_PWR
+MEMpower,memId=%d,power=%d
+_ADSPPM_API_PWR_REQ
+APIPower Req, clientId=%d
+_ADSPPM_API_PWR_REL
+APIPower Rel, clientId=%d
+_ADSPPM_API_MIPS_REQ
+APIMIPS req, clientId=%d, mipstotal=%d, mipsfloor=%d, codelocation=%d, reqoperation=%d
+_ADSPPM_API_MIPS_REL
+APIMIPS Rel clientId=%d
+_ADSPPM_API_REG_REQ
+APIReg Request, clientId=%d, master=%d, slave=%d
+_ADSPPM_API_REG_REL
+APIReg Release, clientId=%d
+_ADSPPM_API_BW_REQ
+APIBW Request, clientId =%d master=%d, slave=%d, BW=%d, percentage=%d
+_ADSPPM_API_BW_REL
+APIBW Release, clientId=%d
+_ADSPPM_API_LATENCY_REQ
+APILatency Request, clientId=%d, latency=%dus
+_ADSPPM_API_LATENCY_REL
+APILatency Release, clientId=%d
+_ADSPPM_API_MEM_PWR_REQ
+APIMEMPower Request, clientId=%d memId=%d, power=%d
+_ADSPPM_API_MEM_PWR_REL
+APIMEMPower Release, clientId=%d
+_CLOCK_EVENT_INIT
+Clock Initialize
+_CLOCK_EVENT_CLOCK_STATUS
+Clock Name: %plugin[1]<clock>.  Requested state = %d (enable/disable), actual state (reference count) = %d
+_CLOCK_EVENT_CLOCK_FREQ
+Clock Name: %plugin[1]<clock>.  Frequency = %d (KHz)
+_CLOCK_EVENT_SOURCE_STATUS
+Clock Source %d.  Status = %d (on/off)
+_CLOCK_EVENT_SOURCE_FREQ
+Source ID: %d.  Frequency = %d (KHz)
+_CLOCK_EVENT_XO
+XO lpr = %d (enable/disable)
+_PMIC_EVENT_FIRST
+PMIC first event placeholder
+_PMIC_EVENT_LAST
+PMIC last event placeholder
+_QDSS_ISLAND_ENTER
+QDSS island enter callback
+_QDSS_ISLAND_EXIT
+QDSS island exit. SSC ETB write_ptr=%u
+_QDSS_SSC_ETB_ISLAND_MODE_START
+SSC ETB island mode trace start
+_QDSS_SSC_ETB_ISLAND_MODE_END
+SSC ETB island mode trace end
+_QDSS_SSC_ETB_NORMAL_MODE_START
+SSC ETB normal mode trace start
+_QDSS_SSC_ETB_NORMAL_MODE_END
+SSC ETB normal mode trace end
+_QDSS_SSC_TS_SYNC
+QDSS SSC timestamp sync at %llu
+_QDSS_SSC_TIMETICK
+Event [0x%x] uTimetick = %llu
+_QDSS_SAVED_TIMESTAMP
+AON and QDSS timestamp counters saved
+_QDSS_RELOADED_TIMESTAMP
+aon_pre=%llx  aon_post=%llx  qdss_pre==%llx qdss_post==%llx
+_QURT_SCHED_SWITCH
+qurt_sched_switch: hwtid=%d  pid=%d
+_QURT_IRQ
+qurt_irq: hwtid=%d  irq_id=%d
+_SLEEP_ENTER_IDLE
+Sleep entry (Context: %d)
+_SLEEP_EARLY_EXIT_STM
+Sleep early STM exit
+_SLEEP_EXIT_IDLE
+Sleep exit
+_SLEEP_EXIT_STM
+Sleep STM exit
+_SLEEP_BKOFF_STATS
+Backoff Stats (lpr: %s) (Freq: %u) (Range: %d : %d) (Total: %lld) (Count: %u) (Avg: %d)
+_SLEEP_WAKEUP
+Master wakeup stats (STM exit: 0x%llx) (RPMh time: 0x%x) (RSCc resume: 0x%llx) (RSCc Expected: 0x%llx) (Err: %lld)
+_SLEEP_ENTER_SOLVER
+Solver entry (cpu frequency: %u) (soft duration: 0x%llx) (Normal latency budget: 0x%x) (Island latency budget: 0x%x) (Island Spec: 0x%x)
+_SLEEP_SOLVER_MODE_CHOSEN
+ Mode chosen (name: %s) (Mode Index: %u)
+_SLEEP_EXIT_SOLVER
+Solver exit
+_SLEEP_MODE_ENABLED
+Mode enabled (lpr: %s) (lprm: %s)
+_SLEEP_MODE_DISABLED
+Mode disabled (lpr: %s) (lprm: %s)
+_SLEEP_ENTER_MODE
+Mode entering (lpr: %s) (lprm: %s)
+_SLEEP_EXIT_MODE
+Mode exiting (lpr: %s) (lprm: %s)
+_SLEEP_ATS_ENTER_MODE
+Mode (re)configuring (Reconfigure: %s) (lpr: %s) (lprm: %s)
+_SLEEP_ATS_EXIT_MODE
+Mode unconfiguring (lpr: %s) (lprm: %s)
+_SLEEP_SET_SEND
+ Sleep set sent
+_SLEEP_ATS_SIGNALS
+Active Solver Thread (signals: 0x%x)
+_TRACER_EVENT_INIT_COMPLETE
+Tracer event initialization complete
+_TRCEVT_TEST1
+Tracer test event
+_TRCEVT_TEST2_3ARGS
+Tracer test 3arg event %d %d %d
+_VCS_EVENT_INIT_START
+VCS Initialization Start
+_VCS_EVENT_INIT_COMPLETE
+VCS Initialization Complete
+_VCS_EVENT_RAIL_CORNER_VOTE_RECEIVED
+VCS Vote Received for Rail = %d, Corner = %d, NAS = %d
+_VCS_EVENT_RAIL_CORNER_VOTE_COMPLETE
+VCS Vote Complete for Rail = %d, Corner = %d, NAS = %d
+_VCS_EVENT_RAIL_LDO_CORNER_VOTE_RECEIVED
+VCS Vote Received for LDO = %d, Corner = %d, Rail = %d
+_VCS_EVENT_RAIL_VOLTAGE_SET
+VCS Voltage Set for Rail = %d, Corner = %d, Voltage = %d, NAS = %d
+_VCS_EVENT_RAIL_NAS_WAKEUP
+VCS NAS Wakeup for Rail = %d, Corner = %d
+_VCS_EVENT_RAIL_NAS_COMPLETE
+VCS NAS Complete for Rail = %d, Corner = %d
+_VCS_EVENT_LDO_STATE_SET
+VCS LDO State Set for LDO = %d, State = %d (1 = Enable / 0 = Disable)
+_VCS_EVENT_LDO_VOLTAGE_SET
+VCS LDO Voltage Set for LDO = %d, Corner = %d, Voltage = %d
+_VCS_EVENT_LDO_RESTRICTION
+VCS LDO Restrictions for LDO = %d, Num of Restrictions = %d
+_VCS_EVENT_CPR_STATE_REQUEST
+VCS CPR State Request for Rail = %d, State = %d (1 = Enable / 0 = Disable)
+_VCS_EVENT_RAIL_MODE_CHANGE
+VCS Mode Change for Rail = %d, Mode = %d, Data = %d

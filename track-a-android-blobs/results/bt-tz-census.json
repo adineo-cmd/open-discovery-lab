@@ -1,0 +1,845 @@
+{
+ "source": "lineage-23.2-20261109-nightly-FP6-signed.zip -> payload.bin; partitions dumped with tools/payload_dump.py (validated byte-identical to payload_dumper on the modem partition, sha256 8a329c305f42747f...)",
+ "bluetooth_partition": {
+  "format": "FAT16",
+  "size": 864256,
+  "sha256": "274cc6812df59a7cd33b50d8bda117e2e55d639e0c4a891d5c8192ec5be3507f"
+ },
+ "bluetooth_files": [
+  {
+   "path": "bluetooth/image/msbtfw12.tlv",
+   "size": 100576,
+   "sha256_16": "67a676c68912cb55",
+   "version": "BTFW.MOSELLE.1.2.0-00380-PATCHZ-1",
+   "tlv_header": {
+    "size": 100576,
+    "type": 1,
+    "length_field": 100572,
+    "total_size": 100540,
+    "data_length": 100504,
+    "format_version": 1,
+    "signature": 0,
+    "download_mode": 3,
+    "product_id": 21,
+    "rom_build": "0x102",
+    "rom_ver_kernel_math": 18,
+    "patch_version": "0x8b04",
+    "entry": "0x23dc4"
+   }
+  },
+  {
+   "path": "bluetooth/image/msbtfw11.mbn",
+   "size": 210724,
+   "sha256_16": "2cbd53302e199e21",
+   "version": "BTFW.MOSELLE.1.1.2-00064-PATCHZ-2",
+   "elf": {
+    "class": "ELF32",
+    "machine": "ARM",
+    "type": "EXEC",
+    "entry": "0x24c51",
+    "phdrs": [
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 0,
+      "vaddr": 0,
+      "filesz": 148
+     },
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 4096,
+      "vaddr": 360448,
+      "filesz": 4616
+     },
+     {
+      "type": "LOAD",
+      "flags": "XWR",
+      "offset": 12288,
+      "vaddr": 150608,
+      "filesz": 198436
+     }
+    ]
+   }
+  },
+  {
+   "path": "bluetooth/image/evrbtfw20.tlv",
+   "size": 48769,
+   "sha256_16": "a88dac0dee09e4f7",
+   "version": "BTFW.EVROS.2.0.0-00143-PATCHZ-5_DEF",
+   "tlv_header": {
+    "size": 48769,
+    "type": 1,
+    "length_field": 48765,
+    "total_size": 48733,
+    "data_length": 48697,
+    "format_version": 1,
+    "signature": 0,
+    "download_mode": 3,
+    "product_id": 29,
+    "rom_build": "0x200",
+    "rom_ver_kernel_math": 32,
+    "patch_version": "0x8c69",
+    "entry": "0x20027fc8"
+   }
+  },
+  {
+   "path": "bluetooth/image/msbtfw11.tlv",
+   "size": 198512,
+   "sha256_16": "4cb4b8381d07c42a",
+   "version": "BTFW.MOSELLE.1.1.2-00064-PATCHZ-2",
+   "tlv_header": {
+    "size": 198512,
+    "type": 1,
+    "length_field": 198508,
+    "total_size": 198476,
+    "data_length": 198440,
+    "format_version": 1,
+    "signature": 0,
+    "download_mode": 3,
+    "product_id": 21,
+    "rom_build": "0x101",
+    "rom_ver_kernel_math": 17,
+    "patch_version": "0x89fd",
+    "entry": "0x24c50"
+   }
+  },
+  {
+   "path": "bluetooth/image/msbtfw11.ver",
+   "size": 34,
+   "sha256_16": "085e678b2cc25e3e",
+   "version": "BTFW.MOSELLE.1.1.2-00064-PATCHZ-2"
+  },
+  {
+   "path": "bluetooth/image/evrbtfw20.ver",
+   "size": 35,
+   "sha256_16": "e5c011da755a4f8e",
+   "version": "BTFW.EVROS.2.0.0-00143-PATCHZ-5_DEF"
+  },
+  {
+   "path": "bluetooth/image/msbtfw12.mbn",
+   "size": 112788,
+   "sha256_16": "06cff4fb357c5d09",
+   "version": "BTFW.MOSELLE.1.2.0-00380-PATCHZ-1",
+   "elf": {
+    "class": "ELF32",
+    "machine": "ARM",
+    "type": "EXEC",
+    "entry": "0x23dc5",
+    "phdrs": [
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 0,
+      "vaddr": 0,
+      "filesz": 148
+     },
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 4096,
+      "vaddr": 253952,
+      "filesz": 4616
+     },
+     {
+      "type": "LOAD",
+      "flags": "XWR",
+      "offset": 12288,
+      "vaddr": 146884,
+      "filesz": 100500
+     }
+    ]
+   }
+  },
+  {
+   "path": "bluetooth/image/msbtfw12.ver",
+   "size": 34,
+   "sha256_16": "74d9ed895317165b",
+   "version": "BTFW.MOSELLE.1.2.0-00380-PATCHZ-1"
+  },
+  {
+   "path": "bluetooth/image/msnv12.bin",
+   "size": 6316,
+   "sha256_16": "d4f266a342ed88cf",
+   "version": "BTFW.MOSELLE.1.2.0-00380-PATCHZ-1",
+   "nvm": {
+    "headers": [
+     {
+      "offset": 0,
+      "type": 2,
+      "length": 6312
+     }
+    ],
+    "tags_walked": 64,
+    "tag1_version": "BTFW.MOSELLE.1.2.0-00380-PATCHZ-1",
+    "remaining_bytes": 0
+   }
+  },
+  {
+   "path": "bluetooth/image/evrnv20.bin",
+   "size": 8331,
+   "sha256_16": "6b75dbad35667521",
+   "version": "BTFW.EVROS.2.0.0-00143-PATCHZ-5_DEF",
+   "nvm": {
+    "headers": [
+     {
+      "offset": 0,
+      "type": 4,
+      "length": 8327
+     },
+     {
+      "offset": 4,
+      "type": 2,
+      "length": 7405
+     }
+    ],
+    "tags_walked": 66,
+    "tag1_version": "BTFW.EVROS.2.0.0-00143-PATCHZ-5_DEF",
+    "remaining_bytes": 903
+   }
+  },
+  {
+   "path": "bluetooth/image/msnv11.bin",
+   "size": 6366,
+   "sha256_16": "3111b607ee56e015",
+   "version": "BTFW.MOSELLE.1.1.2-00064-PATCHZ-2",
+   "nvm": {
+    "headers": [
+     {
+      "offset": 0,
+      "type": 2,
+      "length": 6362
+     }
+    ],
+    "tags_walked": 66,
+    "tag1_version": "BTFW.MOSELLE.1.1.2-00064-PATCHZ-2",
+    "remaining_bytes": 0
+   }
+  }
+ ],
+ "trustzone_files": [
+  {
+   "path": "tee-apps/featenabler.img",
+   "size": 106496,
+   "sha256_16": "3a15317844f7dbc6",
+   "census_family": "trustzone",
+   "version_string": "(no version string; FeatureEnabler TA keyed on soc_hw_version)",
+   "elf": {
+    "class": "ELF64",
+    "machine": "AArch64",
+    "type": "DYN",
+    "entry": "0x0",
+    "phnum": 9,
+    "phdrs": [
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 0,
+      "vaddr": 0,
+      "filesz": 568
+     },
+     {
+      "type": "LOAD",
+      "flags": "XR",
+      "offset": 4096,
+      "vaddr": 0,
+      "filesz": 61830
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 69632,
+      "vaddr": 65536,
+      "filesz": 223
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 73728,
+      "vaddr": 69632,
+      "filesz": 528
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 77824,
+      "vaddr": 73728,
+      "filesz": 913
+     },
+     {
+      "type": "DYNAMIC",
+      "flags": "WR",
+      "offset": 81920,
+      "vaddr": 77824,
+      "filesz": 304
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 81920,
+      "vaddr": 77824,
+      "filesz": 10617
+     },
+     {
+      "type": "GNU_RELRO",
+      "flags": "WR",
+      "offset": 73728,
+      "vaddr": 69632,
+      "filesz": 528
+     },
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 94208,
+      "vaddr": 0,
+      "filesz": 11232
+     }
+    ]
+   }
+  },
+  {
+   "path": "tee-apps/uefisecapp.img",
+   "size": 200704,
+   "sha256_16": "8034362fb2d6c61d",
+   "census_family": "trustzone",
+   "version_string": "(no QC build-id; UefiSecAppVersion field)",
+   "elf": {
+    "class": "ELF64",
+    "machine": "AArch64",
+    "type": "DYN",
+    "entry": "0x0",
+    "phnum": 9,
+    "phdrs": [
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 0,
+      "vaddr": 0,
+      "filesz": 568
+     },
+     {
+      "type": "LOAD",
+      "flags": "XR",
+      "offset": 4096,
+      "vaddr": 0,
+      "filesz": 118654
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 122880,
+      "vaddr": 118784,
+      "filesz": 242
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 126976,
+      "vaddr": 122880,
+      "filesz": 1224
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 131072,
+      "vaddr": 126976,
+      "filesz": 34088
+     },
+     {
+      "type": "DYNAMIC",
+      "flags": "WR",
+      "offset": 167936,
+      "vaddr": 163840,
+      "filesz": 304
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 167936,
+      "vaddr": 163840,
+      "filesz": 23471
+     },
+     {
+      "type": "GNU_RELRO",
+      "flags": "WR",
+      "offset": 126976,
+      "vaddr": 122880,
+      "filesz": 1224
+     },
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 192512,
+      "vaddr": 0,
+      "filesz": 4184
+     }
+    ]
+   }
+  },
+  {
+   "path": "tee-apps/multiimgoem.img",
+   "size": 12288,
+   "sha256_16": "ebe632dc09a8a796",
+   "census_family": "trustzone",
+   "version_string": "(no strings >= 8 chars)",
+   "elf": {
+    "class": "ELF64",
+    "machine": "ARM",
+    "type": 0,
+    "entry": "0x149fd000",
+    "phnum": 3,
+    "phdrs": [
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 0,
+      "vaddr": 0,
+      "filesz": 232
+     },
+     {
+      "type": "LOAD",
+      "flags": "",
+      "offset": 4096,
+      "vaddr": 346017792,
+      "filesz": 1112
+     },
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 8192,
+      "vaddr": 0,
+      "filesz": 3896
+     }
+    ]
+   }
+  },
+  {
+   "path": "trustzone/hyp.img",
+   "size": 1683456,
+   "sha256_16": "210cc7647547dec8",
+   "census_family": "other",
+   "version_string": "QC_IMAGE_VERSION_STRING=TZ.XF.5.28.0-00021-LANAIAAAAANAZT-1",
+   "elf": {
+    "class": "ELF64",
+    "machine": "AArch64",
+    "type": "DYN",
+    "entry": "0x80000000",
+    "phnum": 7,
+    "phdrs": [
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 0,
+      "vaddr": 0,
+      "filesz": 456
+     },
+     {
+      "type": "LOAD",
+      "flags": "XWR",
+      "offset": 4096,
+      "vaddr": 0,
+      "filesz": 1056768
+     },
+     {
+      "type": "DYNAMIC",
+      "flags": "WR",
+      "offset": 1056768,
+      "vaddr": 1052672,
+      "filesz": 424
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 1114112,
+      "vaddr": 2097152,
+      "filesz": 172032
+     },
+     {
+      "type": "TLS",
+      "flags": "WR",
+      "offset": 1282096,
+      "vaddr": 0,
+      "filesz": 0
+     },
+     {
+      "type": "LOAD",
+      "flags": "R",
+      "offset": 1286144,
+      "vaddr": 14680064,
+      "filesz": 385024
+     },
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 1671168,
+      "vaddr": 0,
+      "filesz": 11136
+     }
+    ]
+   }
+  },
+  {
+   "path": "trustzone/keymaster.img",
+   "size": 442368,
+   "sha256_16": "b5ed87a964da2b63",
+   "census_family": "trustzone",
+   "version_string": "(no QC build-id string; KeyMaster TA, keymaster64)",
+   "elf": {
+    "class": "ELF64",
+    "machine": "AArch64",
+    "type": "DYN",
+    "entry": "0x0",
+    "phnum": 9,
+    "phdrs": [
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 0,
+      "vaddr": 0,
+      "filesz": 568
+     },
+     {
+      "type": "LOAD",
+      "flags": "XR",
+      "offset": 4096,
+      "vaddr": 0,
+      "filesz": 390628
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 397312,
+      "vaddr": 393216,
+      "filesz": 250
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 401408,
+      "vaddr": 397312,
+      "filesz": 2936
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 405504,
+      "vaddr": 401408,
+      "filesz": 7044
+     },
+     {
+      "type": "DYNAMIC",
+      "flags": "WR",
+      "offset": 413696,
+      "vaddr": 409600,
+      "filesz": 304
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 413696,
+      "vaddr": 409600,
+      "filesz": 15005
+     },
+     {
+      "type": "GNU_RELRO",
+      "flags": "WR",
+      "offset": 401408,
+      "vaddr": 397312,
+      "filesz": 2936
+     },
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 430080,
+      "vaddr": 0,
+      "filesz": 11232
+     }
+    ]
+   }
+  },
+  {
+   "path": "trustzone/tz.img",
+   "size": 4034560,
+   "sha256_16": "c4acad0f8b0f5e10",
+   "census_family": "trustzone",
+   "version_string": "QC_IMAGE_VERSION_STRING=TZ.XF.5.28.0-00021-LANAIAAAAANAZT-1",
+   "elf": {
+    "class": "ELF64",
+    "machine": "AArch64",
+    "type": "EXEC",
+    "entry": "0x14693000",
+    "phnum": 45,
+    "phdrs": [
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 0,
+      "vaddr": 0,
+      "filesz": 2584
+     },
+     {
+      "type": "LOAD",
+      "flags": "XWR",
+      "offset": 4096,
+      "vaddr": 342437888,
+      "filesz": 8192
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 12288,
+      "vaddr": 342446080,
+      "filesz": 16384
+     },
+     {
+      "type": "LOAD",
+      "flags": "XWR",
+      "offset": 28672,
+      "vaddr": 342499328,
+      "filesz": 8192
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 36864,
+      "vaddr": 342507520,
+      "filesz": 8192
+     },
+     {
+      "type": "LOAD",
+      "flags": "XWR",
+      "offset": 45056,
+      "vaddr": 469803008,
+      "filesz": 81920
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 126976,
+      "vaddr": 469884928,
+      "filesz": 65536
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 192512,
+      "vaddr": 469950464,
+      "filesz": 40960
+     },
+     {
+      "type": "LOAD",
+      "flags": "XWR",
+      "offset": 233472,
+      "vaddr": 358858752,
+      "filesz": 1261568
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 1495040,
+      "vaddr": 360120320,
+      "filesz": 81920
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 1576960,
+      "vaddr": 360202240,
+      "filesz": 643072
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2220032,
+      "vaddr": 360845312,
+      "filesz": 0
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2220032,
+      "vaddr": 361218048,
+      "filesz": 61440
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2281472,
+      "vaddr": 361598976,
+      "filesz": 0
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2281472,
+      "vaddr": 361664512,
+      "filesz": 65536
+     },
+     {
+      "type": "LOAD",
+      "flags": "R",
+      "offset": 2347008,
+      "vaddr": 472907776,
+      "filesz": 4096
+     },
+     {
+      "type": "LOAD",
+      "flags": "XR",
+      "offset": 2351104,
+      "vaddr": 472911872,
+      "filesz": 36864
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2387968,
+      "vaddr": 472948736,
+      "filesz": 4096
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2392064,
+      "vaddr": 472952832,
+      "filesz": 4096
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2396160,
+      "vaddr": 472956928,
+      "filesz": 4096
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2400256,
+      "vaddr": 472961024,
+      "filesz": 8192
+     },
+     {
+      "type": "LOAD",
+      "flags": "XR",
+      "offset": 2408448,
+      "vaddr": 472969216,
+      "filesz": 581632
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2990080,
+      "vaddr": 473550848,
+      "filesz": 8192
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 2998272,
+      "vaddr": 473559040,
+      "filesz": 36864
+     },
+     {
+      "type": "LOAD",
+      "flags": "XR",
+      "offset": 3035136,
+      "vaddr": 473595904,
+      "filesz": 413696
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 3448832,
+      "vaddr": 474009600,
+      "filesz": 4096
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 3452928,
+      "vaddr": 474013696,
+      "filesz": 8192
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 3461120,
+      "vaddr": 474021888,
+      "filesz": 32768
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 3493888,
+      "vaddr": 474054656,
+      "filesz": 73728
+     },
+     {
+      "type": "LOAD",
+      "flags": "XR",
+      "offset": 3567616,
+      "vaddr": 474128384,
+      "filesz": 90112
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 3657728,
+      "vaddr": 474218496,
+      "filesz": 4096
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 3661824,
+      "vaddr": 474222592,
+      "filesz": 4096
+     }
+    ]
+   }
+  },
+  {
+   "path": "trustzone/devcfg.img",
+   "size": 49152,
+   "sha256_16": "e5e75f48b376bba2",
+   "census_family": "other",
+   "version_string": "(no version string; device-config table)",
+   "elf": {
+    "class": "ELF64",
+    "machine": "AArch64",
+    "type": "EXEC",
+    "entry": "0x1c000000",
+    "phnum": 4,
+    "phdrs": [
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 0,
+      "vaddr": 0,
+      "filesz": 288
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 4096,
+      "vaddr": 469762048,
+      "filesz": 36864
+     },
+     {
+      "type": "LOAD",
+      "flags": "WR",
+      "offset": 40960,
+      "vaddr": 2149568512,
+      "filesz": 4096
+     },
+     {
+      "type": "NULL",
+      "flags": "",
+      "offset": 45056,
+      "vaddr": 0,
+      "filesz": 3944
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+{
+  "778994474926961152": {
+    "query": "web search \"Gaia DR3 778994474926961152\" + coords \"167.4177\" \"43.8183\"",
+    "found": "no hits; only generic Gaia DR3 pages",
+    "verdict": "unknown-in-lit",
+    "note": "searched 2026-11-10; source-id and exact-coordinate searches both empty"
+  },
+  "1296928326363004416": {
+    "query": "web search \"Gaia DR3 1296928326363004416\"",
+    "found": "no hits; no page indexes this source id",
+    "verdict": "unknown-in-lit",
+    "note": "searched 2026-11-10"
+  },
+  "5390732032963218560": {
+    "query": "web search \"Gaia DR3 5390732032963218560\" OR bare id",
+    "found": "no direct matches",
+    "verdict": "unknown-in-lit",
+    "note": "searched 2026-11-10; nearest SIMBAD entry (0.76') is an unrelated '*' star"
+  },
+  "5036731890598470912": {
+    "query": "web search \"Gaia DR3 5036731890598470912\" OR bare id",
+    "found": "no results; no papers or catalog pages mention this id",
+    "verdict": "unknown-in-lit",
+    "note": "searched 2026-11-10"
+  },
+  "1173260339417897344": {
+    "query": "web search \"Gaia DR3 1173260339417897344\" OR bare id",
+    "found": "no direct matches",
+    "verdict": "unknown-in-lit",
+    "note": "searched 2026-11-10"
+  },
+  "4271023510457216896": {
+    "query": "web search \"Gaia DR3 4271023510457216896\" + 'high proper motion'",
+    "found": "no matches at all, even without the qualifier",
+    "verdict": "unknown-in-lit",
+    "note": "searched 2026-11-10"
+  }
+}

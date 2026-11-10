@@ -1,0 +1,854 @@
+{
+ "experiment": "modem-wmi-xref",
+ "date": "2026-11-11",
+ "question": "Does the FP6 modem (mpss, Hexagon) store ath11k WMI command/event IDs that the wpss does not?",
+ "verdict": "NO",
+ "verdict_basis": "Every value family found in the modem (PDEV 0x4001-0x4050, WLAN-profile 0x10001-0x10005, TDLS 0x20001-0x20002, grp 0x30, grp 0x40) is also present in the adsp.b36 negative control at comparable or higher multiplicity with the same adjacency structure; no modem-exclusive WMI signature exists; modem.b19 strings show a cellular stack (3GPP/QMI/IWLAN-S2B) with zero HTC/HTT/ath11k/WCN markers.",
+ "inputs": {
+  "ath11k_wmi_h": "instruments/ath11k/wmi.h (605 IDs = 398 CMDID + 207 EVENTID)",
+  "segments_dir": "downloads/lineage-fp6/extracted/trees/modem/image/",
+  "tool": "track-a-android-blobs/tools/xref_wmi.py (verified evaluator, reused from F-9)",
+  "encoding": "WMI_TLV_CMD(grp) = (grp<<12)|1; CMDID/EVENTID pairs share values",
+  "print_cap": "tool prints max 40 hits per segment; matched count complete"
+ },
+ "segments": {
+  "modem.b23": {
+   "size_bytes": 39608384,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 366,
+   "top40_shown": 40,
+   "family_mix_top40": {
+    "grp_0x20": 4,
+    "grp_0x04": 22,
+    "grp_0x40": 2,
+    "grp_0x10": 3,
+    "grp_0x08": 5,
+    "grp_0x18": 2,
+    "grp_0x2c": 1,
+    "grp_0x12": 1
+   },
+   "targeted_counts": {
+    "0x10001": 28,
+    "0x10002": 11,
+    "0x10003": 11,
+    "0x10004": 4,
+    "0x10005": 0,
+    "0x20001": 71,
+    "0x20002": 8,
+    "0x30001": 3,
+    "0x30002": 7,
+    "0x40001": 11,
+    "0x40002": 36
+   },
+   "window_2kb_profile_5of5": null,
+   "top_hits": [
+    {
+     "name": "WMI_TDLS_SET_STATE_CMDID",
+     "value": 131073,
+     "count": 71,
+     "first": 399524
+    },
+    {
+     "name": "WMI_TDLS_PEER_EVENTID",
+     "value": 131073,
+     "count": 71,
+     "first": 399524
+    },
+    {
+     "name": "WMI_PDEV_SET_SRG_PARTIAL_BSSID_BITMAP_CMDID",
+     "value": 16444,
+     "count": 66,
+     "first": 36389448
+    },
+    {
+     "name": "WMI_PDEV_OBSS_PD_SPATIAL_REUSE_SET_DEF_OBSS_THRESH_CMDID",
+     "value": 262146,
+     "count": 36,
+     "first": 475156
+    },
+    {
+     "name": "WMI_WLAN_PROFILE_TRIGGER_CMDID",
+     "value": 65537,
+     "count": 26,
+     "first": 4559724
+    },
+    {
+     "name": "WMI_ADDBA_STATUS_CMDID",
+     "value": 32771,
+     "count": 25,
+     "first": 2665196
+    },
+    {
+     "name": "WMI_BA_RSP_SSN_EVENTID",
+     "value": 32771,
+     "count": 25,
+     "first": 2665196
+    },
+    {
+     "name": "WMI_PDEV_PKTLOG_ENABLE_CMDID",
+     "value": 16388,
+     "count": 20,
+     "first": 1279584
+    },
+    {
+     "name": "WMI_PDEV_DUMP_EVENTID",
+     "value": 16388,
+     "count": 20,
+     "first": 1279584
+    },
+    {
+     "name": "WMI_PDEV_GET_TEMPERATURE_CMDID",
+     "value": 16400,
+     "count": 17,
+     "first": 798308
+    }
+   ]
+  },
+  "modem.b24": {
+   "size_bytes": 28947136,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 177,
+   "top40_shown": 40,
+   "family_mix_top40": {
+    "grp_0x10": 5,
+    "grp_0x04": 22,
+    "grp_0x20": 3,
+    "grp_0x30": 4,
+    "grp_0x40": 2,
+    "grp_0x0d": 1,
+    "grp_0x28": 1,
+    "grp_0x03": 2
+   },
+   "targeted_counts": {
+    "0x10001": 27,
+    "0x10002": 12,
+    "0x10003": 4,
+    "0x10004": 4,
+    "0x10005": 5,
+    "0x20001": 16,
+    "0x20002": 12,
+    "0x30001": 10,
+    "0x30002": 6,
+    "0x40001": 4,
+    "0x40002": 7
+   },
+   "window_2kb_profile_5of5": null,
+   "top_hits": [
+    {
+     "name": "WMI_WLAN_PROFILE_TRIGGER_CMDID",
+     "value": 65537,
+     "count": 26,
+     "first": 8619256
+    },
+    {
+     "name": "WMI_PDEV_SET_ANTENNA_MODE_CMDID",
+     "value": 16416,
+     "count": 17,
+     "first": 8790604
+    },
+    {
+     "name": "WMI_PDEV_RAP_INFO_EVENTID",
+     "value": 16416,
+     "count": 17,
+     "first": 8790604
+    },
+    {
+     "name": "WMI_TDLS_SET_STATE_CMDID",
+     "value": 131073,
+     "count": 16,
+     "first": 8630112
+    },
+    {
+     "name": "WMI_TDLS_PEER_EVENTID",
+     "value": 131073,
+     "count": 16,
+     "first": 8630112
+    },
+    {
+     "name": "WMI_PDEV_SET_NON_SRG_OBSS_BSSID_ENABLE_BITMAP_CMDID",
+     "value": 16448,
+     "count": 14,
+     "first": 8601936
+    },
+    {
+     "name": "WMI_WLAN_PROFILE_SET_HIST_INTVL_CMDID",
+     "value": 65538,
+     "count": 12,
+     "first": 8619156
+    },
+    {
+     "name": "WMI_TDLS_PEER_UPDATE_CMDID",
+     "value": 131074,
+     "count": 11,
+     "first": 8622924
+    },
+    {
+     "name": "WMI_SAP_OFL_ENABLE_CMDID",
+     "value": 196609,
+     "count": 10,
+     "first": 8630080
+    },
+    {
+     "name": "WMI_SAP_OFL_ADD_STA_EVENTID",
+     "value": 196609,
+     "count": 10,
+     "first": 8630080
+    }
+   ]
+  },
+  "modem.b18": {
+   "size_bytes": 12520508,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 44,
+   "top40_shown": 40,
+   "family_mix_top40": {
+    "grp_0x04": 10,
+    "grp_0x10": 2,
+    "grp_0x30": 3,
+    "grp_0x40": 2,
+    "grp_0x13": 1,
+    "grp_0x29": 2,
+    "grp_0x32": 2,
+    "grp_0x00": 1,
+    "grp_0x08": 2,
+    "grp_0x19": 2,
+    "grp_0x31": 2,
+    "grp_0x05": 4,
+    "grp_0x06": 1,
+    "grp_0x07": 1,
+    "grp_0x12": 1,
+    "grp_0x16": 1,
+    "grp_0x1d": 1,
+    "grp_0x23": 1,
+    "grp_0x39": 1
+   },
+   "targeted_counts": {
+    "0x10001": 6,
+    "0x10002": 5,
+    "0x10003": 0,
+    "0x10004": 0,
+    "0x10005": 0,
+    "0x20001": 0,
+    "0x20002": 0,
+    "0x30001": 6,
+    "0x30002": 1,
+    "0x40001": 6,
+    "0x40002": 4
+   },
+   "window_2kb_profile_5of5": null,
+   "top_hits": [
+    {
+     "name": "WMI_PDEV_TBTT_OFFSET_SYNC_CMDID",
+     "value": 16442,
+     "count": 13,
+     "first": 266436
+    },
+    {
+     "name": "WMI_WLAN_PROFILE_TRIGGER_CMDID",
+     "value": 65537,
+     "count": 6,
+     "first": 183048
+    },
+    {
+     "name": "WMI_SAP_OFL_ENABLE_CMDID",
+     "value": 196609,
+     "count": 6,
+     "first": 333688
+    },
+    {
+     "name": "WMI_PDEV_OBSS_PD_SPATIAL_REUSE_CMDID",
+     "value": 262145,
+     "count": 6,
+     "first": 214160
+    },
+    {
+     "name": "WMI_SAP_OFL_ADD_STA_EVENTID",
+     "value": 196609,
+     "count": 6,
+     "first": 333688
+    },
+    {
+     "name": "WMI_WLAN_PROFILE_SET_HIST_INTVL_CMDID",
+     "value": 65538,
+     "count": 5,
+     "first": 652752
+    },
+    {
+     "name": "WMI_WOW_UDP_SVC_OFLD_CMDID",
+     "value": 77839,
+     "count": 4,
+     "first": 490836
+    },
+    {
+     "name": "WMI_PDEV_OBSS_PD_SPATIAL_REUSE_SET_DEF_OBSS_THRESH_CMDID",
+     "value": 262146,
+     "count": 4,
+     "first": 792796
+    },
+    {
+     "name": "WMI_MODEM_POWER_STATE_CMDID",
+     "value": 167937,
+     "count": 3,
+     "first": 251032
+    },
+    {
+     "name": "WMI_SOC_SET_HW_MODE_CMDID",
+     "value": 204802,
+     "count": 3,
+     "first": 990948
+    }
+   ]
+  },
+  "modem.b19": {
+   "size_bytes": 12412695,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 118,
+   "top40_shown": 40,
+   "family_mix_top40": {
+    "grp_0x10": 5,
+    "grp_0x20": 4,
+    "grp_0x30": 4,
+    "grp_0x40": 2,
+    "grp_0x04": 14,
+    "grp_0x0a": 2,
+    "grp_0x08": 2,
+    "grp_0x05": 2,
+    "grp_0x12": 1,
+    "grp_0x03": 1,
+    "grp_0x07": 2,
+    "grp_0x00": 1
+   },
+   "targeted_counts": {
+    "0x10001": 4236,
+    "0x10002": 1091,
+    "0x10003": 550,
+    "0x10004": 822,
+    "0x10005": 605,
+    "0x20001": 497,
+    "0x20002": 1823,
+    "0x30001": 192,
+    "0x30002": 261,
+    "0x40001": 125,
+    "0x40002": 103
+   },
+   "window_2kb_profile_5of5": 5,
+   "top_hits": [
+    {
+     "name": "WMI_WLAN_PROFILE_TRIGGER_CMDID",
+     "value": 65537,
+     "count": 3668,
+     "first": 271064
+    },
+    {
+     "name": "WMI_TDLS_PEER_UPDATE_CMDID",
+     "value": 131074,
+     "count": 1241,
+     "first": 271072
+    },
+    {
+     "name": "WMI_WLAN_PROFILE_SET_HIST_INTVL_CMDID",
+     "value": 65538,
+     "count": 1091,
+     "first": 1104524
+    },
+    {
+     "name": "WMI_WLAN_PROFILE_ENABLE_PROFILE_ID_CMDID",
+     "value": 65540,
+     "count": 822,
+     "first": 564512
+    },
+    {
+     "name": "WMI_WLAN_PROFILE_LIST_PROFILE_ID_CMDID",
+     "value": 65541,
+     "count": 605,
+     "first": 1106140
+    },
+    {
+     "name": "WMI_WLAN_PROFILE_GET_PROFILE_DATA_CMDID",
+     "value": 65539,
+     "count": 550,
+     "first": 1105980
+    },
+    {
+     "name": "WMI_TDLS_SET_STATE_CMDID",
+     "value": 131073,
+     "count": 497,
+     "first": 564488
+    },
+    {
+     "name": "WMI_TDLS_PEER_EVENTID",
+     "value": 131073,
+     "count": 497,
+     "first": 564488
+    },
+    {
+     "name": "WMI_TDLS_SET_OFFCHAN_MODE_CMDID",
+     "value": 131075,
+     "count": 372,
+     "first": 1058104
+    },
+    {
+     "name": "WMI_SAP_SET_BLACKLIST_PARAM_CMDID",
+     "value": 196610,
+     "count": 261,
+     "first": 272744
+    }
+   ]
+  },
+  "modem.b20": {
+   "size_bytes": 4968456,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 216,
+   "top40_shown": 40,
+   "family_mix_top40": {
+    "grp_0x10": 3,
+    "grp_0x20": 4,
+    "grp_0x40": 2,
+    "grp_0x30": 4,
+    "grp_0x04": 8,
+    "grp_0x03": 1,
+    "grp_0x05": 12,
+    "grp_0x0d": 1,
+    "grp_0x00": 1,
+    "grp_0x06": 4
+   },
+   "targeted_counts": {
+    "0x10001": 179,
+    "0x10002": 23,
+    "0x10003": 5,
+    "0x10004": 14,
+    "0x10005": 4,
+    "0x20001": 142,
+    "0x20002": 28,
+    "0x30001": 120,
+    "0x30002": 21,
+    "0x40001": 124,
+    "0x40002": 7
+   },
+   "window_2kb_profile_5of5": 5,
+   "top_hits": [
+    {
+     "name": "WMI_WLAN_PROFILE_TRIGGER_CMDID",
+     "value": 65537,
+     "count": 175,
+     "first": 60732
+    },
+    {
+     "name": "WMI_TDLS_SET_STATE_CMDID",
+     "value": 131073,
+     "count": 142,
+     "first": 41712
+    },
+    {
+     "name": "WMI_TDLS_PEER_EVENTID",
+     "value": 131073,
+     "count": 142,
+     "first": 41712
+    },
+    {
+     "name": "WMI_PDEV_OBSS_PD_SPATIAL_REUSE_CMDID",
+     "value": 262145,
+     "count": 124,
+     "first": 519664
+    },
+    {
+     "name": "WMI_SAP_OFL_ENABLE_CMDID",
+     "value": 196609,
+     "count": 120,
+     "first": 142020
+    },
+    {
+     "name": "WMI_SAP_OFL_ADD_STA_EVENTID",
+     "value": 196609,
+     "count": 120,
+     "first": 142020
+    },
+    {
+     "name": "WMI_PDEV_SET_STATS_THRESHOLD_CMDID",
+     "value": 16423,
+     "count": 62,
+     "first": 4613376
+    },
+    {
+     "name": "WMI_TDLS_PEER_UPDATE_CMDID",
+     "value": 131074,
+     "count": 28,
+     "first": 88576
+    },
+    {
+     "name": "WMI_WLAN_PROFILE_SET_HIST_INTVL_CMDID",
+     "value": 65538,
+     "count": 23,
+     "first": 573352
+    },
+    {
+     "name": "WMI_SAP_SET_BLACKLIST_PARAM_CMDID",
+     "value": 196610,
+     "count": 21,
+     "first": 8516
+    }
+   ]
+  },
+  "modem.b13": {
+   "size_bytes": 4587520,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 123,
+   "top40_shown": 40,
+   "family_mix_top40": {
+    "grp_0x10": 1,
+    "grp_0x04": 38,
+    "grp_0x30": 1
+   },
+   "targeted_counts": {
+    "0x10001": 329,
+    "0x10002": 16,
+    "0x10003": 5,
+    "0x10004": 5,
+    "0x10005": 2,
+    "0x20001": 2,
+    "0x20002": 19,
+    "0x30001": 1,
+    "0x30002": 36,
+    "0x40001": 4,
+    "0x40002": 0
+   },
+   "window_2kb_profile_5of5": 5,
+   "top_hits": [
+    {
+     "name": "WMI_WLAN_PROFILE_TRIGGER_CMDID",
+     "value": 65537,
+     "count": 280,
+     "first": 2189364
+    },
+    {
+     "name": "WMI_PDEV_SET_CHANNEL_CMDID",
+     "value": 16386,
+     "count": 158,
+     "first": 49336
+    },
+    {
+     "name": "WMI_CHAN_INFO_EVENTID",
+     "value": 16386,
+     "count": 158,
+     "first": 49336
+    },
+    {
+     "name": "WMI_PDEV_PKTLOG_DISABLE_CMDID",
+     "value": 16389,
+     "count": 157,
+     "first": 21624
+    },
+    {
+     "name": "WMI_TX_PAUSE_EVENTID",
+     "value": 16389,
+     "count": 157,
+     "first": 21624
+    },
+    {
+     "name": "WMI_PDEV_PKTLOG_ENABLE_CMDID",
+     "value": 16388,
+     "count": 144,
+     "first": 32584
+    },
+    {
+     "name": "WMI_PDEV_DUMP_EVENTID",
+     "value": 16388,
+     "count": 144,
+     "first": 32584
+    },
+    {
+     "name": "WMI_PDEV_SET_VHT_CAP_IE_CMDID",
+     "value": 16392,
+     "count": 112,
+     "first": 44772
+    },
+    {
+     "name": "WMI_PDEV_TEMPERATURE_EVENTID",
+     "value": 16392,
+     "count": 112,
+     "first": 44772
+    },
+    {
+     "name": "WMI_PDEV_GET_TPC_CONFIG_CMDID",
+     "value": 16396,
+     "count": 80,
+     "first": 14076
+    }
+   ]
+  },
+  "modem.b11": {
+   "size_bytes": 3983696,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 122,
+   "top40_shown": 40,
+   "family_mix_top40": {
+    "grp_0x04": 40
+   },
+   "targeted_counts": {},
+   "window_2kb_profile_5of5": null,
+   "top_hits": [
+    {
+     "name": "WMI_PDEV_SET_NON_SRG_OBSS_BSSID_ENABLE_BITMAP_CMDID",
+     "value": 16448,
+     "count": 3735,
+     "first": 17892
+    },
+    {
+     "name": "WMI_PDEV_SET_SRG_PARTIAL_BSSID_BITMAP_CMDID",
+     "value": 16444,
+     "count": 2398,
+     "first": 95436
+    },
+    {
+     "name": "WMI_PDEV_GET_TEMPERATURE_CMDID",
+     "value": 16400,
+     "count": 782,
+     "first": 8524
+    },
+    {
+     "name": "WMI_PDEV_SET_HW_MODE_RESP_EVENTID",
+     "value": 16400,
+     "count": 782,
+     "first": 8524
+    },
+    {
+     "name": "WMI_PDEV_PKTLOG_ENABLE_CMDID",
+     "value": 16388,
+     "count": 719,
+     "first": 23884
+    },
+    {
+     "name": "WMI_PDEV_DUMP_EVENTID",
+     "value": 16388,
+     "count": 719,
+     "first": 23884
+    },
+    {
+     "name": "WMI_PDEV_SET_CHANNEL_CMDID",
+     "value": 16386,
+     "count": 601,
+     "first": 14940
+    },
+    {
+     "name": "WMI_CHAN_INFO_EVENTID",
+     "value": 16386,
+     "count": 601,
+     "first": 14940
+    },
+    {
+     "name": "WMI_PDEV_SET_VHT_CAP_IE_CMDID",
+     "value": 16392,
+     "count": 573,
+     "first": 11024
+    },
+    {
+     "name": "WMI_PDEV_TEMPERATURE_EVENTID",
+     "value": 16392,
+     "count": 573,
+     "first": 11024
+    }
+   ]
+  },
+  "modem.b15": {
+   "size_bytes": 3936928,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 0,
+   "top40_shown": 0,
+   "family_mix_top40": {},
+   "targeted_counts": {},
+   "window_2kb_profile_5of5": null,
+   "top_hits": []
+  },
+  "modem.b08": {
+   "size_bytes": 2490436,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 119,
+   "top40_shown": 40,
+   "family_mix_top40": {
+    "grp_0x04": 40
+   },
+   "targeted_counts": {},
+   "window_2kb_profile_5of5": null,
+   "top_hits": [
+    {
+     "name": "WMI_PDEV_SET_NON_SRG_OBSS_BSSID_ENABLE_BITMAP_CMDID",
+     "value": 16448,
+     "count": 918,
+     "first": 5028
+    },
+    {
+     "name": "WMI_PDEV_PKTLOG_ENABLE_CMDID",
+     "value": 16388,
+     "count": 438,
+     "first": 36196
+    },
+    {
+     "name": "WMI_PDEV_DUMP_EVENTID",
+     "value": 16388,
+     "count": 438,
+     "first": 36196
+    },
+    {
+     "name": "WMI_PDEV_SET_QUIET_MODE_CMDID",
+     "value": 16394,
+     "count": 424,
+     "first": 3100
+    },
+    {
+     "name": "WMI_PDEV_FIPS_EVENTID",
+     "value": 16394,
+     "count": 424,
+     "first": 3100
+    },
+    {
+     "name": "WMI_PDEV_SET_HT_CAP_IE_CMDID",
+     "value": 16391,
+     "count": 377,
+     "first": 1160
+    },
+    {
+     "name": "WMI_PDEV_L1SS_TRACK_EVENTID",
+     "value": 16391,
+     "count": 377,
+     "first": 1160
+    },
+    {
+     "name": "WMI_PDEV_SET_CHANNEL_CMDID",
+     "value": 16386,
+     "count": 354,
+     "first": 6088
+    },
+    {
+     "name": "WMI_CHAN_INFO_EVENTID",
+     "value": 16386,
+     "count": 354,
+     "first": 6088
+    },
+    {
+     "name": "WMI_PDEV_PKTLOG_DISABLE_CMDID",
+     "value": 16389,
+     "count": 351,
+     "first": 2552
+    }
+   ]
+  },
+  "modem.b25": {
+   "size_bytes": 1293698,
+   "role": "mpss modem segment",
+   "matched_wmi_ids": 0,
+   "top40_shown": 0,
+   "family_mix_top40": {},
+   "targeted_counts": {},
+   "window_2kb_profile_5of5": null,
+   "top_hits": []
+  },
+  "adsp.b36": {
+   "size_bytes": 6386356,
+   "role": "negative-control (ADSP DSP firmware)",
+   "matched_wmi_ids": 140,
+   "top40_shown": 40,
+   "family_mix_top40": {
+    "grp_0x04": 39,
+    "grp_0x10": 1
+   },
+   "targeted_counts": {
+    "0x10001": 513,
+    "0x10002": 38,
+    "0x10003": 31,
+    "0x10004": 12,
+    "0x10005": 17,
+    "0x20001": 166,
+    "0x20002": 303,
+    "0x30001": 80,
+    "0x30002": 68,
+    "0x40001": 42,
+    "0x40002": 39
+   },
+   "window_2kb_profile_5of5": 5,
+   "top_hits": [
+    {
+     "name": "WMI_PDEV_SET_CHANNEL_CMDID",
+     "value": 16386,
+     "count": 963,
+     "first": 33868
+    },
+    {
+     "name": "WMI_CHAN_INFO_EVENTID",
+     "value": 16386,
+     "count": 963,
+     "first": 33868
+    },
+    {
+     "name": "WMI_PDEV_PKTLOG_ENABLE_CMDID",
+     "value": 16388,
+     "count": 878,
+     "first": 44460
+    },
+    {
+     "name": "WMI_PDEV_DUMP_EVENTID",
+     "value": 16388,
+     "count": 878,
+     "first": 44460
+    },
+    {
+     "name": "WMI_PDEV_SET_PARAM_CMDID",
+     "value": 16387,
+     "count": 604,
+     "first": 44108
+    },
+    {
+     "name": "WMI_PHYERR_EVENTID",
+     "value": 16387,
+     "count": 604,
+     "first": 44108
+    },
+    {
+     "name": "WMI_PDEV_SET_VHT_CAP_IE_CMDID",
+     "value": 16392,
+     "count": 522,
+     "first": 46584
+    },
+    {
+     "name": "WMI_PDEV_TEMPERATURE_EVENTID",
+     "value": 16392,
+     "count": 522,
+     "first": 46584
+    },
+    {
+     "name": "WMI_PDEV_GET_TEMPERATURE_CMDID",
+     "value": 16400,
+     "count": 494,
+     "first": 61632
+    },
+    {
+     "name": "WMI_PDEV_SET_HW_MODE_RESP_EVENTID",
+     "value": 16400,
+     "count": 494,
+     "first": 61632
+    }
+   ]
+  }
+ },
+ "reference_wpss_b08_profile_counts": {
+  "0x10001": 1,
+  "0x10002": 2,
+  "0x10003": 4,
+  "0x10004": 5,
+  "0x10005": 4
+ },
+ "reproduction_note": "Strict 2048-byte sliding window on wpss.b08 yields 4/5 profile values (consistent with F-9's own first@ offsets table); the 5/5-in-2KB phrasing in F-9 does not reproduce strictly, and 5/5 passes trivially in modem and control at high counts.",
+ "strings_b19": {
+  "total_lines_n8": 52365,
+  "wmi": 1,
+  "qmi": 528,
+  "wlan": 66,
+  "htc": 0,
+  "htt": 0,
+  "ath11k": 0,
+  "wcn": 0,
+  "character": "cellular protocol/data stack: ds_3gpp_*, ds_iwlan_s2b_* (VoWiFi ePDG), QMI framework, RF L1"
+ },
+ "strings_b23": {
+  "character": "opaque packed/compressed payload; no extractable protocol strings"
+ }
+}

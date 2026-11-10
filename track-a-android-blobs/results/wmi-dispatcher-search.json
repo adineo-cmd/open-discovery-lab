@@ -1,0 +1,1347 @@
+{
+ "experiment": "wmi-dispatcher-search (F-20)",
+ "date": "2026-11-11",
+ "question": "Does WCN6750 wpss firmware construct WMI message IDs (grp<<12|1) at runtime, and where does the WMI dispatcher live?",
+ "tool": "capstone 5.0.7 RV32+RVC linear sweep with resync + constant propagation (scratch tool, wpss_disasm.py extended; not committed to git)",
+ "segments": {
+  "b07": {
+   "size": 139316,
+   "pt_loads": [
+    {
+     "idx": 0,
+     "file_offset": 16384,
+     "vaddr": "0x404000",
+     "filesz": 2330,
+     "decoded_bytes": 2330,
+     "coverage_pct": 100.0,
+     "n_insns": 915,
+     "top_mnemonics": [
+      [
+       "c.unimp",
+       424
+      ],
+      [
+       "j",
+       149
+      ],
+      [
+       "c.swsp",
+       96
+      ],
+      [
+       "c.lwsp",
+       96
+      ],
+      [
+       "sw",
+       36
+      ],
+      [
+       "addi",
+       19
+      ]
+     ]
+    },
+    {
+     "idx": 1,
+     "file_offset": 18944,
+     "vaddr": "0x404a00",
+     "filesz": 66264,
+     "decoded_bytes": 66262,
+     "coverage_pct": 100.0,
+     "n_insns": 23115,
+     "top_mnemonics": [
+      [
+       "c.li",
+       2402
+      ],
+      [
+       "addi",
+       1867
+      ],
+      [
+       "lw",
+       1777
+      ],
+      [
+       "c.lwsp",
+       1582
+      ],
+      [
+       "jal",
+       1487
+      ],
+      [
+       "c.swsp",
+       1411
+      ]
+     ]
+    },
+    {
+     "idx": 2,
+     "file_offset": 85376,
+     "vaddr": "0x404d80",
+     "filesz": 8,
+     "decoded_bytes": 8,
+     "coverage_pct": 100.0,
+     "n_insns": 4,
+     "top_mnemonics": [
+      [
+       "c.unimp",
+       4
+      ]
+     ]
+    },
+    {
+     "idx": 3,
+     "file_offset": 101592,
+     "vaddr": "0x414cd8",
+     "filesz": 20724,
+     "decoded_bytes": 19350,
+     "coverage_pct": 93.4,
+     "n_insns": 9290,
+     "top_mnemonics": [
+      [
+       "c.unimp",
+       5644
+      ],
+      [
+       "c.lui",
+       539
+      ],
+      [
+       "c.flw",
+       535
+      ],
+      [
+       "c.addi4spn",
+       431
+      ],
+      [
+       "c.nop",
+       296
+      ],
+      [
+       "c.lw",
+       279
+      ]
+     ]
+    },
+    {
+     "idx": 4,
+     "file_offset": 122320,
+     "vaddr": "0x419dd0",
+     "filesz": 0,
+     "decoded_bytes": 0,
+     "coverage_pct": 0.0,
+     "n_insns": 0,
+     "top_mnemonics": []
+    },
+    {
+     "idx": 5,
+     "file_offset": 124200,
+     "vaddr": "0x422528",
+     "filesz": 14385,
+     "decoded_bytes": 13022,
+     "coverage_pct": 90.5,
+     "n_insns": 5738,
+     "top_mnemonics": [
+      [
+       "c.flw",
+       1305
+      ],
+      [
+       "c.lui",
+       1256
+      ],
+      [
+       "c.flwsp",
+       627
+      ],
+      [
+       "c.fld",
+       449
+      ],
+      [
+       "c.lw",
+       411
+      ],
+      [
+       "c.li",
+       281
+      ]
+     ]
+    }
+   ]
+  },
+  "b08": {
+   "size": 275644,
+   "pt_loads": [
+    {
+     "idx": 0,
+     "file_offset": 4096,
+     "vaddr": "0x4ff00000",
+     "filesz": 262144,
+     "decoded_bytes": 241116,
+     "coverage_pct": 92.0,
+     "n_insns": 113728,
+     "top_mnemonics": [
+      [
+       "c.unimp",
+       37568
+      ],
+      [
+       "c.fsw",
+       14227
+      ],
+      [
+       "c.addi4spn",
+       7527
+      ],
+      [
+       "c.bnez",
+       7277
+      ],
+      [
+       "c.fld",
+       6031
+      ],
+      [
+       "c.flw",
+       4802
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "pattern_a_construction_sites": {
+  "b07": [
+   {
+    "segment_idx": 0,
+    "vaddr": "0x404000",
+    "clean_code": true,
+    "slli12_sites": [],
+    "materialized_id_shaped_constants": [],
+    "lui_smallimm_shapes_noise_count": 5
+   },
+   {
+    "segment_idx": 1,
+    "vaddr": "0x404a00",
+    "clean_code": true,
+    "slli12_sites": [
+     {
+      "addr": "0x00405872",
+      "vaddr_off": 3698,
+      "op": "slli a2, a1, 0xc",
+      "ctx": [
+       "00405854: 03a54180 lw       a0, -0x7fc(gp)",
+       "00405858: ef40f002 jal      0x482e",
+       "0040585c: 3705f803 lui      a0, 0x3f80",
+       "00405860: 8565     c.lui    a1, 1",
+       "00405862: 232ab576 sw       a1, 0x774(a0)",
+       "00405866: 9305f007 addi     a1, zero, 0x7f",
+       "0040586a: 2322b570 sw       a1, 0x704(a0)",
+       "0040586e: 83a54180 lw       a1, -0x7fc(gp)",
+       "00405872: 1396c500 slli     a2, a1, 0xc",
+       "00405876: b7068003 lui      a3, 0x3800",
+       "0040587a: a106     c.addi   a3, 8",
+       "0040587c: 3696     c.add    a2, a3",
+       "0040587e: 93061010 addi     a3, zero, 0x101",
+       "00405882: 14c2     c.sw     a3, 0(a2)",
+       "00405884: 14c6     c.sw     a3, 8(a2)",
+       "00405886: 37269003 lui      a2, 0x3902",
+       "0040588a: 0cc2     c.sw     a1, 0(a2)"
+      ],
+      "grp_imm_ctx": [
+       "1",
+       "127"
+      ]
+     },
+     {
+      "addr": "0x004119a2",
+      "vaddr_off": 53154,
+      "op": "c.slli a3, 0xc",
+      "ctx": [
+       "0041198a: 13054407 addi     a0, s0, 0x74",
+       "0041198e: 1146     c.li     a2, 4",
+       "00411990: efc06ff4 jal      -0x38ba",
+       "00411994: 03a5c193 lw       a0, -0x6c4(gp)",
+       "00411998: 83250508 lw       a1, 0x80(a0)",
+       "0041199c: 105d     c.lw     a2, 0x38(a0)",
+       "0041199e: 9445     c.lw     a3, 8(a1)",
+       "004119a0: 1106     c.addi   a2, 4",
+       "004119a2: b206     c.slli   a3, 0xc",
+       "004119a4: b296     c.add    a3, a2",
+       "004119a6: 9442     c.lw     a3, 0(a3)",
+       "004119a8: 8d8a     c.andi   a3, 3",
+       "004119aa: 74dc     c.sw     a3, 0x7c(s0)",
+       "004119ac: 8c59     c.lw     a1, 0x30(a1)",
+       "004119ae: b205     c.slli   a1, 0xc",
+       "004119b0: b295     c.add    a1, a2",
+       "004119b2: 8c41     c.lw     a1, 0(a1)"
+      ],
+      "grp_imm_ctx": [
+       "116",
+       "4(WMI_GRP PDEV)"
+      ]
+     },
+     {
+      "addr": "0x004119ae",
+      "vaddr_off": 53166,
+      "op": "c.slli a1, 0xc",
+      "ctx": [
+       "0041199e: 9445     c.lw     a3, 8(a1)",
+       "004119a0: 1106     c.addi   a2, 4",
+       "004119a2: b206     c.slli   a3, 0xc",
+       "004119a4: b296     c.add    a3, a2",
+       "004119a6: 9442     c.lw     a3, 0(a3)",
+       "004119a8: 8d8a     c.andi   a3, 3",
+       "004119aa: 74dc     c.sw     a3, 0x7c(s0)",
+       "004119ac: 8c59     c.lw     a1, 0x30(a1)",
+       "004119ae: b205     c.slli   a1, 0xc",
+       "004119b0: b295     c.add    a1, a2",
+       "004119b2: 8c41     c.lw     a1, 0(a1)",
+       "004119b4: 8d89     c.andi   a1, 3",
+       "004119b6: 2cdc     c.sw     a1, 0x78(s0)",
+       "004119b8: 832a4500 lw       s5, 4(a0)",
+       "004119bc: 93854a15 addi     a1, s5, 0x154",
+       "004119c0: 1305c408 addi     a0, s0, 0x8c",
+       "004119c4: 1146     c.li     a2, 4"
+      ],
+      "grp_imm_ctx": [
+       "140",
+       "4(WMI_GRP PDEV)"
+      ]
+     },
+     {
+      "addr": "0x004120fa",
+      "vaddr_off": 55034,
+      "op": "c.slli a1, 0xc",
+      "ctx": [
+       "004120e4: 06c6     c.swsp   ra, 0xc(sp)",
+       "004120e6: 22c4     c.swsp   s0, 8(sp)",
+       "004120e8: 83a58191 lw       a1, -0x6e8(gp)",
+       "004120ec: 03a5c193 lw       a0, -0x6c4(gp)",
+       "004120f0: 95cd     c.beqz   a1, 0x3c",
+       "004120f2: 83250508 lw       a1, 0x80(a0)",
+       "004120f6: cc4d     c.lw     a1, 0x1c(a1)",
+       "004120f8: 085d     c.lw     a0, 0x38(a0)",
+       "004120fa: b205     c.slli   a1, 0xc",
+       "004120fc: 2e95     c.add    a0, a1",
+       "004120fe: 93053008 addi     a1, zero, 0x83",
+       "00412102: 0cc1     c.sw     a1, 0(a0)",
+       "00412104: 13052003 addi     a0, zero, 0x32",
+       "00412108: efc0cf83 jal      -0x3fc4",
+       "0041210c: 03a5c193 lw       a0, -0x6c4(gp)",
+       "00412110: 83250508 lw       a1, 0x80(a0)",
+       "00412114: cc4d     c.lw     a1, 0x1c(a1)"
+      ],
+      "grp_imm_ctx": [
+       "131",
+       "50(WMI_GRP 0x32)"
+      ]
+     },
+     {
+      "addr": "0x00412118",
+      "vaddr_off": 55064,
+      "op": "c.slli a1, 0xc",
+      "ctx": [
+       "004120fe: 93053008 addi     a1, zero, 0x83",
+       "00412102: 0cc1     c.sw     a1, 0(a0)",
+       "00412104: 13052003 addi     a0, zero, 0x32",
+       "00412108: efc0cf83 jal      -0x3fc4",
+       "0041210c: 03a5c193 lw       a0, -0x6c4(gp)",
+       "00412110: 83250508 lw       a1, 0x80(a0)",
+       "00412114: cc4d     c.lw     a1, 0x1c(a1)",
+       "00412116: 085d     c.lw     a0, 0x38(a0)",
+       "00412118: b205     c.slli   a1, 0xc",
+       "0041211a: 2e95     c.add    a0, a1",
+       "0041211c: 9305002c addi     a1, zero, 0x2c0",
+       "00412120: 0cc1     c.sw     a1, 0(a0)",
+       "00412122: 2244     c.lwsp   s0, 8(sp)",
+       "00412124: b240     c.lwsp   ra, 0xc(sp)",
+       "00412126: 4101     c.addi   sp, 0x10",
+       "00412128: 6f000002 j        0x20",
+       "0041212c: 1305850c addi     a0, a0, 0xc8"
+      ],
+      "grp_imm_ctx": [
+       "131",
+       "50(WMI_GRP 0x32)",
+       "200"
+      ]
+     }
+    ],
+    "materialized_id_shaped_constants": [],
+    "lui_smallimm_shapes_noise_count": 120
+   },
+   {
+    "segment_idx": 2,
+    "vaddr": "0x404d80",
+    "clean_code": true,
+    "slli12_sites": [],
+    "materialized_id_shaped_constants": [],
+    "lui_smallimm_shapes_noise_count": 0
+   },
+   {
+    "segment_idx": 3,
+    "vaddr": "0x414cd8",
+    "clean_code": false,
+    "slli12_sites": [],
+    "materialized_id_shaped_constants": [],
+    "lui_smallimm_shapes_noise_count": 344
+   },
+   {
+    "segment_idx": 4,
+    "vaddr": "0x419dd0",
+    "clean_code": false,
+    "slli12_sites": [],
+    "materialized_id_shaped_constants": [],
+    "lui_smallimm_shapes_noise_count": 0
+   },
+   {
+    "segment_idx": 5,
+    "vaddr": "0x422528",
+    "clean_code": false,
+    "slli12_sites": [],
+    "materialized_id_shaped_constants": [],
+    "lui_smallimm_shapes_noise_count": 853
+   }
+  ],
+  "b08": [
+   {
+    "segment_idx": 0,
+    "vaddr": "0x4ff00000",
+    "clean_code": false,
+    "slli12_sites": [
+     {
+      "addr": "0x4ff128d6",
+      "op": "c.slli a7, 0xc"
+     },
+     {
+      "addr": "0x4ff14b1a",
+      "op": "c.slli sp, 0xc"
+     },
+     {
+      "addr": "0x4ff14b74",
+      "op": "c.slli tp, 0xc"
+     },
+     {
+      "addr": "0x4ff18254",
+      "op": "c.slli sp, 0xc"
+     },
+     {
+      "addr": "0x4ff1b3c0",
+      "op": "c.slli tp, 0xc"
+     },
+     {
+      "addr": "0x4ff1c138",
+      "op": "c.slli a4, 0xc"
+     },
+     {
+      "addr": "0x4ff1c710",
+      "op": "c.slli a2, 0xc"
+     },
+     {
+      "addr": "0x4ff1d556",
+      "op": "c.slli s5, 0xc"
+     },
+     {
+      "addr": "0x4ff1ef42",
+      "op": "c.slli s5, 0xc"
+     },
+     {
+      "addr": "0x4ff23ad0",
+      "op": "c.slli sp, 0xc"
+     },
+     {
+      "addr": "0x4ff29d64",
+      "op": "c.slli sp, 0xc"
+     },
+     {
+      "addr": "0x4ff339fe",
+      "op": "c.slli a7, 0xc"
+     },
+     {
+      "addr": "0x4ff35a2a",
+      "op": "c.slli s2, 0xc"
+     },
+     {
+      "addr": "0x4ff36f5a",
+      "op": "c.slli ra, 0xc"
+     },
+     {
+      "addr": "0x4ff36fc6",
+      "op": "c.slli a5, 0xc"
+     },
+     {
+      "addr": "0x4ff36fd4",
+      "op": "c.slli a5, 0xc"
+     },
+     {
+      "addr": "0x4ff36fe6",
+      "op": "c.slli a5, 0xc"
+     },
+     {
+      "addr": "0x4ff36ff4",
+      "op": "c.slli a5, 0xc"
+     },
+     {
+      "addr": "0x4ff3703c",
+      "op": "c.slli gp, 0xc"
+     },
+     {
+      "addr": "0x4ff37766",
+      "op": "c.slli sp, 0xc"
+     },
+     {
+      "addr": "0x4ff37ab6",
+      "op": "c.slli ra, 0xc"
+     },
+     {
+      "addr": "0x4ff37b44",
+      "op": "c.slli s0, 0xc"
+     }
+    ],
+    "materialized_id_shaped_constants": [],
+    "lui_smallimm_shapes_noise_count": 800
+   }
+  ],
+  "b07_slli12_full_contexts": [
+   {
+    "addr": "0x00405872",
+    "vaddr_off": 3698,
+    "op": "slli a2, a1, 0xc",
+    "ctx": [
+     "00405854: 03a54180 lw       a0, -0x7fc(gp)",
+     "00405858: ef40f002 jal      0x482e",
+     "0040585c: 3705f803 lui      a0, 0x3f80",
+     "00405860: 8565     c.lui    a1, 1",
+     "00405862: 232ab576 sw       a1, 0x774(a0)",
+     "00405866: 9305f007 addi     a1, zero, 0x7f",
+     "0040586a: 2322b570 sw       a1, 0x704(a0)",
+     "0040586e: 83a54180 lw       a1, -0x7fc(gp)",
+     "00405872: 1396c500 slli     a2, a1, 0xc",
+     "00405876: b7068003 lui      a3, 0x3800",
+     "0040587a: a106     c.addi   a3, 8",
+     "0040587c: 3696     c.add    a2, a3",
+     "0040587e: 93061010 addi     a3, zero, 0x101",
+     "00405882: 14c2     c.sw     a3, 0(a2)",
+     "00405884: 14c6     c.sw     a3, 8(a2)",
+     "00405886: 37269003 lui      a2, 0x3902",
+     "0040588a: 0cc2     c.sw     a1, 0(a2)"
+    ],
+    "grp_imm_ctx": [
+     "1",
+     "127"
+    ]
+   },
+   {
+    "addr": "0x004119a2",
+    "vaddr_off": 53154,
+    "op": "c.slli a3, 0xc",
+    "ctx": [
+     "0041198a: 13054407 addi     a0, s0, 0x74",
+     "0041198e: 1146     c.li     a2, 4",
+     "00411990: efc06ff4 jal      -0x38ba",
+     "00411994: 03a5c193 lw       a0, -0x6c4(gp)",
+     "00411998: 83250508 lw       a1, 0x80(a0)",
+     "0041199c: 105d     c.lw     a2, 0x38(a0)",
+     "0041199e: 9445     c.lw     a3, 8(a1)",
+     "004119a0: 1106     c.addi   a2, 4",
+     "004119a2: b206     c.slli   a3, 0xc",
+     "004119a4: b296     c.add    a3, a2",
+     "004119a6: 9442     c.lw     a3, 0(a3)",
+     "004119a8: 8d8a     c.andi   a3, 3",
+     "004119aa: 74dc     c.sw     a3, 0x7c(s0)",
+     "004119ac: 8c59     c.lw     a1, 0x30(a1)",
+     "004119ae: b205     c.slli   a1, 0xc",
+     "004119b0: b295     c.add    a1, a2",
+     "004119b2: 8c41     c.lw     a1, 0(a1)"
+    ],
+    "grp_imm_ctx": [
+     "116",
+     "4(WMI_GRP PDEV)"
+    ]
+   },
+   {
+    "addr": "0x004119ae",
+    "vaddr_off": 53166,
+    "op": "c.slli a1, 0xc",
+    "ctx": [
+     "0041199e: 9445     c.lw     a3, 8(a1)",
+     "004119a0: 1106     c.addi   a2, 4",
+     "004119a2: b206     c.slli   a3, 0xc",
+     "004119a4: b296     c.add    a3, a2",
+     "004119a6: 9442     c.lw     a3, 0(a3)",
+     "004119a8: 8d8a     c.andi   a3, 3",
+     "004119aa: 74dc     c.sw     a3, 0x7c(s0)",
+     "004119ac: 8c59     c.lw     a1, 0x30(a1)",
+     "004119ae: b205     c.slli   a1, 0xc",
+     "004119b0: b295     c.add    a1, a2",
+     "004119b2: 8c41     c.lw     a1, 0(a1)",
+     "004119b4: 8d89     c.andi   a1, 3",
+     "004119b6: 2cdc     c.sw     a1, 0x78(s0)",
+     "004119b8: 832a4500 lw       s5, 4(a0)",
+     "004119bc: 93854a15 addi     a1, s5, 0x154",
+     "004119c0: 1305c408 addi     a0, s0, 0x8c",
+     "004119c4: 1146     c.li     a2, 4"
+    ],
+    "grp_imm_ctx": [
+     "140",
+     "4(WMI_GRP PDEV)"
+    ]
+   },
+   {
+    "addr": "0x004120fa",
+    "vaddr_off": 55034,
+    "op": "c.slli a1, 0xc",
+    "ctx": [
+     "004120e4: 06c6     c.swsp   ra, 0xc(sp)",
+     "004120e6: 22c4     c.swsp   s0, 8(sp)",
+     "004120e8: 83a58191 lw       a1, -0x6e8(gp)",
+     "004120ec: 03a5c193 lw       a0, -0x6c4(gp)",
+     "004120f0: 95cd     c.beqz   a1, 0x3c",
+     "004120f2: 83250508 lw       a1, 0x80(a0)",
+     "004120f6: cc4d     c.lw     a1, 0x1c(a1)",
+     "004120f8: 085d     c.lw     a0, 0x38(a0)",
+     "004120fa: b205     c.slli   a1, 0xc",
+     "004120fc: 2e95     c.add    a0, a1",
+     "004120fe: 93053008 addi     a1, zero, 0x83",
+     "00412102: 0cc1     c.sw     a1, 0(a0)",
+     "00412104: 13052003 addi     a0, zero, 0x32",
+     "00412108: efc0cf83 jal      -0x3fc4",
+     "0041210c: 03a5c193 lw       a0, -0x6c4(gp)",
+     "00412110: 83250508 lw       a1, 0x80(a0)",
+     "00412114: cc4d     c.lw     a1, 0x1c(a1)"
+    ],
+    "grp_imm_ctx": [
+     "131",
+     "50(WMI_GRP 0x32)"
+    ]
+   },
+   {
+    "addr": "0x00412118",
+    "vaddr_off": 55064,
+    "op": "c.slli a1, 0xc",
+    "ctx": [
+     "004120fe: 93053008 addi     a1, zero, 0x83",
+     "00412102: 0cc1     c.sw     a1, 0(a0)",
+     "00412104: 13052003 addi     a0, zero, 0x32",
+     "00412108: efc0cf83 jal      -0x3fc4",
+     "0041210c: 03a5c193 lw       a0, -0x6c4(gp)",
+     "00412110: 83250508 lw       a1, 0x80(a0)",
+     "00412114: cc4d     c.lw     a1, 0x1c(a1)",
+     "00412116: 085d     c.lw     a0, 0x38(a0)",
+     "00412118: b205     c.slli   a1, 0xc",
+     "0041211a: 2e95     c.add    a0, a1",
+     "0041211c: 9305002c addi     a1, zero, 0x2c0",
+     "00412120: 0cc1     c.sw     a1, 0(a0)",
+     "00412122: 2244     c.lwsp   s0, 8(sp)",
+     "00412124: b240     c.lwsp   ra, 0xc(sp)",
+     "00412126: 4101     c.addi   sp, 0x10",
+     "00412128: 6f000002 j        0x20",
+     "0041212c: 1305850c addi     a0, a0, 0xc8"
+    ],
+    "grp_imm_ctx": [
+     "131",
+     "50(WMI_GRP 0x32)",
+     "200"
+    ]
+   }
+  ]
+ },
+ "pattern_b_word_literals": {
+  "b07": {
+   "in_range": {
+    "0xa001": {
+     "name": "WMI_PDEV_DFS_RADAR_DETECTION_EVENTID",
+     "offs": [
+      "0x5e30",
+      "0x6a44",
+      "0x768c",
+      "0x903c"
+     ],
+     "count": 4
+    },
+    "0x10001": {
+     "name": "WMI_WLAN_PROFILE_TRIGGER_CMDID",
+     "offs": [
+      "0x66e4"
+     ],
+     "count": 1
+    },
+    "0x30002": {
+     "name": "WMI_SAP_OFL_DEL_STA_EVENTID",
+     "offs": [
+      "0x1c150"
+     ],
+     "count": 1
+    }
+   },
+   "whole_file_counts": {
+    "0xa001": 4,
+    "0x10001": 1,
+    "0x30002": 1
+   }
+  },
+  "b08": {
+   "in_range": {
+    "0x10001": {
+     "name": "WMI_WLAN_PROFILE_TRIGGER_CMDID",
+     "offs": [
+      "0x395f0"
+     ],
+     "count": 1
+    },
+    "0x10002": {
+     "name": "WMI_WLAN_PROFILE_SET_HIST_INTVL_CMDID",
+     "offs": [
+      "0xb58c",
+      "0x383a0"
+     ],
+     "count": 2
+    },
+    "0x10003": {
+     "name": "WMI_WLAN_PROFILE_GET_PROFILE_DATA_CMDID",
+     "offs": [
+      "0xb5cc",
+      "0x38334",
+      "0x38af8"
+     ],
+     "count": 3
+    },
+    "0x10004": {
+     "name": "WMI_WLAN_PROFILE_ENABLE_PROFILE_ID_CMDID",
+     "offs": [
+      "0xb60c",
+      "0xba8c",
+      "0xbaec",
+      "0xbb4c",
+      "0xbbac"
+     ],
+     "count": 5
+    },
+    "0x10005": {
+     "name": "WMI_WLAN_PROFILE_LIST_PROFILE_ID_CMDID",
+     "offs": [
+      "0xbc0c",
+      "0xbc6c",
+      "0xbccc",
+      "0xbd2c"
+     ],
+     "count": 4
+    },
+    "0x1f001": {
+     "name": "WMI_FWTEST_VDEV_MCC_SET_TBTT_MODE_CMDID",
+     "offs": [
+      "0x22dc8"
+     ],
+     "count": 1
+    },
+    "0x20001": {
+     "name": "WMI_TDLS_PEER_EVENTID",
+     "offs": [
+      "0x3881c"
+     ],
+     "count": 1
+    },
+    "0x2c001": {
+     "name": "WMI_EXTSCAN_START_STOP_EVENTID",
+     "offs": [
+      "0x38c90"
+     ],
+     "count": 1
+    },
+    "0x30001": {
+     "name": "WMI_SAP_OFL_ADD_STA_EVENTID",
+     "offs": [
+      "0x38b10",
+      "0x38e08"
+     ],
+     "count": 2
+    }
+   },
+   "whole_file_counts": {
+    "0x10001": 1,
+    "0x10002": 2,
+    "0x10003": 4,
+    "0x10004": 5,
+    "0x10005": 4,
+    "0x1f001": 1,
+    "0x20001": 1,
+    "0x2c001": 1,
+    "0x30001": 2,
+    "0x30002": 1
+   }
+  },
+  "b07_note": "in-range == whole-file: all F-9 b07 word hits lie inside LOAD ranges",
+  "b08_note": "the 2 whole-file-only hits are artifacts: 0x30002 @ 0x10 (junk ELF header, F-7) and 0x10003 @ 0x4101c (8 KB tail beyond the 262144-byte LOAD)"
+ },
+ "pattern_b_halfword_scan": {
+  "wpss.b07": {
+   "size": 139316,
+   "hits": 246,
+   "distinct_values": 39,
+   "per_kb": 1.8,
+   "runs_ge6": [
+    {
+     "offset": "0x436e",
+     "len": 13
+    }
+   ],
+   "top12": [
+    [
+     "0xa001",
+     90,
+     [
+      "0x436e",
+      "0x4370",
+      "0x4372",
+      "0x4374",
+      "0x4376",
+      "0x4378",
+      "0x437a",
+      "0x437c"
+     ]
+    ],
+    [
+     "0x5020",
+     19,
+     [
+      "0x1a3de",
+      "0x1a404",
+      "0x1eac6",
+      "0x20200",
+      "0x20766",
+      "0x20780",
+      "0x20f18",
+      "0x20f32"
+     ]
+    ],
+    [
+     "0x3004",
+     16,
+     [
+      "0x400c",
+      "0x4352",
+      "0x4362",
+      "0x4702",
+      "0x478a",
+      "0x4792",
+      "0x4798",
+      "0x5702"
+     ]
+    ],
+    [
+     "0x4005",
+     16,
+     [
+      "0x4c14",
+      "0x4f4c",
+      "0x77e8",
+      "0x7dfe",
+      "0x7e10",
+      "0x7e40",
+      "0x7e54",
+      "0x7e6c"
+     ]
+    ],
+    [
+     "0x4008",
+     11,
+     [
+      "0x5a42",
+      "0x8972",
+      "0xa35c",
+      "0xa7d8",
+      "0xceec",
+      "0xdb48",
+      "0xe93e",
+      "0xea8c"
+     ]
+    ],
+    [
+     "0x3002",
+     9,
+     [
+      "0x4008",
+      "0x422c",
+      "0x4280",
+      "0x42d4",
+      "0x4328",
+      "0x5c0c",
+      "0x5c1c",
+      "0x5c36"
+     ]
+    ],
+    [
+     "0x400c",
+     8,
+     [
+      "0x606e",
+      "0x686e",
+      "0x8d76",
+      "0xa046",
+      "0xad66",
+      "0x12bf6",
+      "0x12c22",
+      "0x143e2"
+     ]
+    ],
+    [
+     "0x8005",
+     7,
+     [
+      "0x6b5e",
+      "0x7fda",
+      "0x8522",
+      "0xa87e",
+      "0xa888",
+      "0x10faa",
+      "0x12852"
+     ]
+    ],
+    [
+     "0x4006",
+     6,
+     [
+      "0x4c68",
+      "0x7f18",
+      "0x7f38",
+      "0x7f5c",
+      "0xc24a",
+      "0x14700"
+     ]
+    ],
+    [
+     "0x6005",
+     6,
+     [
+      "0x9d14",
+      "0x9d3a",
+      "0x9de4",
+      "0x9e58",
+      "0x10ef0",
+      "0x10f0a"
+     ]
+    ],
+    [
+     "0x8002",
+     5,
+     [
+      "0x4004",
+      "0x4228",
+      "0x427c",
+      "0x42d0",
+      "0x4324"
+     ]
+    ],
+    [
+     "0x4045",
+     4,
+     [
+      "0x4f48",
+      "0x4f50",
+      "0xb388",
+      "0xb39c"
+     ]
+    ]
+   ]
+  },
+  "wpss.b08": {
+   "size": 275644,
+   "hits": 4034,
+   "distinct_values": 176,
+   "per_kb": 14.6,
+   "runs_ge6": [],
+   "top12": [
+    [
+     "0x6001",
+     529,
+     [
+      "0x140c",
+      "0x141a",
+      "0xc77e",
+      "0xc7b6",
+      "0xc7c4",
+      "0xc7ca",
+      "0xc7d8",
+      "0xc868"
+     ]
+    ],
+    [
+     "0x6008",
+     319,
+     [
+      "0xc678",
+      "0xc6b8",
+      "0xc700",
+      "0xc740",
+      "0xc80e",
+      "0xc890",
+      "0xc8a0",
+      "0xc986"
+     ]
+    ],
+    [
+     "0x7001",
+     220,
+     [
+      "0xc6d8",
+      "0xc6e2",
+      "0xc84a",
+      "0xc854",
+      "0xc85a",
+      "0xc9ec",
+      "0xced2",
+      "0xceda"
+     ]
+    ],
+    [
+     "0x6002",
+     150,
+     [
+      "0xc698",
+      "0xc6ae",
+      "0xc6f6",
+      "0xc736",
+      "0xc804",
+      "0xca16",
+      "0xce3c",
+      "0xce60"
+     ]
+    ],
+    [
+     "0x5021",
+     140,
+     [
+      "0x13f70",
+      "0x15250",
+      "0x152b4",
+      "0x15984",
+      "0x1598c",
+      "0x15992",
+      "0x15998",
+      "0x165ee"
+     ]
+    ],
+    [
+     "0x600b",
+     136,
+     [
+      "0xc47c",
+      "0xc6b0",
+      "0xc6f8",
+      "0xc738",
+      "0xc806",
+      "0xca18",
+      "0xce3e",
+      "0xce62"
+     ]
+    ],
+    [
+     "0x6011",
+     132,
+     [
+      "0xccba",
+      "0xccc4",
+      "0xccce",
+      "0xcce8",
+      "0xccf2",
+      "0xccfc",
+      "0xcd16",
+      "0xcd20"
+     ]
+    ],
+    [
+     "0x3001",
+     126,
+     [
+      "0xfe8a",
+      "0x10314",
+      "0x10a1c",
+      "0x10b50",
+      "0x10b7a",
+      "0x10d34",
+      "0x10d78",
+      "0x10dd4"
+     ]
+    ],
+    [
+     "0x7008",
+     118,
+     [
+      "0xd3ce",
+      "0xd3da",
+      "0xf910",
+      "0xf916",
+      "0xf91c",
+      "0xfbee",
+      "0xff8c",
+      "0x10130"
+     ]
+    ],
+    [
+     "0x600a",
+     117,
+     [
+      "0xd410",
+      "0xd422",
+      "0xd450",
+      "0xd45a",
+      "0xd762",
+      "0xd7b4",
+      "0xda74",
+      "0xdaca"
+     ]
+    ],
+    [
+     "0xf001",
+     109,
+     [
+      "0xd1c0",
+      "0xd30e",
+      "0xd324",
+      "0xd388",
+      "0xd4d6",
+      "0xd4ee",
+      "0xe852",
+      "0xe93e"
+     ]
+    ],
+    [
+     "0xb001",
+     91,
+     [
+      "0xc720",
+      "0xd4f2",
+      "0xd5b0",
+      "0xd5c8",
+      "0xe786",
+      "0xe95e",
+      "0xff5e",
+      "0x10a06"
+     ]
+    ]
+   ]
+  },
+  "adsp.b36 CONTROL": {
+   "size": 6386356,
+   "hits": 171574,
+   "distinct_values": 202,
+   "per_kb": 26.9,
+   "runs_ge6": [],
+   "top12": [
+    [
+     "0x4002",
+     17025,
+     [
+      "0x1018",
+      "0x11dc",
+      "0x1244",
+      "0x1300",
+      "0x1bd4",
+      "0x25f4",
+      "0x2638",
+      "0x269c"
+     ]
+    ],
+    [
+     "0x4001",
+     8446,
+     [
+      "0xc0",
+      "0x11cc",
+      "0x1230",
+      "0x237c",
+      "0x2730",
+      "0x28cc",
+      "0x2940",
+      "0x2a70"
+     ]
+    ],
+    [
+     "0x4010",
+     8162,
+     [
+      "0x164c",
+      "0x17a0",
+      "0x1c50",
+      "0x2200",
+      "0x22a0",
+      "0x2c24",
+      "0x3584",
+      "0x50ac"
+     ]
+    ],
+    [
+     "0x4003",
+     7965,
+     [
+      "0x1134",
+      "0x11f4",
+      "0x125c",
+      "0x1304",
+      "0x1354",
+      "0x18b8",
+      "0x1c3c",
+      "0x24b4"
+     ]
+    ],
+    [
+     "0x4004",
+     6238,
+     [
+      "0x20ec",
+      "0x272c",
+      "0x2a6c",
+      "0x2df0",
+      "0x308c",
+      "0x33cc",
+      "0x3770",
+      "0x3a0c"
+     ]
+    ],
+    [
+     "0x4022",
+     6078,
+     [
+      "0x1728",
+      "0x4fe0",
+      "0x5628",
+      "0x581c",
+      "0x5c00",
+      "0x7e58",
+      "0x8054",
+      "0x810c"
+     ]
+    ],
+    [
+     "0x4012",
+     4571,
+     [
+      "0x294c",
+      "0x29c0",
+      "0x2c44",
+      "0x2cb0",
+      "0x2cc8",
+      "0x2d48",
+      "0x2ec4",
+      "0x2f70"
+     ]
+    ],
+    [
+     "0xb010",
+     4311,
+     [
+      "0x2b0a",
+      "0x2e62",
+      "0x346a",
+      "0x37e2",
+      "0x3dea",
+      "0x4142",
+      "0x474a",
+      "0x4aa2"
+     ]
+    ],
+    [
+     "0x4020",
+     3732,
+     [
+      "0x1428",
+      "0x1568",
+      "0x25a0",
+      "0x287c",
+      "0x3020",
+      "0x31dc",
+      "0x39a0",
+      "0x3ad4"
+     ]
+    ],
+    [
+     "0x4011",
+     3576,
+     [
+      "0x2bf8",
+      "0x2c34",
+      "0x2f04",
+      "0x2f88",
+      "0x3558",
+      "0x3594",
+      "0x3884",
+      "0x390c"
+     ]
+    ],
+    [
+     "0x4005",
+     3456,
+     [
+      "0x1bb0",
+      "0x24f4",
+      "0x4db8",
+      "0x4ddc",
+      "0x537c",
+      "0x5cf4",
+      "0x5d70",
+      "0x5d7c"
+     ]
+    ],
+    [
+     "0x4023",
+     3305,
+     [
+      "0x4e9c",
+      "0x4f10",
+      "0x4f74",
+      "0x54f4",
+      "0x56d4",
+      "0x7790",
+      "0xae20",
+      "0xaf3c"
+     ]
+    ]
+   ]
+  },
+  "chance_model_b08": {
+   "positions": 131072,
+   "candidate_values": 202,
+   "expected_hits": 404.0,
+   "expected_distinct": 174.662272776971,
+   "observed_distinct": 176
+  }
+ },
+ "pattern_c_b08_as_code": {
+  "coverage_pct": 92.0,
+  "n_insns": 113728,
+  "c_unimp_fraction": 0.33,
+  "top_mnemonics": [
+   [
+    "c.unimp",
+    37568
+   ],
+   [
+    "c.fsw",
+    14227
+   ],
+   [
+    "c.addi4spn",
+    7527
+   ],
+   [
+    "c.bnez",
+    7277
+   ],
+   [
+    "c.fld",
+    6031
+   ],
+   [
+    "c.flw",
+    4802
+   ]
+  ],
+  "verdict": "data segment; decode density is an RVC-validity artifact, 33% of decodes are c.unimp (zero halfwords)"
+ },
+ "verdict": "No construction site in wpss.b07 (24,030 clean-code instructions at 100% coverage; 5 slli x12 sites are all packed-pointer indexing). No ID tables at word or halfword granularity (in-range==whole-file; halfword distinct count at chance level; adsp.b36 control reproduces/exceeds). F-19's runtime-computation mechanism is falsified for b07; IDs appear neither stored nor constructed in this image."
+}

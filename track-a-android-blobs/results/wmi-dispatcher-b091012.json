@@ -1,0 +1,154 @@
+{
+ "experiment": "F-21",
+ "date": "2026-11-11",
+ "question": "Does WMI message-ID handling live in the unexamined wpss segments b09/b10/b12 of the WCN6750 firmware?",
+ "tool": "tools/wmi_b091012_scan.py (reuses F-20 sweep+pattern_search verbatim; capstone RV32+C resync sweep; xref_wmi 605 IDs; mdt phdr ground truth)",
+ "mdt_header_ground_truth": {
+  "file": "wpss.mdt",
+  "elf_magic": true,
+  "e_machine": 164,
+  "e_machine_note": "164=EM_QDSP6 (Qualcomm Hexagon) - confirms F-7 junk-field finding; entry 0x9bb00000",
+  "phdr_map": [
+   {"seg": "b01", "ph": 1, "vaddr": "0xfe000000", "filesz": 6440, "flags": "R-X"},
+   {"seg": "b02", "ph": 2, "vaddr": "0xfe002000", "filesz": 461049, "flags": "RWX"},
+   {"seg": "b03", "ph": 3, "vaddr": "0xfe073000", "filesz": 1104, "flags": "R-X"},
+   {"seg": "b04", "ph": 4, "vaddr": "0xc0000000", "filesz": 256, "flags": "R-X"},
+   {"seg": "b05", "ph": 5, "vaddr": "0xc0001000", "filesz": 4096, "flags": "R-X"},
+   {"seg": "b06", "ph": 6, "vaddr": "0xc0002000", "filesz": 6074641, "flags": "RWX"},
+   {"seg": "b07", "ph": 7, "vaddr": "0xc0600000", "filesz": 139316, "flags": "RW-"},
+   {"seg": "b08", "ph": 8, "vaddr": "0xc0623000", "filesz": 275644, "flags": "RW-"},
+   {"seg": "b09", "ph": 9, "vaddr": "0xc0667000", "filesz": 360960, "memsz": 14835712, "flags": "RW-"},
+   {"seg": "b10", "ph": 10, "vaddr": "0xc1500000", "filesz": 909398, "memsz": 913408, "flags": "RW-"},
+   {"seg": "b12", "ph": 12, "type": "PT_NULL(0)", "vaddr": "0x00000000", "filesz": 4376, "flags": "R--"}
+  ],
+  "note": "Only b01/b02/b03/b05/b06 carry PF_X. b07/b08 (F-20's targets) are RW data segments. b09/b10 RW data; b12 is a PT_NULL hash/cert region."
+ },
+ "segments": {
+  "b09": {
+   "file": "wpss.b09",
+   "size": 360960,
+   "elf_magic": false,
+   "note": "Raw payload (unlike b07/b08 which are standalone ELFs). RW data segment, memsz 14.8 MB vs filesz 361 KB = mostly zero-fill (60.9% zero bytes in file).",
+   "rv32_sweep": {
+    "n_insns": 154633,
+    "decoded_pct": 88.9,
+    "dominated_by": "c.unimp x94128 (resync filler) => data, not code",
+    "construction_hits_raw": 403,
+    "construction_hits_verdict": "noise (data sweep), same class as F-20's rodata noise",
+    "slli12": 39
+   },
+   "eh_frame": {
+    "chain_end": 1072,
+    "chained_pct": 0.3,
+    "cies": 9,
+    "fdes": 28,
+    "chain_breaks": 0,
+    "note": "clean u32-length chain 1,072 B then content changes role; FDE pc_begin sdata4-pcrel values decode into b06 exec range (~0xC04E6BD0-0xC04E6CB0)"
+   },
+   "event_name_strings": {
+    "count_eventid_cmdid": 148,
+    "prefixed": {"WHAL_": 44, "WAL_": 44},
+    "region_offset": "0x1fc84+",
+    "examples": [
+     "WHAL_HWSCH_POST_CMD_EVENTID",
+     "WHAL_HWSCH_FES_HP_REG_MODE_EVENTID",
+     "WHAL_HWSCH_RESET_EVENTID",
+     "WAL_RX_FW_RX_REFILL_FREE_HOST1_ENTRIES_EVENTID",
+     "SCHED_ALGO_MIGRATE_EVENTID",
+     "WHAL_TQM_PROCESS_GEN_MPDUS_STATUS_FLOW_EVENTID",
+     "WHAL_MISC_QTICK_TIMER_LOG_EVENTID"
+    ]
+   },
+   "id_registry_table": {
+    "record_shape": "12-byte stride [ptr, id, 0]; ptr in 0xc0000000-0xc2000000 (b06 exec range); id grp<<12|cmd",
+    "total_aligned_id_word_hits": 213,
+    "distinct_ids": 149,
+    "records_in_stride12_runs": 225,
+    "runs": [
+     {"start_file": "0x2a080", "end_file": "0x2a3b0", "records": 69},
+     {"start_file": "0x2a3e8", "end_file": "0x2a4cc", "records": 20},
+     {"start_file": "0x2a578", "end_file": "0x2a59c", "records": 4},
+     {"start_file": "0x2a738", "end_file": "0x2a780", "records": 7},
+     {"start_file": "0x2a848", "end_file": "0x2aa7c", "records": 48},
+     {"start_file": "0x2aac0", "end_file": "0x2ab08", "records": 7},
+     {"start_file": "0x2abb0", "end_file": "0x2acac", "records": 22},
+     {"start_file": "0x2adf8", "end_file": "0x2ae1c", "records": 4},
+     {"start_file": "0x2ae40", "end_file": "0x2ae64", "records": 4},
+     {"start_file": "0x2aed8", "end_file": "0x2af08", "records": 5},
+     {"start_file": "0x2af70", "end_file": "0x2afc4", "records": 8},
+     {"start_file": "0x2b620", "end_file": "0x2b650", "records": 5},
+     {"start_file": "0x2b7f8", "end_file": "0x2b840", "records": 7},
+     {"start_file": "0x2be38", "end_file": "0x2be80", "records": 7},
+     {"start_file": "0x2c490", "end_file": "0x2c4b4", "records": 4},
+     {"start_file": "0x36fc8", "end_file": "0x36fec", "records": 4}
+    ],
+    "main_run": {"file": "0x2a080-0x2a3b0", "records": 69, "vaddr": "0xc0691080-0xc06913b0"},
+    "id_groups_present": {"3_SCAN": 7, "4_PDEV": 49, "5_VDEV": 35, "6_PEER": 20, "7_MGMT": 11, "8": 5, "10": 8, "11_ROAM": 9, "13_OCE": 5},
+    "owner_ptr_histogram": {"0xc02cd9cc": 44, "0xc031d8c8": 34, "0xc02d94bc": 15, "0xc035d2e0": 7, "0xc0377b5c": 5},
+    "self_vaddr_pointers": ["0xc0691080", "0xc0691f88", "0xc06913c0"],
+    "self_vaddr_note": "0xc0691080 = vaddr of the main run itself; registry nodes link to each other",
+    "sample_records": [
+     {"ptr": "0xc02cd9cc", "id": "0x4001", "name_in_ath11k": "WMI_PDEV_TPC_CONFIG_EVENTID"},
+     {"ptr": "0xc02cd9cc", "id": "0x4002", "name_in_ath11k": "WMI_STOP_SCAN_CMDID"},
+     {"ptr": "0xc02cd9cc", "id": "0x16001", "name_in_ath11k": "-"},
+     {"ptr": "0xc037b6bc", "id": "0x38005", "name_in_ath11k": "-"}
+    ],
+    "verdict": "WMI-shaped message-ID registry with code-range pointers: dispatch DATA found (unlike F-20's b07/b08). IDs numerically overlap ath11k wmi.h IDs (shared grp<<12|cmd space); name strings are firmware-internal WHAL_/WAL_ enums."
+   },
+   "unidentified_adjacent_records": {
+    "region": "file 0xd000-0xe0xx pages",
+    "stride": 16,
+    "shape": "[x, ptr, id, hash-like-word] or [id, hash, ...]; pairs WMI-shaped ids (0x2001,0x200a,0x200b,0x1005,0x1008,0x2115,0x4011,0x401a...) with random-looking 32-bit words (CRC-like)",
+    "ids_include_non_wmi_groups": ["0x5104", "0x9221", "0xa200"],
+    "verdict": "unidentified; broader message system (diag/QuRT?) - honest unknown"
+   },
+   "strings": {"n_strings": 530, "pct_of_file": 3.8, "markers": {"wlan": 2}}
+  },
+  "b10": {
+   "file": "wpss.b10",
+   "size": 909398,
+   "elf_magic": false,
+   "note": "RW data segment; 95.5% of file is ASCII",
+   "role": "format-string/trace table for the b06 code: 'file.c:...' QCA style (wal_*.c, whal_*.c, wmi_ftm_attach.c, memheap.c, platform_diag_pmon.c)",
+   "rv32_sweep": {
+    "n_insns": 353261,
+    "decoded_pct": 85.4,
+    "dominated_by": "c.flw/c.lui (string bytes misread) => noise",
+    "construction_hits_raw": 42278,
+    "construction_hits_verdict": "pure noise from sweeping strings"
+   },
+   "strings": {
+    "n_strings": 11244,
+    "pct_of_file": 95.5,
+    "markers": {"wlan": 5203, "WMI": 261, "wmi": 388, "diag": 445, "qurt": 68, "htt": 65, "HTT": 20, "htc": 13, "task": 10, "pmon": 37},
+    "strings_containing_wmi_eventid_cmdid_names": 66,
+    "wmi_name_examples": [
+     "wlan_dev.c:WMI_PDEV_CONFIG_VENDOR_OUI_ACTION_CMDID Error: total_length (%d) > %d",
+     "wal_local_frames.c:MGMT_TX_WMI_FROM_HOST TX COMP: flags = 0x%x buffer_id = 0x%x",
+     "wmi_ftm_attach.c:ERROR: ftm_parse_unifiedcmd: dataLen %d is LESS than sizeof(segHdrInfo) %d"
+    ]
+   },
+   "id_tables": {
+    "u32_hits": 0,
+    "u16_hits": {"distinct": 4, "verdict": "noise; top 0x5020 x449 = ASCII ' P' in text"}
+   },
+   "verdict": "NO ID tables; role = trace/format strings"
+  },
+  "b12": {
+   "file": "wpss.b12",
+   "size": 4376,
+   "elf_magic": false,
+   "note": "PT_NULL hash/cert region; not a normal LOAD",
+   "rv32_sweep": {"n_insns": 1181, "decoded_pct": 59.1, "verdict": "noise; content is DER"},
+   "content": "X.509 DER certificate chain: DER SEQUENCE headers at 0x3f8/0x653/0x8f3; strings: 'Generated OEM Root CA', 'Fairphone BV', 'T2MO OEM Key', 'Amsterdam', 'SecTools', 'Generated OEM Attestation CA', validity '250305073959Z'->'450228073959Z'",
+   "verdict": "Secure-boot cert chain (production), independently confirms librephone-upstream docs/wpss.b12.md. NO code, NO WMI content. Closed."
+  }
+ },
+ "verdict": {
+  "wmi_id_handling_in_wpss": "YES - table-driven, in b09 (data) + b10 (trace strings); handler code in b06 (RWX, 6.07 MB main code segment)",
+  "explains_F20": "F-20's zero on b07 is fully explained: b07/b08 are RW data segments (PF_X absent per mdt); construction-site hunting was the wrong instrument because dispatch is not arithmetic - IDs are stored in a static registry",
+  "remaining_unknown": "exact b06 consumer of the registry (cross-ref vaddr 0xc0691080+ from b06 code) - future work",
+  "segments_closed": "b07 (F-20), b08 (F-20), b09 (F-21: registry data, no code), b10 (F-21: strings), b12 (F-21: certs)"
+ },
+ "prior_art": "none found (GitHub code/repo search 2026-11-11, per F-20); extends F-20"
+}

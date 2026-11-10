@@ -37,15 +37,17 @@ MAGICS = [
     (b"QC\x00\x00", "QC-BIN-PROBABLE"),
 ]
 
-# Qualcomm Hexagon / architectures of interest (ELF e_machine values)
+# ELF e_machine registry — corrected per binutils/glibc (see journal 2026-11-11:
+# 195 was mislabeled TILE64; binutils owns 195=ARCv2 EM_ARC_COMPACT2; TI PRU=144)
 EM_NAMES = {
     2: "SPARC", 3: "x86", 8: "MIPS", 20: "PowerPC", 40: "ARM",
     42: "SuperH", 50: "IA-64", 62: "x86-64", 83: "AVR",
-    87: "V850", 88: "M32R", 92: "Altera Nios II", 93: "TI PRU",
-    94: "RISC-V (old, bespoke)", 183: "AArch64", 164: "QDSP6 / Hexagon",
+    87: "V850", 88: "M32R", 92: "Altera Nios II",
+    144: "TI PRU", 183: "AArch64", 164: "QDSP6 / Hexagon",
+    187: "TILE64", 191: "TILEGx",
     243: "RISC-V", 247: "BPF", 252: "C-SKY", 242: "LoongArch",
-    189: "MicroBlaze", 110: "DLX", 113: "NIOS", 166: "Xtensa",
-    190: "ARC", 195: "TILE64", 216: "Kalimba (CSR)", 199: "RISC-V (historic 0xC7)",
+    189: "MicroBlaze", 113: "NIOS", 166: "Xtensa",
+    190: "ARC (legacy EM_ARC)", 195: "ARCv2 (EM_ARC_COMPACT2)", 216: "Kalimba (CSR)",
 }
 
 PF_NAMES = {1: "X", 2: "W", 4: "R"}

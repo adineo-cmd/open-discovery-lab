@@ -8,6 +8,8 @@ adjacent, in a structured config region); the broader WMI command space is
 **absent as stored constants** — the firmware evidently constructs IDs
 arithmetically (`grp << 12 | 1` at runtime), so naive static cross-reference
 does not scale. Nothing about this comparison exists in public literature.
+*(Note: the family-cluster attribution below was corrected on 2026-11-11 —
+see the correction banner at the end; the structural conclusion stands.)*
 
 ## Method
 
@@ -41,7 +43,9 @@ among 605 — appear within a 2 KB window of each other, several repeatedly,
 in a region with repeating (cmd, status) word pairs. That structure is
 consistent with a registered-handler/config table for the profile/FWTEST
 subsystem, and implausible as random data (5/5 of one family, 0/398 of the
-rest as aligned stores).
+rest as aligned stores). *(CORRECTED 2026-11-11 — see the correction banner
+at the end of this file: with an adsp negative control, all families
+reproduce at equal/higher counts; this attribution does not survive.)*
 
 **The negative result matters:** core commands (SCAN=0x3001, PDEV=0x4xxx,
 VDEV=0x5xxx families) are *not* stored as aligned constants anywhere in
@@ -64,3 +68,16 @@ group immediates) or the IPCI transport layer.
 No public work cross-references ath11k WMI IDs against this firmware
 (GitHub code search: `wpss.b08`, `WCN6750 wmi`; ath11k mailing list; XDA —
 checked 2026-11-09).
+
+## CORRECTION (2026-11-11, per F-19 — modem-wmi-xref.md)
+
+The profile-family assessment above was too strong. With adsp.b36 as a
+negative control (the control F-9 lacked), ALL of the "WMI-like" value
+families — PDEV 0x4001–0x4050, WLAN-profile 0x10001–0x10005, TDLS,
+grp-0x30/0x40 — are reproduced by the unrelated audio-DSP control at equal
+or higher counts. A strict 2 KB sliding window on wpss.b08 yields 4/5
+profile values, not 5/5 (consistent with F-9's own first@ table; the
+0x10001 value sits 0x2d9e4 away from the rest). The structural conclusion
+(IDs constructed at runtime, no stored dispatch table) SURVIVES and is now
+supported by three-way evidence (wpss + modem + DSP control). The
+value-presence evidence for a profile-handler table does not survive.

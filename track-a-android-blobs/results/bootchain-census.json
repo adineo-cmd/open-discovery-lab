@@ -1,0 +1,586 @@
+{
+ "meta": {
+  "source": "lineage-23.2-FP6-signed.zip -> payload.bin; partitions dumped with tools/payload_dump.py (same validated tooling as results/bt-tz-census.json)",
+  "date": "2026-11-10",
+  "device": "Fairphone FP6 (QCM6490; build target LANAI, SoC family name Milos per xbl_config DTBs)",
+  "scope": "census-only: versions, container/ELF layout, ISA identification, hashes, AVB metadata facts. No key material, no disassembly beyond entry sanity, no bypass content.",
+  "isa_method": "e_machine claims cross-checked per F-7 junk-header rule: entry-in-LOAD sanity, e_flags, RV32 opcode enrichment vs validated references (wpss.b07 RV32, modem.bXX Hexagon)",
+  "prior_art": "checked 2026-11-10: exact build IDs have 1 GitHub hit (DiamaneOS inventory JSON, metadata only); no public structural analysis of any FP6 boot-chain image; see docs/bootchain-census.md",
+  "notes": "aop e_entry 0x13200000 lies outside all LOADs (flagged); qupfw Hexagon claim is header-level only (no Hexagon tooling installed); vbmeta descriptor boundary walk inconclusive for avbtool 1.3.0 layout — descriptor content enumerated via direct string evidence; vendor_boot v4 extension field order not decoded (table located by content at 0xd1a000, 1 entry, 108 B)"
+ },
+ "partitions": {
+  "abl": {
+   "size": 245760,
+   "sha256_16": "0a08171b90a75d7a",
+   "elf": {
+    "class": "ELF32",
+    "machine_raw": 40,
+    "machine": "ARM",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x9fa00000",
+    "phnum": 3,
+    "flags": "0x0",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 148, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 4096, "vaddr": "0x9fa00000", "filesz": 237568, "memsz": 237568, "paddr": "0x9fa00000"},
+     {"type": "NULL", "flags": null, "offset": 241664, "vaddr": "0x0", "filesz": 3896, "memsz": 3896, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {},
+   "signing": {"oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 6, "not_before_UTC": "260831030623"}
+  },
+  "aop": {
+   "size": 319488,
+   "sha256_16": "66cf5f1fa090de5c",
+   "elf": {
+    "class": "ELF32",
+    "machine_raw": 243,
+    "machine": "RISCV",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x13200000",
+    "phnum": 11,
+    "flags": "0x1",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 404, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 4096, "vaddr": "0xb000000", "filesz": 82728, "memsz": 98304, "paddr": "0xb000000"},
+     {"type": "LOAD", "flags": "RW", "offset": 90112, "vaddr": "0xb0e0000", "filesz": 38464, "memsz": 49152, "paddr": "0xb0e0000"},
+     {"type": "LOAD", "flags": "RW", "offset": 131072, "vaddr": "0x81c00000", "filesz": 46644, "memsz": 81920, "paddr": "0x81c00000"},
+     {"type": "LOAD", "flags": "RW", "offset": 180224, "vaddr": "0x81c14000", "filesz": 140, "memsz": 32768, "paddr": "0x81c14000"},
+     {"type": "LOAD", "flags": "RWX", "offset": 184320, "vaddr": "0x81c1c000", "filesz": 90144, "memsz": 278528, "paddr": "0x81c1c000"},
+     {"type": "LOAD", "flags": "RWX", "offset": 278528, "vaddr": "0x14686000", "filesz": 17842, "memsz": 17842, "paddr": "0x14686000"},
+     {"type": "LOAD", "flags": "RW", "offset": 278528, "vaddr": "0x1468e000", "filesz": 0, "memsz": 0, "paddr": "0x1468e000"},
+     {"type": "LOAD", "flags": "RX", "offset": 299008, "vaddr": "0x1468f000", "filesz": 276, "memsz": 276, "paddr": "0x1468f000"},
+     {"type": "LOAD", "flags": "RW", "offset": 303104, "vaddr": "0x14692000", "filesz": 4096, "memsz": 4096, "paddr": "0x14692000"},
+     {"type": "NULL", "flags": null, "offset": 307200, "vaddr": "0x0", "filesz": 11328, "memsz": 11328, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {
+    "QC_IMAGE_VERSION_STRING": "QC_IMAGE_VERSION_STRING=AOP.HO.5.0-00813-LANAI_E-1",
+    "OEM_IMAGE_VERSION_STRING": "OEM_IMAGE_VERSION_STRING=ip-10-195-202-146",
+    "IMAGE_VERSION_STRING": "IMAGE_VERSION_STRING=AOP.HO.5.0-00813-LANAI_E-1",
+    "OEM_IMAGE_UUID_STRING": "OEM_IMAGE_UUID_STRING=Q_SENTINEL_{3A4E11ED-51FC-4B02-BDFD-A651E4A7BBEF}_20250430_1132"
+   },
+   "signing": {"srot_ca": 5, "cass": 1, "oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 12, "not_before_UTC": "250430114054"}
+  },
+  "aop_config": {
+   "size": 20480,
+   "sha256_16": "676e00e4e8b1fb58",
+   "elf": {
+    "class": "ELF32",
+    "machine_raw": 243,
+    "machine": "RISCV",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x81c82014",
+    "phnum": 4,
+    "flags": "0x1",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 180, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RW", "offset": 4096, "vaddr": "0x81c80000", "filesz": 7220, "memsz": 7220, "paddr": "0x81c80000"},
+     {"type": "LOAD", "flags": "RWX", "offset": 12288, "vaddr": "0x81c82000", "filesz": 902, "memsz": 122880, "paddr": "0x81c82000"},
+     {"type": "NULL", "flags": null, "offset": 16384, "vaddr": "0x0", "filesz": 3944, "memsz": 3944, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {},
+   "signing": {"oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 6, "not_before_UTC": "260831040519"}
+  },
+  "boot": {
+   "size": 100663296,
+   "sha256_16": "930766ab03d90791",
+   "bootimg": {
+    "magic": "ANDROID!",
+    "header_version": 4,
+    "header_size": 1584,
+    "kernel_size": 35711488,
+    "ramdisk_size": 0,
+    "os_version_field": "0x200001aa",
+    "cmdline": "",
+    "kernel_head": "4d5a40fae1a870140000000000000000",
+    "os_version_note": "raw field; MAKE_OS_VERSION decode overflows documented layout (queued)"
+   },
+   "avb_footer": {
+    "header_version": "1.0",
+    "original_image_size": 35717120,
+    "vbmeta_offset": 35717120,
+    "vbmeta_size": 2432
+   },
+   "embedded_vbmeta": {
+    "offset": 35717120,
+    "algo": 2,
+    "rollback_index": 1788566400,
+    "flags": 0,
+    "release_string": "avbtool 1.3.0",
+    "public_key": {"present": true, "size": 1032, "sha256_16": "7728e30f50bfa5ce"},
+    "properties": {
+     "com.android.build.boot.os_version": "16",
+     "com.android.build.boot.fingerprint": "Fairphone/lineage_FP6/FP6:16/BP4A.251205.006/43b742158d:userdebug/release-keys",
+     "com.android.build.boot.security_patch": "2026-09-05"
+    },
+    "names_visible": ["boot", "Ncom.android.build.boot.fingerprint", "2026-09-05"]
+   },
+   "kernel_pe": {
+    "mz_offset": 4096,
+    "pe_sig_at": 4160,
+    "machine": "0xaa64",
+    "magic": "0x20b",
+    "note": "PE32+ EFI-stub AArch64 kernel image"
+   }
+  },
+  "cpucp": {
+   "size": 204800,
+   "sha256_16": "5aedb89f0857d17c",
+   "elf": {
+    "class": "ELF32",
+    "machine_raw": 243,
+    "machine": "RISCV",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x17d0036c",
+    "phnum": 13,
+    "flags": "0x1",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 468, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RX", "offset": 4096, "vaddr": "0x17d00000", "filesz": 28954, "memsz": 28954, "paddr": "0x17d00000"},
+     {"type": "LOAD", "flags": "RW", "offset": 36864, "vaddr": "0x17d08000", "filesz": 4068, "memsz": 4068, "paddr": "0x17d08000"},
+     {"type": "LOAD", "flags": "RW", "offset": 40960, "vaddr": "0x17d0b000", "filesz": 0, "memsz": 256, "paddr": "0x17d0b000"},
+     {"type": "LOAD", "flags": "RW", "offset": 40960, "vaddr": "0x17d0c000", "filesz": 11128, "memsz": 11128, "paddr": "0x17d0c000"},
+     {"type": "LOAD", "flags": "RW", "offset": 53248, "vaddr": "0x17d0f000", "filesz": 0, "memsz": 4096, "paddr": "0x17d0f000"},
+     {"type": "LOAD", "flags": "RW", "offset": 53248, "vaddr": "0x81860000", "filesz": 0, "memsz": 1310720, "paddr": "0x81860000"},
+     {"type": "LOAD", "flags": "RX", "offset": 53248, "vaddr": "0x17d20000", "filesz": 18028, "memsz": 18028, "paddr": "0x819c0000"},
+     {"type": "LOAD", "flags": "RW", "offset": 73728, "vaddr": "0x17d28000", "filesz": 10740, "memsz": 10740, "paddr": "0x819c8000"},
+     {"type": "LOAD", "flags": "RW", "offset": 86016, "vaddr": "0x17d2f000", "filesz": 0, "memsz": 4096, "paddr": "0x819cf000"},
+     {"type": "LOAD", "flags": "RX", "offset": 86016, "vaddr": "0x819d0000", "filesz": 44172, "memsz": 44172, "paddr": "0x819d0000"},
+     {"type": "LOAD", "flags": "RW", "offset": 131072, "vaddr": "0x819e0000", "filesz": 61340, "memsz": 61340, "paddr": "0x819e0000"},
+     {"type": "NULL", "flags": null, "offset": 192512, "vaddr": "0x0", "filesz": 11424, "memsz": 11424, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {},
+   "signing": {"srot_ca": 5, "cass": 1, "oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 12, "not_before_UTC": "250131095219"},
+   "role_strings": ["SCMI init Done", "RPMH driver init Done", "CPRh init", "Memlat init", "DTB parsing Done", "Boot Core-1 Done", "SAW init", "APM init", "CPUEvents Framework init Done"]
+  },
+  "cpucp_dtb": {
+   "size": 12288,
+   "sha256_16": "de6bd9d7927a9dfa",
+   "elf": {
+    "class": "ELF64",
+    "machine_raw": 1,
+    "machine": "M32",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x819f0000",
+    "phnum": 3,
+    "flags": "0x5",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 232, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 232, "vaddr": "0x819f0000", "filesz": 4156, "memsz": 4156, "paddr": "0x819f0000"},
+     {"type": "NULL", "flags": null, "offset": 8192, "vaddr": "0x0", "filesz": 3896, "memsz": 3896, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {},
+   "signing": {"oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 6, "not_before_UTC": "260831040223"}
+  },
+  "dtbo": {
+   "size": 31457280,
+   "sha256_16": "f9545d15daaa8978",
+   "dtbo": {
+    "magic": "0xd7b7ab1e",
+    "total_size": 1780765,
+    "header_size": 32,
+    "dt_entry_size": 32,
+    "dt_entry_count": 14,
+    "dt_entries_offset": 32,
+    "page_size": 4096,
+    "version": 0,
+    "entries": [
+     {"dtb_size": 214710, "dtb_offset": 480, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 39089, "dtb_offset": 215190, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 214710, "dtb_offset": 254279, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 39089, "dtb_offset": 468989, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 214710, "dtb_offset": 508078, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 39089, "dtb_offset": 722788, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 215123, "dtb_offset": 761877, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 39599, "dtb_offset": 977000, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 215123, "dtb_offset": 1016599, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 39599, "dtb_offset": 1231722, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 215123, "dtb_offset": 1271321, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 39599, "dtb_offset": 1486444, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 215123, "dtb_offset": 1526043, "paddr": "0x0", "custom_size": 0},
+     {"dtb_size": 39599, "dtb_offset": 1741166, "paddr": "0x0", "custom_size": 0}
+    ]
+   },
+   "dt_table_note": "big-endian mkdtimg format"
+  },
+  "imagefv": {
+   "size": 53248,
+   "sha256_16": "2b5d1f6375b84159",
+   "elf": {
+    "class": "ELF32",
+    "machine_raw": 40,
+    "machine": "ARM",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x0",
+    "phnum": 3,
+    "flags": "0x0",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 148, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 4096, "vaddr": "0x0", "filesz": 45056, "memsz": 45056, "paddr": "0x0"},
+     {"type": "NULL", "flags": null, "offset": 49152, "vaddr": "0x0", "filesz": 3896, "memsz": 3896, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {},
+   "signing": {"oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 6, "not_before_UTC": "260831040220"}
+  },
+  "pvmfw": {
+   "size": 1048576,
+   "sha256_16": "c5cd3afe1ef9724e",
+   "bootimg": {
+    "magic": "ANDROID!",
+    "header_version": 3,
+    "header_size": 1580,
+    "kernel_size": 768576,
+    "ramdisk_size": 0,
+    "os_version_field": "0x200001aa",
+    "cmdline": "",
+    "kernel_head": "1e4000101ec018d5deffff101d00e0d2",
+    "os_version_note": "raw field; MAKE_OS_VERSION decode overflows documented layout (queued)"
+   },
+   "avb_footer": {
+    "header_version": "1.0",
+    "original_image_size": 774144,
+    "vbmeta_offset": 774144,
+    "vbmeta_size": 640
+   },
+   "payload": {
+    "offset": 4096,
+    "size": 768576,
+    "head_hex": "1e4000101ec018d5deffff101d00e0d21d00c0f21df8aff21d0080f2bf031eeb",
+    "note": "raw AArch64 load image (ADR/MOVZ/SYSTEM encodings), not ELF"
+   }
+  },
+  "qupfw": {
+   "size": 61440,
+   "sha256_16": "3c93bb6da560d919",
+   "elf": {
+    "class": "ELF32",
+    "machine_raw": 164,
+    "machine": "EM_QDSP6_Hexagon",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x0",
+    "phnum": 13,
+    "flags": "0x3",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 468, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 4096, "vaddr": "0x1000", "filesz": 19824, "memsz": 19824, "paddr": "0x1000"},
+     {"type": "LOAD", "flags": "RWX", "offset": 23920, "vaddr": "0x5d70", "filesz": 1403, "memsz": 1403, "paddr": "0x5d70"},
+     {"type": "LOAD", "flags": "RWX", "offset": 25328, "vaddr": "0x62f0", "filesz": 1745, "memsz": 1745, "paddr": "0x62f0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 27080, "vaddr": "0x69c8", "filesz": 4357, "memsz": 4357, "paddr": "0x69c8"},
+     {"type": "LOAD", "flags": "RWX", "offset": 31440, "vaddr": "0x7ad0", "filesz": 4453, "memsz": 4453, "paddr": "0x7ad0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 35896, "vaddr": "0x8c38", "filesz": 2914, "memsz": 2914, "paddr": "0x8c38"},
+     {"type": "LOAD", "flags": "RWX", "offset": 38816, "vaddr": "0x97a0", "filesz": 1829, "memsz": 1829, "paddr": "0x97a0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 40648, "vaddr": "0x9ec8", "filesz": 2141, "memsz": 2141, "paddr": "0x9ec8"},
+     {"type": "LOAD", "flags": "RWX", "offset": 42792, "vaddr": "0xa728", "filesz": 724, "memsz": 724, "paddr": "0xa728"},
+     {"type": "LOAD", "flags": "RWX", "offset": 43520, "vaddr": "0xaa00", "filesz": 2181, "memsz": 2181, "paddr": "0xaa00"},
+     {"type": "LOAD", "flags": "RWX", "offset": 45704, "vaddr": "0xb288", "filesz": 2125, "memsz": 2125, "paddr": "0xb288"},
+     {"type": "NULL", "flags": null, "offset": 49152, "vaddr": "0x0", "filesz": 11424, "memsz": 11424, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {},
+   "signing": {"srot_ca": 5, "cass": 1, "oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 12, "not_before_UTC": "240314062808"}
+  },
+  "shrm": {
+   "size": 53248,
+   "sha256_16": "8bd6d7c1ed6cf793",
+   "elf": {
+    "class": "ELF32",
+    "machine_raw": 243,
+    "machine": "RISCV",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x200000",
+    "phnum": 4,
+    "flags": "0x1",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 180, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RX", "offset": 4096, "vaddr": "0x200000", "filesz": 29388, "memsz": 29388, "paddr": "0x24020000"},
+     {"type": "LOAD", "flags": "RW", "offset": 36864, "vaddr": "0x400000", "filesz": 1088, "memsz": 1088, "paddr": "0x24030000"},
+     {"type": "NULL", "flags": null, "offset": 40960, "vaddr": "0x0", "filesz": 10992, "memsz": 10992, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {},
+   "signing": {"srot_ca": 5, "cass": 1, "oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 12, "not_before_UTC": "241212040240"},
+   "role_strings": ["DDR_FW version : 19.12.0"]
+  },
+  "uefi": {
+   "size": 2904064,
+   "sha256_16": "849a2e5fe34f5741",
+   "elf": {
+    "class": "ELF64",
+    "machine_raw": 40,
+    "machine": "ARM",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0xa7000000",
+    "phnum": 3,
+    "flags": "0x0",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 232, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 4096, "vaddr": "0xa7000000", "filesz": 2895872, "memsz": 2895872, "paddr": "0xa7000000"},
+     {"type": "NULL", "flags": null, "offset": 2899968, "vaddr": "0x0", "filesz": 3896, "memsz": 3896, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {
+    "QC_IMAGE_VERSION_STRING": "QC_IMAGE_VERSION_STRING=BOOT.MXF.2.1-02027-LANAI-1",
+    "IMAGE_VERSION_STRING": "IMAGE_VERSION_STRING=BOOT.MXF.2.1-02027-LANAI-1"
+   },
+   "signing": {"oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 6, "not_before_UTC": "260831040221"}
+  },
+  "vbmeta": {
+   "size": 12288,
+   "sha256_16": "091ce4b00f95d35e",
+   "vbmeta": {
+    "header_version": "1.0",
+    "algorithm": "SHA256_RSA4096",
+    "authentication_block_size": 576,
+    "auxiliary_block_size": 8384,
+    "flags": 3,
+    "hash": {"offset": 0, "size": 32},
+    "signature": {"offset": 32, "size": 512},
+    "public_key": {"present": true, "size": 1032, "offset": 8128, "sha256_16": "7728e30f50bfa5ce"},
+    "public_key_metadata": {"present": false, "size": 0},
+    "rollback_index": 0,
+    "rollback_index_location": 0,
+    "release_string": "avbtool 1.3.0",
+    "descriptors": [
+     {"tag": 4, "kind": "chain_partition (avb 3.4, name 'boot', key embedded; boundary offsets not decoded by minimal parser)"}
+    ],
+    "sha256": "091ce4b00f95d35eccecb52bacbd94611fba7dd6909f62664197a187de9b70da",
+    "descriptor_walk_note": "minimal-parser boundary walk inconclusive for this build (avbtool 1.3.0); chain name 'boot' located by string evidence at blob offset 92; key blob (random bytes) follows"
+   }
+  },
+  "vbmeta_system": {
+   "size": 4096,
+   "sha256_16": "782c83159132f2f6",
+   "vbmeta": {
+    "header_version": "1.0",
+    "algorithm": "SHA256_RSA4096",
+    "authentication_block_size": 576,
+    "auxiliary_block_size": 3136,
+    "flags": 0,
+    "hash": {"offset": 0, "size": 32},
+    "signature": {"offset": 32, "size": 512},
+    "public_key": {"present": true, "size": 1032, "offset": 2904, "sha256_16": "7728e30f50bfa5ce"},
+    "public_key_metadata": {"present": false, "size": 0},
+    "rollback_index": 1788566400,
+    "rollback_index_location": 0,
+    "release_string": "avbtool 1.3.0",
+    "rollback_index_decoded": "1788566400 = Unix epoch of 2026-09-05 00:00 UTC = boot security_patch date",
+    "descriptors": [
+     {"kind": "property", "key": "com.android.build.product.os_version", "value": "16"},
+     {"kind": "property", "key": "com.android.build.product.fingerprint", "value": "Fairphone/lineage_FP6/FP6:16/BP4A.251205.006/43b742158d:userdebug/release-keys"},
+     {"kind": "property", "key": "com.android.build.product.security_patch", "value": "2026-10-01"},
+     {"kind": "property", "key": "com.android.build.pvmfw.fingerprint", "value": "Fairphone/lineage_FP6/FP6:16/BP4A.251205.006/43b742158d:userdebug/release-keys"},
+     {"kind": "property", "key": "com.android.build.system.os_version", "value": "16"},
+     {"kind": "property", "key": "com.android.build.system.fingerprint", "value": "Fairphone/lineage_FP6/FP6:16/BP4A.251205.006/43b742158d:userdebug/release-keys"},
+     {"kind": "property", "key": "com.android.build.system.security_patch", "value": "2026-10-01"},
+     {"kind": "property", "key": "com.android.build.system_ext.os_version", "value": "16"},
+     {"kind": "property", "key": "com.android.build.system_ext.fingerprint", "value": "Fairphone/lineage_FP6/FP6:16/BP4A.251205.006/43b742158d:userdebug/release-keys"},
+     {"kind": "property", "key": "com.android.build.system_ext.security_patch", "value": "2026-10-01"},
+     {"kind": "hash/hashtree (sha256)", "partition_name": "pvmfw"},
+     {"kind": "hash/hashtree (sha256)", "partition_name": "product"},
+     {"kind": "hash/hashtree (sha256)", "partition_name": "system"},
+     {"kind": "hash/hashtree (sha256)", "partition_name": "system_ext"}
+    ],
+    "sha256": "782c83159132f2f6dabae95854cd54273537c482188b4db704ea66c75ccd8fc4",
+    "descriptor_walk_note": "minimal-parser boundary walk inconclusive for this build (avbtool 1.3.0); contents enumerated via direct string evidence"
+   }
+  },
+  "vendor_boot": {
+   "size": 100663296,
+   "sha256_16": "142676fa3e0de2bd",
+   "vendor_boot": {
+    "magic": "VNDRBOOT",
+    "header_version": 4,
+    "page_size": 4096,
+    "kernel_load_addr": "0x8000",
+    "ramdisk_load_addr": "0x01000000",
+    "vendor_ramdisk_size": 10091577,
+    "vendor_cmdline_offset": 28,
+    "cmdline": "nosoftlockup sysctl.kernel.firmware_config.force_sysfs_fallback=1 bootconfig",
+    "tags_addr": "0x01000000",
+    "dtb_load_addr_field": "0x08500000",
+    "dtb_size_field": 3641222,
+    "dtb_region": "0x9a1000..0xd19f86 (8 FDT blobs, first magic at region start)",
+    "header_layout_note": "vendor_cmdline at offset 28 (no vhdr_name observed); dtb_size field at 2100 (0x378f86) verified: region start + size == last FDT end; v4 extension fields at +2112..(+2127: 108, 1, 108, 146) not decoded; vendor_ramdisk table located by content at 0xd1a000: 1 entry {size 10091577, offset 0, type 1, name empty, board_id zeros}, entry_size 108"
+   },
+   "avb_footer": {
+    "header_version": "1.0",
+    "original_image_size": 13746176,
+    "vbmeta_offset": 13746176,
+    "vbmeta_size": 640
+   },
+   "embedded_vbmeta": {
+    "offset": 13746176,
+    "algo": 0,
+    "rollback_index": 0,
+    "flags": 0,
+    "release_string": "avbtool 1.3.0",
+    "public_key": {"present": false, "size": 0, "sha256_16": null},
+    "properties": {
+     "com.android.build.vendor_boot.fingerprint": "Fairphone/lineage_FP6/FP6:16/BP4A.251205.006/43b742158d:userdebug/release-keys"
+    },
+    "names_visible": ["vendor_boot", "sha256"]
+   }
+  },
+  "xbl": {
+   "size": 1196032,
+   "sha256_16": "a95645eeb3391812",
+   "elf": {
+    "class": "ELF32",
+    "machine_raw": 1,
+    "machine": "M32",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x22126000",
+    "phnum": 2,
+    "flags": "0x5",
+    "phdrs": [
+     {"type": "LOAD", "flags": "RWX", "offset": 116, "vaddr": "0x22126000", "filesz": 4096, "memsz": 4096, "paddr": "0x22126000"},
+     {"type": "LOAD", "flags": "RWX", "offset": 4212, "vaddr": "0x22283000", "filesz": 652, "memsz": 652, "paddr": "0x22283000"}
+    ]
+   },
+   "version_strings": {
+    "QC_IMAGE_VERSION_STRING": "QC_IMAGE_VERSION_STRING=BOOT.MXF.2.1-02027-LANAI-1",
+    "OEM_IMAGE_VERSION_STRING": "OEM_IMAGE_VERSION_STRING=ip-10-195-202-206",
+    "IMAGE_VARIANT_STRING": "IMAGE_VARIANT_STRING=SocMilosLAA",
+    "IMAGE_VERSION_STRING": "IMAGE_VERSION_STRING=ip-10-195-202-206",
+    "OEM_IMAGE_UUID_STRING": "OEM_IMAGE_UUID_STRING=Q_SENTINEL_{D60FA30B-ADA4-492C-84A1-85353A30F70F}_20250731_1811"
+   },
+   "signing": {"srot_ca": 10, "cass": 2, "oem_attest": 4, "oem_root": 6, "fairphone": 6, "oem_key": 6, "validity": 24, "not_before_UTC": "250516062115"},
+   "container": {
+    "kind": "3 concatenated ELFs",
+    "members": [
+     {
+      "offset": 0,
+      "cls": "ELF32",
+      "machine": 1,
+      "type": 2,
+      "entry": "0x22126000",
+      "phnum": 2,
+      "phdrs": [
+       {"type": 1, "offset": 116, "vaddr": "0x22126000", "filesz": 4096, "flags": "0x1000007"},
+       {"type": 1, "offset": 4212, "vaddr": "0x22283000", "filesz": 652, "flags": "0x1000007"}
+      ]
+     },
+     {
+      "offset": 4864,
+      "cls": "ELF32",
+      "machine": 243,
+      "type": 2,
+      "entry": "0x20412d00",
+      "phnum": 12,
+      "phdrs": [
+       {"type": 0, "offset": 0, "vaddr": "0x0", "filesz": 436, "flags": "0x7000000"},
+       {"type": 0, "offset": 0, "vaddr": "0x20000000", "filesz": 0, "flags": "0x0"},
+       {"type": 0, "offset": 0, "vaddr": "0x20000000", "filesz": 0, "flags": "0x0"},
+       {"type": 0, "offset": 0, "vaddr": "0x20000000", "filesz": 0, "flags": "0x0"},
+       {"type": 0, "offset": 0, "vaddr": "0x20000000", "filesz": 0, "flags": "0x0"},
+       {"type": 1, "offset": 3328, "vaddr": "0x20412d00", "filesz": 136568, "flags": "0x1000005"},
+       {"type": 1, "offset": 139896, "vaddr": "0x20434278", "filesz": 23784, "flags": "0x1000006"},
+       {"type": 1, "offset": 163680, "vaddr": "0x20439f60", "filesz": 5032, "flags": "0x1000006"},
+       {"type": 1, "offset": 168712, "vaddr": "0x2043b308", "filesz": 6840, "flags": "0x1000006"},
+       {"type": 0, "offset": 168712, "vaddr": "0x20400000", "filesz": 0, "flags": "0x6"},
+       {"type": 0, "offset": 168712, "vaddr": "0x20400200", "filesz": 0, "flags": "0x6"},
+       {"type": 0, "offset": 176128, "vaddr": "0x0", "filesz": 11376, "flags": "0x2000000"}
+      ]
+     },
+     {
+      "offset": 192368,
+      "cls": "ELF64",
+      "machine": 183,
+      "type": 2,
+      "entry": "0x14825fa8",
+      "phnum": 9,
+      "phdrs": [
+       {"type": 0, "offset": 0, "vaddr": "0x0", "filesz": 568, "flags": "0x7000000"},
+       {"type": 1, "offset": 4096, "vaddr": "0x14800000", "filesz": 0, "flags": "0x6"},
+       {"type": 1, "offset": 4096, "vaddr": "0x14825000", "filesz": 667648, "flags": "0x5"},
+       {"type": 1, "offset": 671744, "vaddr": "0x148da000", "filesz": 0, "flags": "0x6"},
+       {"type": 1, "offset": 671744, "vaddr": "0x148c8000", "filesz": 73728, "flags": "0x4"},
+       {"type": 1, "offset": 745472, "vaddr": "0x148dd000", "filesz": 163840, "flags": "0x6"},
+       {"type": 1, "offset": 909312, "vaddr": "0x14905000", "filesz": 81920, "flags": "0x6"},
+       {"type": 1, "offset": 991232, "vaddr": "0x81810000", "filesz": 0, "flags": "0x6"},
+       {"type": 0, "offset": 991232, "vaddr": "0x0", "filesz": 11232, "flags": "0x2000000"}
+      ]
+     }
+    ]
+   }
+  },
+  "xbl_config": {
+   "size": 311296,
+   "sha256_16": "b3722f53eda51ca5",
+   "elf": {
+    "class": "ELF64",
+    "machine_raw": 1,
+    "machine": "M32",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x1494e000",
+    "phnum": 10,
+    "flags": "0x5",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 624, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RWX", "offset": 624, "vaddr": "0x1494e000", "filesz": 388, "memsz": 388, "paddr": "0x1494e000"},
+     {"type": "LOAD", "flags": "RWX", "offset": 1012, "vaddr": "0x1494e184", "filesz": 51204, "memsz": 51204, "paddr": "0x1494e184"},
+     {"type": "LOAD", "flags": "RWX", "offset": 52216, "vaddr": "0x1495a988", "filesz": 51204, "memsz": 51204, "paddr": "0x1495a988"},
+     {"type": "LOAD", "flags": "RWX", "offset": 103420, "vaddr": "0x1496718c", "filesz": 51204, "memsz": 51204, "paddr": "0x1496718c"},
+     {"type": "LOAD", "flags": "RWX", "offset": 154624, "vaddr": "0x14973990", "filesz": 51204, "memsz": 51204, "paddr": "0x14973990"},
+     {"type": "LOAD", "flags": "RWX", "offset": 205828, "vaddr": "0x14980194", "filesz": 7320, "memsz": 7320, "paddr": "0x14980194"},
+     {"type": "LOAD", "flags": "RWX", "offset": 213148, "vaddr": "0x14981e2c", "filesz": 27928, "memsz": 27928, "paddr": "0x14981e2c"},
+     {"type": "LOAD", "flags": "RWX", "offset": 241076, "vaddr": "0x14988b44", "filesz": 59756, "memsz": 59756, "paddr": "0x14988b44"},
+     {"type": "NULL", "flags": null, "offset": 303104, "vaddr": "0x0", "filesz": 4232, "memsz": 4232, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {},
+   "signing": {"oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 6, "not_before_UTC": "260831040523"},
+   "role_strings": ["pre-ddr-milos-1.0.dtb", "post-ddr-milos-1.0.dtb", "A018_7_0100_0_dcb.bin", "A018_8_0100_1_dcb.bin", "PLL Pre-Cal", "RCW CDC/Full Cycle Sweep"]
+  },
+  "xbl_ramdump": {
+   "size": 860160,
+   "sha256_16": "7126dc25a0c2817e",
+   "elf": {
+    "class": "ELF64",
+    "machine_raw": 183,
+    "machine": "AArch64",
+    "type_raw": 2,
+    "type": "EXEC",
+    "entry": "0x81a40000",
+    "phnum": 5,
+    "flags": "0x0",
+    "phdrs": [
+     {"type": "NULL", "flags": null, "offset": 0, "vaddr": "0x0", "filesz": 344, "memsz": 0, "paddr": "0x0"},
+     {"type": "LOAD", "flags": "RX", "offset": 4096, "vaddr": "0x81a40000", "filesz": 540672, "memsz": 540672, "paddr": "0x81a40000"},
+     {"type": "LOAD", "flags": "RW", "offset": 544768, "vaddr": "0x81ac4000", "filesz": 143360, "memsz": 143360, "paddr": "0x81ac4000"},
+     {"type": "LOAD", "flags": "RW", "offset": 688128, "vaddr": "0x81ae7000", "filesz": 167936, "memsz": 798720, "paddr": "0x81ae7000"},
+     {"type": "NULL", "flags": null, "offset": 856064, "vaddr": "0x0", "filesz": 3992, "memsz": 3992, "paddr": "0x0"}
+    ]
+   },
+   "version_strings": {
+    "QC_IMAGE_VERSION_STRING": "QC_IMAGE_VERSION_STRING=BOOT.MXF.2.1-02027-LANAI-1",
+    "OEM_IMAGE_VERSION_STRING": "OEM_IMAGE_VERSION_STRING=T2M-NB-BY151",
+    "IMAGE_VARIANT_STRING": "IMAGE_VARIANT_STRING=SocMilosLAA",
+    "IMAGE_VERSION_STRING": "IMAGE_VERSION_STRING=T2M-NB-BY151",
+    "OEM_IMAGE_UUID_STRING": "OEM_IMAGE_UUID_STRING=Q_SENTINEL_{00D1FA99-8CBB-408E-94E0-209236D76C0D}_20260831_1119"
+   },
+   "signing": {"oem_attest": 2, "oem_root": 3, "fairphone": 3, "oem_key": 3, "validity": 6, "not_before_UTC": "260831040219"}
+  },
+  "platform_names": {
+   "build_target": "LANAI",
+   "image_variant": "SocMilosLAA",
+   "note": "xbl_config DTBs name the SoC Milos; build IDs use LANAI target"
+  }
+ }
+}

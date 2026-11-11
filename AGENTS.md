@@ -21,6 +21,16 @@ Mandatory sequence for every task and finding:
    corrected where the original claim lives (precedent: F-9 corrected by
    F-19's negative control, banner in wmi-xref.md).
 
+## Rule 1 — IMPROVE PREVIOUS WORK WHEN YOU FIND THE OPPORTUNITY (owner directive)
+
+If during any task you notice something in the lab's prior work that can be
+improved — a dangling reference, a stale number, a missing citation, an
+uncorrected claim, a missing artifact, a broken link — **fix it in the same
+session** (respecting file-walls: only files no other running agent owns).
+Improvements are first-class deliverables: list them in your report with
+before/after. The lab compounds: every session must leave the repos better
+than it found them.
+
 ## Fleet rules
 
 - Two agents run concurrently (account cap = 2; a third launch is

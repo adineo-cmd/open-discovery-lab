@@ -1,0 +1,54 @@
+{
+ "experiment": "modem-b23-b24-unpack",
+ "date": "2026-11-11",
+ "parent_finding": "F-19 (modem-wmi-xref.md): b23/b24 skipped as 'packed/compressed, contents unverified'",
+ "question": "Do WMI-like values in modem.b23/b24 live in decompressible/literal regions or hidden compressed payloads? Does the F-19 modem NO verdict change?",
+ "verdict": "NO-CONFIRMS",
+ "verdict_basis": "b24 is not packed at all (87% all-zero fill, max block entropy 7.5, all data literal, 147 distinct values fully accounted for in literal regions). b23 = 745 KB literal islands (99 distinct values, same generic families) + 38.9 MB opaque body with no container magic, no chunk table, no strings, isolated WMI-like hits (0/71 with WMI-like neighbors), and a compressed-token-like 16-bit profile; its hits are consistent with compression artifacts of the same generic QC constant families already neutralized by the adsp.b36 control.",
+ "inputs": {
+  "b23": "downloads/lineage-fp6/extracted/trees/modem/image/modem.b23 (39,608,384 B)",
+  "b24": "downloads/lineage-fp6/extracted/trees/modem/image/modem.b24 (28,947,136 B)",
+  "wmi_h": "instruments/ath11k/wmi.h (605 IDs = 398 CMDID + 207 EVENTID)",
+  "scanner": "track-a-android-blobs/tools/xref_wmi.py evaluator logic (reused from F-9/F-19)"
+ },
+ "entropy_map_64kb": {
+  "b23": {"blocks": 605, "zero_lt_0.1": 0, "mid_3_7.5": 12, "high_gt_7.5": 593,
+   "runs": [["H", "0x0", "0x2290000"], ["M", "0x2290000", "0x22f0000"], ["H", "0x22f0000", "0x2570000"], ["M", "0x2570000", "0x25d0000"]],
+   "entropy_histogram_bins_0.5": {"5.0": 2, "5.5": 1, "6.0": 3, "6.5": 1, "7.0": 1, "7.5": 500, "8.0": 97}},
+  "b24": {"blocks": 442, "zero_lt_0.1": 386, "mid_3_7.5": 54, "high_gt_7.5": 0,
+   "runs": [["Z", "0x0", "0x830000"], ["M", "0x830000", "0x980000"], ["Z", "0x980000", "0x1180000"], ["M", "0x1180000", "0x11c0000"], ["Z", "0x11c0000", "0x16f0000"], ["M", "0x16f0000", "0x1710000"], ["Z", "0x1710000", "0x1770000"], ["M", "0x1770000", "0x17a0000"], ["Z", "0x17a0000", "0x19f0000"], ["M", "0x19f0000", "0x1b90000"], ["Z", "0x1b90000", "0x1ba0000"]]}
+ },
+ "decompression": {
+  "yield_bytes": 0,
+  "whole_stream": {"zlib_std": "fail", "zlib_raw": "fail", "gzip": "fail", "bzip2": "fail", "lzma_alone": "fail", "xz": "fail"},
+  "candidates_probed": {"b23_lzma_alone_5d0000": 167, "b24_lzma_alone_5d0000": 34, "b23_gzip_1f8b08": 8, "b23_bzh": 4, "b23_zlib_fcheck_valid": 5124, "b24_zlib_fcheck_valid": 814, "sampled_raw_deflate_8kb_stride": "both files, 0 successes"},
+  "xz_lz4_zstd_magic_hits": 0,
+  "q6zip_evidence": "q6z/Q6Z/ZIC hits at chance level; no chunk table; format unidentified (proprietary, q6zip-like suspected by profile only)"
+ },
+ "verified_literal_regions": {
+  "b23_mid1": {"offset": "0x2290000", "end": "0x22f0000", "bytes": 393216, "matched_names": 82, "distinct_values": 51, "aligned_hits": 324, "top": {"0x4004": 13, "0x401f": 5, "0x4020": 5, "0x400d": 4, "0x4001": 3, "0x4003": 2}},
+  "b23_mid2": {"offset": "0x2570000", "end": "0x25d0000", "bytes": 352320, "matched_names": 68, "distinct_values": 48, "aligned_hits": 117, "top": {"0x20002": 5, "0x20003": 3, "0x30001": 3, "0x10002": 4}},
+  "b24_r1_mcfg": {"offset": "0x830000", "end": "0x980000", "bytes": 1376256, "matched_names": 143, "distinct_values": 93, "aligned_hits": 360, "strings": {"qmi": 1782, "QMI": 80, "wlan": 249, "WLAN": 241, "ath": 107, "HTT": 19, "MCFG": 6}, "content": "MCFG XML config data", "top": {"0x10004": 4, "0x10005": 3, "0x10003": 2, "0x40001": 3}},
+  "b24_r2": {"offset": "0x1180000", "end": "0x11c0000", "bytes": 262144, "matched_names": 32, "distinct_values": 23, "aligned_hits": 41},
+  "b24_r3": {"offset": "0x16f0000", "end": "0x1710000", "bytes": 131072, "matched_names": 36, "distinct_values": 25, "aligned_hits": 43},
+  "b24_r4": {"offset": "0x1770000", "end": "0x17a0000", "bytes": 196608, "matched_names": 7, "distinct_values": 6, "aligned_hits": 7},
+  "b24_r5": {"offset": "0x19f0000", "end": "0x1b90000", "bytes": 1749696, "matched_names": 0, "distinct_values": 0, "aligned_hits": 0, "note": "dense binary, entropy <=7.3, gibberish-only strings, verdict-neutral"}
+ },
+ "b23_opaque_body_tests": {
+  "extent": "38.9 MB (all entropy-H blocks outside the two mid islands)",
+  "strings_ge8_total": 7568, "strings_sample": ["lk&pIrALEMr", "H(*XU;LiLOtZ", "2!JDQSFQ&4R("], "protocol_strings": 0,
+  "value_0x20001": {"aligned_hits": 71, "first": "0x618a4", "last": "0x25bcc68", "median_gap": "0x1dd58", "hits_with_wmi_like_neighbor_at_+-4_8": 0},
+  "value_0x10001": {"aligned_hits": 26, "median_gap": "0x1a0"},
+  "value_0x4004": {"aligned_hits": 20, "note": "6 of 20 in literal mid1 (0x22b62f0..0x22b9b20, clustered); 14 isolated in body"},
+  "dup_32byte_blocks_per_8MB_window": {"0x0": 506, "0x1000000": 59, "0x2000000+0x2200000": "zero-run dominated (literal islands edge)"},
+  "top_words_first_8MB": [["10002000", 199], ["0040862f", 194], ["44380020", 152]],
+  "slot16_fractions_lt8000_lt1000_lt100": {"b23_body": [0.603, 0.1587, 0.0317], "uniform_random": [0.5, 0.0625, 0.0039], "b23_mid1_literal": [0.73, 0.4171, 0.3357], "b24_r1_literal": [0.956, 0.1107, 0.0762]},
+  "interpretation": "compressed-token artifacts, not stored dispatch constants (isolation + gibberish contexts + no strings + partial-skew profile); worst-case-literal fallback still lands in generic control-matched families"
+ },
+ "comparison_to_f19": {
+  "f19_b23_matched": 366, "f19_b24_matched": 177, "counting_semantics": "distinct ID names (CMDID/EVENTID share values)",
+  "b24_provenance": "fully literal; F-19's 177 names fully inside verifiable bytes",
+  "b23_provenance": "99 distinct values / 441 hits in the two literal islands; remainder in opaque body, artifact-consistent"
+ },
+ "notes": "Extracted regions kept in /tmp only; no binary committed. Scripts one-off in /tmp/scripts. Honest negative: b23 body decompression yield 0 bytes; verdict rests on structural tests, not payload decryption."
+}

@@ -15,7 +15,7 @@ these results are first.
 
 1. **Capability:** Ghidra 12.2 headless + Hexagon processor module runs on this host.
    wpss.b06 imports at base 0xc0002000 (b06 phdr vaddr, filesz 6,074,641 = exact file
-   size) as one flat block `ram:0xc0002000-0xc05cd110`.
+   size) as one flat block `ram:0xc0002000-0xc05cd110` (0xc05cd110 = inclusive last-byte; end-exclusive convention: 0xc05bd111).
 2. **Decode-verification (load-bearing):** all four dominant per-group handlers decode:
    PDEV 0xc02cd9cc (function body **9,828 B**; serves 48 PDEV-group records under F-22's
    strict filter / 47 under F-23's loose filter), VDEV 0xc031d8c8 (37, 3,864 B),

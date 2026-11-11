@@ -1,0 +1,1016 @@
+{
+ "finding": "F-23",
+ "title": "Who consumes the F-22 WMI message-ID registry: architecture correction (Hexagon, not RISC-V), per-group handler clustering, consumer-constant search negative",
+ "inputs": {
+  "files": [
+   "wpss.mdt",
+   "wpss.b06",
+   "wpss.b09"
+  ],
+  "mdt_phdr_b06": {
+   "i": 6,
+   "vaddr": "0xc0002000",
+   "filesz": 6074641,
+   "memsz": 6078464,
+   "flags": "0x8000007"
+  },
+  "mdt_phdr_b09": {
+   "i": 9,
+   "vaddr": "0xc0667000",
+   "filesz": 360960
+  },
+  "e_machine_wpss_mdt": 164,
+  "e_machine_note": "EM_HEXAGON=164 (EM_ARM=40, EM_RISCV=243); wpss is a Hexagon QDSP image"
+ },
+ "registry": {
+  "records_with_ptr_in_b06_exec": 193,
+  "runs": 30,
+  "run_list": [
+   {
+    "start": "0xc0684da0",
+    "end": "0xc0684dc4",
+    "n": 3
+   },
+   {
+    "start": "0xc0691080",
+    "end": "0xc06910a4",
+    "n": 3
+   },
+   {
+    "start": "0xc06910bc",
+    "end": "0xc0691158",
+    "n": 13
+   },
+   {
+    "start": "0xc06911b8",
+    "end": "0xc0691254",
+    "n": 13
+   },
+   {
+    "start": "0xc0691260",
+    "end": "0xc06912c0",
+    "n": 8
+   },
+   {
+    "start": "0xc0691314",
+    "end": "0xc069132c",
+    "n": 2
+   },
+   {
+    "start": "0xc0691338",
+    "end": "0xc0691368",
+    "n": 4
+   },
+   {
+    "start": "0xc069138c",
+    "end": "0xc06913bc",
+    "n": 4
+   },
+   {
+    "start": "0xc06913e8",
+    "end": "0xc06914d8",
+    "n": 20
+   },
+   {
+    "start": "0xc0691578",
+    "end": "0xc06915a8",
+    "n": 4
+   },
+   {
+    "start": "0xc06915c0",
+    "end": "0xc06915d8",
+    "n": 2
+   },
+   {
+    "start": "0xc0691738",
+    "end": "0xc069178c",
+    "n": 7
+   },
+   {
+    "start": "0xc0691848",
+    "end": "0xc06918b4",
+    "n": 9
+   },
+   {
+    "start": "0xc06918f0",
+    "end": "0xc069192c",
+    "n": 5
+   },
+   {
+    "start": "0xc0691938",
+    "end": "0xc0691974",
+    "n": 5
+   },
+   {
+    "start": "0xc0691980",
+    "end": "0xc06919b0",
+    "n": 4
+   },
+   {
+    "start": "0xc06919bc",
+    "end": "0xc0691a28",
+    "n": 9
+   },
+   {
+    "start": "0xc0691a34",
+    "end": "0xc0691a7c",
+    "n": 6
+   },
+   {
+    "start": "0xc0691bb0",
+    "end": "0xc0691cb8",
+    "n": 22
+   },
+   {
+    "start": "0xc0691df8",
+    "end": "0xc0691e28",
+    "n": 4
+   },
+   {
+    "start": "0xc0691e40",
+    "end": "0xc0691e70",
+    "n": 4
+   },
+   {
+    "start": "0xc0691ed8",
+    "end": "0xc0691f14",
+    "n": 5
+   },
+   {
+    "start": "0xc06925e0",
+    "end": "0xc06925f8",
+    "n": 2
+   },
+   {
+    "start": "0xc0692620",
+    "end": "0xc069265c",
+    "n": 5
+   },
+   {
+    "start": "0xc0692718",
+    "end": "0xc0692730",
+    "n": 2
+   },
+   {
+    "start": "0xc0692a30",
+    "end": "0xc0692a54",
+    "n": 3
+   },
+   {
+    "start": "0xc0692aa0",
+    "end": "0xc0692ab8",
+    "n": 2
+   },
+   {
+    "start": "0xc06934a8",
+    "end": "0xc06934c0",
+    "n": 2
+   },
+   {
+    "start": "0xc0693720",
+    "end": "0xc0693744",
+    "n": 3
+   },
+   {
+    "start": "0xc069dfc8",
+    "end": "0xc069dff8",
+    "n": 4
+   }
+  ],
+  "distinct_ptrs": 32,
+  "top_ptrs": [
+   [
+    "0xc02cd9cc",
+    51
+   ],
+   [
+    "0xc031d8c8",
+    38
+   ],
+   [
+    "0xc035d2e0",
+    22
+   ],
+   [
+    "0xc02d94bc",
+    20
+   ],
+   [
+    "0xc0377b5c",
+    5
+   ],
+   [
+    "0xc03bd4c0",
+    5
+   ],
+   [
+    "0xc04ecc3d",
+    5
+   ],
+   [
+    "0xc02df240",
+    4
+   ],
+   [
+    "0xc0376c54",
+    4
+   ],
+   [
+    "0xc03771b8",
+    4
+   ],
+   [
+    "0xc04b603c",
+    4
+   ],
+   [
+    "0xc03cffa0",
+    3
+   ],
+   [
+    "0xc0424740",
+    3
+   ],
+   [
+    "0xc017612c",
+    2
+   ]
+  ],
+  "grp_ptr_cluster": {
+   "1": {
+    "n": 1,
+    "top_ptrs": [
+     [
+      "0xc04ecc3d",
+      1
+     ]
+    ],
+    "distinct": 1
+   },
+   "3": {
+    "n": 7,
+    "top_ptrs": [
+     [
+      "0xc02f2f20",
+      1
+     ],
+     [
+      "0xc02f382c",
+      1
+     ],
+     [
+      "0xc02f3888",
+      1
+     ]
+    ],
+    "distinct": 7
+   },
+   "4": {
+    "n": 48,
+    "top_ptrs": [
+     [
+      "0xc02cd9cc",
+      48
+     ]
+    ],
+    "distinct": 1
+   },
+   "5": {
+    "n": 41,
+    "top_ptrs": [
+     [
+      "0xc031d8c8",
+      37
+     ],
+     [
+      "0xc02cd9cc",
+      1
+     ],
+     [
+      "0xc03bf824",
+      1
+     ]
+    ],
+    "distinct": 5
+   },
+   "6": {
+    "n": 23,
+    "top_ptrs": [
+     [
+      "0xc02d94bc",
+      20
+     ],
+     [
+      "0xc017612c",
+      2
+     ],
+     [
+      "0xc0175f1c",
+      1
+     ]
+    ],
+    "distinct": 3
+   },
+   "7": {
+    "n": 11,
+    "top_ptrs": [
+     [
+      "0xc02df240",
+      4
+     ],
+     [
+      "0xc03bd4c0",
+      4
+     ],
+     [
+      "0xc02df400",
+      2
+     ]
+    ],
+    "distinct": 4
+   },
+   "8": {
+    "n": 5,
+    "top_ptrs": [
+     [
+      "0xc0377b5c",
+      5
+     ]
+    ],
+    "distinct": 1
+   },
+   "10": {
+    "n": 8,
+    "top_ptrs": [
+     [
+      "0xc0376c54",
+      4
+     ],
+     [
+      "0xc03771b8",
+      4
+     ]
+    ],
+    "distinct": 2
+   },
+   "11": {
+    "n": 24,
+    "top_ptrs": [
+     [
+      "0xc035d2e0",
+      22
+     ],
+     [
+      "0xc031d8c8",
+      1
+     ],
+     [
+      "0xc035e124",
+      1
+     ]
+    ],
+    "distinct": 3
+   },
+   "13": {
+    "n": 5,
+    "top_ptrs": [
+     [
+      "0xc03c1ca8",
+      2
+     ],
+     [
+      "0xc03d3640",
+      2
+     ],
+     [
+      "0xc03bd4c0",
+      1
+     ]
+    ],
+    "distinct": 3
+   },
+   "16": {
+    "n": 7,
+    "top_ptrs": [
+     [
+      "0xc04b603c",
+      4
+     ],
+     [
+      "0xc04ecc3d",
+      3
+     ]
+    ],
+    "distinct": 2
+   },
+   "17": {
+    "n": 3,
+    "top_ptrs": [
+     [
+      "0xc02cd9cc",
+      2
+     ],
+     [
+      "0xc04ecc3d",
+      1
+     ]
+    ],
+    "distinct": 2
+   },
+   "18": {
+    "n": 2,
+    "top_ptrs": [
+     [
+      "0xc03b9be8",
+      2
+     ]
+    ],
+    "distinct": 1
+   },
+   "19": {
+    "n": 6,
+    "top_ptrs": [
+     [
+      "0xc0424740",
+      3
+     ],
+     [
+      "0xc03cffa0",
+      2
+     ],
+     [
+      "0xc03c4e14",
+      1
+     ]
+    ],
+    "distinct": 3
+   },
+   "20": {
+    "n": 2,
+    "top_ptrs": [
+     [
+      "0xc0400550",
+      2
+     ]
+    ],
+    "distinct": 1
+   }
+  },
+  "run_list_heads_prev4": [
+   {
+    "run": "0xc0684da0",
+    "n": 3,
+    "prev4": [
+     "0x3",
+     "0xc0684da0",
+     "0x1",
+     "0x0"
+    ]
+   },
+   {
+    "run": "0xc0691080",
+    "n": 3,
+    "prev4": [
+     "0xffff",
+     "0x45",
+     "0xc0691080",
+     "0x1"
+    ]
+   },
+   {
+    "run": "0xc06910bc",
+    "n": 13,
+    "prev4": [
+     "0x0",
+     "0xc02cd9cc",
+     "0x16010",
+     "0x0"
+    ]
+   },
+   {
+    "run": "0xc06911b8",
+    "n": 13,
+    "prev4": [
+     "0x0",
+     "0xc02cd9cc",
+     "0x1d010",
+     "0x0"
+    ]
+   },
+   {
+    "run": "0xc0691260",
+    "n": 8,
+    "prev4": [
+     "0x0",
+     "0xc02cd9cc",
+     "0x16008",
+     "0x0"
+    ]
+   },
+   {
+    "run": "0xc0691314",
+    "n": 2,
+    "prev4": [
+     "0x0",
+     "0xc02cd9cc",
+     "0x1d01d",
+     "0x0"
+    ]
+   },
+   {
+    "run": "0xc0691338",
+    "n": 4,
+    "prev4": [
+     "0x0",
+     "0xc02cd9cc",
+     "0x1d014",
+     "0x0"
+    ]
+   },
+   {
+    "run": "0xc069138c",
+    "n": 4,
+    "prev4": [
+     "0x0",
+     "0xc02cd9cc",
+     "0x1e002",
+     "0x0"
+    ]
+   },
+   {
+    "run": "0xc06913e8",
+    "n": 20,
+    "prev4": [
+     "0x14",
+     "0xc06913e8",
+     "0x1",
+     "0x0"
+    ]
+   },
+   {
+    "run": "0xc0691578",
+    "n": 4,
+    "prev4": [
+     "0x4",
+     "0xc0691578",
+     "0x1",
+     "0x0"
+    ]
+   },
+   {
+    "run": "0xc06915c0",
+    "n": 2,
+    "prev4": [
+     "0xffff",
+     "0x2",
+     "0xc06915c0",
+     "0x1"
+    ]
+   },
+   {
+    "run": "0xc0691738",
+    "n": 7,
+    "prev4": [
+     "0x7",
+     "0xc0691738",
+     "0x1",
+     "0x0"
+    ]
+   }
+  ],
+  "mini_table_id_ptr_main_run_area": [
+   {
+    "id": "0x4001",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691080"
+   },
+   {
+    "id": "0x4002",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc069108c"
+   },
+   {
+    "id": "0x4003",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691098"
+   },
+   {
+    "id": "0x400a",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06910bc"
+   },
+   {
+    "id": "0x4004",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06910c8"
+   },
+   {
+    "id": "0x4005",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06910d4"
+   },
+   {
+    "id": "0x4036",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06910e0"
+   },
+   {
+    "id": "0x4006",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06910ec"
+   },
+   {
+    "id": "0x4009",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06910f8"
+   },
+   {
+    "id": "0x400b",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691104"
+   },
+   {
+    "id": "0x11001",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691110"
+   },
+   {
+    "id": "0x11002",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc069111c"
+   },
+   {
+    "id": "0x400c",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691128"
+   },
+   {
+    "id": "0x4007",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691134"
+   },
+   {
+    "id": "0x4008",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691140"
+   },
+   {
+    "id": "0x400d",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc069114c"
+   },
+   {
+    "id": "0x4010",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691194"
+   },
+   {
+    "id": "0x401d",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06911b8"
+   },
+   {
+    "id": "0x401e",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06911c4"
+   },
+   {
+    "id": "0x401f",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06911d0"
+   },
+   {
+    "id": "0x4020",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06911dc"
+   },
+   {
+    "id": "0x4014",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06911e8"
+   },
+   {
+    "id": "0x4015",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06911f4"
+   },
+   {
+    "id": "0x4016",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691200"
+   },
+   {
+    "id": "0x401a",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc069120c"
+   },
+   {
+    "id": "0x401b",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691218"
+   },
+   {
+    "id": "0x4017",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691224"
+   },
+   {
+    "id": "0x404b",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691230"
+   },
+   {
+    "id": "0x404c",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc069123c"
+   },
+   {
+    "id": "0x4022",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691248"
+   },
+   {
+    "id": "0x4026",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691260"
+   },
+   {
+    "id": "0x5022",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc069126c"
+   },
+   {
+    "id": "0x402a",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691278"
+   },
+   {
+    "id": "0x4028",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691284"
+   },
+   {
+    "id": "0x402e",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc0691290"
+   },
+   {
+    "id": "0x402f",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc069129c"
+   },
+   {
+    "id": "0x4031",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06912a8"
+   },
+   {
+    "id": "0x4034",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06912b4"
+   },
+   {
+    "id": "0x4035",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06912cc"
+   },
+   {
+    "id": "0x4037",
+    "ptr": "0xc02cd9cc",
+    "vaddr": "0xc06912e4"
+   }
+  ],
+  "records_in_runs_ge2": 178,
+  "distinct_ptrs_in_runs_ge2": 26
+ },
+ "consumer_search": {
+  "rv32_lens": {
+   "lui_hits_registry_window": 0,
+   "auipc_hits_registry_window": 0,
+   "addi_rd_rd_12_hits_b06": 0,
+   "lui_addi_resolved_pairs": 0,
+   "exec_segments_scanned": [
+    "1",
+    "2",
+    "3",
+    "5",
+    "6"
+   ],
+   "note": "b01,b02,b03,b05,b06 scanned 2-byte-aligned for lui 0xc068x-0xc069x / auipc into registry window; zero everywhere"
+  },
+  "literal_pointer_search": {
+   "segments_scanned": "b01..b12",
+   "hits_all_in_b09": true,
+   "n_hits": 20,
+   "sample": [
+    [
+     "0xc0684d94",
+     "0xc0684da0"
+    ],
+    [
+     "0xc0691060",
+     "0xc06913c0"
+    ],
+    [
+     "0xc0691078",
+     "0xc0691080"
+    ],
+    [
+     "0xc06913dc",
+     "0xc06913e8"
+    ],
+    [
+     "0xc069156c",
+     "0xc0691578"
+    ],
+    [
+     "0xc06915b8",
+     "0xc06915c0"
+    ],
+    [
+     "0xc069172c",
+     "0xc0691738"
+    ],
+    [
+     "0xc069183c",
+     "0xc0691848"
+    ],
+    [
+     "0xc0691b7c",
+     "0xc0691bb0"
+    ],
+    [
+     "0xc0691dec",
+     "0xc0691df8"
+    ]
+   ],
+   "interpretation": "every run start is preceded (8-12 B earlier) by a word equal to the run start address: self-referential list-head/anchor pattern inside b09 itself; no other segment holds a registry pointer"
+  },
+  "hexagon_immext_scan": {
+   "method": "4-byte-aligned words with top nibble 0xD, 26-bit field at shift 0..6 == target>>6 for 12 registry vaddrs",
+   "hits": 0,
+   "caveat": "immext encoding assumption unverified; capstone 5.0.7 has no CS_ARCH_HEXAGON so full Hexagon instruction decode was not possible"
+  }
+ },
+ "ptr_target_decode": {
+  "rv32C_decode_at_ptrs": "looks like mid-function noise at every sampled ptr (c.lw/c.flw/c.andi chains) - consistent with wrong-ISA decode, not evidence against ptrs being code",
+  "sample_decodes": [
+   {
+    "ptr": "0xc02cd9cc",
+    "count": 51,
+    "at_ptr": "c.lw s1, 0x10(s1)",
+    "around": [
+     "c.lwsp s0, 0xc0(sp)",
+     "c.lwsp s7, 0xac(sp)",
+     "c.lwsp s2, 0x28(sp)",
+     "c.addi s8, 1"
+    ]
+   },
+   {
+    "ptr": "0xc031d8c8",
+    "count": 38,
+    "at_ptr": "c.lw a3, 8(s0)",
+    "around": [
+     "c.lw s0, 0(a2)",
+     "c.flw fs0, 0x30(s0)",
+     "c.beqz a2, 0x10",
+     "c.lui a6, 0xfffe0"
+    ]
+   },
+   {
+    "ptr": "0xc035d2e0",
+    "count": 22,
+    "at_ptr": "c.lw a5, 0xc(a3)",
+    "around": [
+     "c.sw s0, 0(s0)",
+     "c.lw s0, 8(s0)",
+     "c.flw fs0, 0x28(a1)",
+     "c.swsp sp, 0x30(sp)"
+    ]
+   },
+   {
+    "ptr": "0xc02d94bc",
+    "count": 20,
+    "at_ptr": "c.flwsp fa1, 0xd8(sp)",
+    "around": [
+     "c.fswsp ft3, 0x80(sp)",
+     "bltz ra, 0xf8e",
+     "c.sw s1, 0(s0)",
+     "c.jalr tp"
+    ]
+   },
+   {
+    "ptr": "0xc0377b5c",
+    "count": 5,
+    "at_ptr": "c.flw fa4, 0x60(a3)",
+    "around": [
+     "c.sw s0, 0(s0)",
+     "c.flw fs0, 0x38(a4)",
+     "c.fswsp fa5, 0xa4(sp)",
+     "c.li a6, -0x15"
+    ]
+   },
+   {
+    "ptr": "0xc03bd4c0",
+    "count": 5,
+    "at_ptr": "c.lw s0, 0x10(s1)",
+    "around": [
+     "c.swsp s0, 0xc0(sp)",
+     "c.srli a0, 0x3c",
+     "c.beqz s0, 0x40",
+     "c.lwsp sp, 8(sp)"
+    ]
+   }
+  ],
+  "fde_check": {
+   "b09_eh_frame_fdes": 28,
+   "fde_pc_begin_interpretation": "absolute (raw u32)",
+   "all_28_in_b06": true,
+   "begin_range": [
+    "0xc04e6878",
+    "0xc04e7a70"
+   ],
+   "fde_begins": [
+    "0xc04e6878",
+    "0xc04e68b4",
+    "0xc04e68d0",
+    "0xc04e6910",
+    "0xc04e69d8",
+    "0xc04e69f8",
+    "0xc04e6a18",
+    "0xc04e6a5c",
+    "0xc04e6b80",
+    "0xc04e6cb4",
+    "0xc04e6d40",
+    "0xc04e6eb0",
+    "0xc04e6ec0",
+    "0xc04e7010",
+    "0xc04e70d4",
+    "0xc04e7180",
+    "0xc04e724c",
+    "0xc04e72d4",
+    "0xc04e73d0",
+    "0xc04e7410",
+    "0xc04e74a0",
+    "0xc04e74c8",
+    "0xc04e74f8",
+    "0xc04e7580",
+    "0xc04e7620",
+    "0xc04e7a30",
+    "0xc04e7a50",
+    "0xc04e7a70"
+   ],
+   "prologue_at_fde_begins_rv32C": [
+    {
+     "begin": "0xc04e6878",
+     "insns": [
+      "c.beqz s0, 0",
+      "c.j 0x66"
+     ]
+    },
+    {
+     "begin": "0xc04e68b4",
+     "insns": [
+      "c.sw s0, 0(s0)",
+      "c.j 0x66",
+      "c.lui s11, 0xa",
+      "c.slli s8, 1",
+      "c.swsp zero, 0xc(sp)",
+      "c.lw s0, 0x10(a1)"
+     ]
+    },
+    {
+     "begin": "0xc04e68d0",
+     "insns": [
+      "c.beqz s0, 0",
+      "c.j 0x66"
+     ]
+    }
+   ],
+   "note": "even eh_frame-verified b06 function starts decode to RV32C noise -> confirms RV32 lens invalid for b06"
+  },
+  "alignment": {
+   "ptrs_4aligned_except": [
+    "0xc04ecc3d"
+   ],
+   "fde_begins_all_4aligned": true,
+   "note": "Hexagon packets are 4-byte aligned; 4-aligned ptrs consistent with function pointers"
+  }
+ },
+ "ath11k_xref": {
+  "source": "instruments/ath11k/wmi.h wmi_grp enum (WMI_GRP_SCAN=3, PDEV=4, VDEV=5, PEER=6, MGMT=7, BA_NEG=8, DFS=0xa, ROAM=0xb, P2P=0xd, PROFILE=0x10, SUSPEND=0x11, BCN_FILTER=0x12, WOW=0x13, RTT=0x14)",
+  "id_names_sample": {
+   "0x4001": "WMI_PDEV_TPC_CONFIG_EVENTID",
+   "0x4002": "WMI_CHAN_INFO_EVENTID",
+   "0x3001": "WMI_SCAN_EVENTID",
+   "0x3003": "WMI_SCAN_CHAN_LIST_CMDID",
+   "0x4009": "WMI_SERVICE_READY_EXT_EVENTID"
+  }
+ },
+ "status": {
+  "consumer_code_located": false,
+  "grp_ptr_mapping": "complete for records found",
+  "handler_prologue_validity": "not verifiable: no Hexagon disassembler on host",
+  "architecture_correction": "confirmed via e_machine"
+ }
+}

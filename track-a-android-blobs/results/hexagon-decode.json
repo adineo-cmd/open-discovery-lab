@@ -1,0 +1,145 @@
+{
+ "finding": "F-28",
+ "title": "Hexagon decode unlocked: Ghidra 12.2 headless decode-verification of F-23 WMI handler pointers in wpss.b06",
+ "capability": {
+  "tool": "Ghidra 12.2 PUBLIC (tag Ghidra_12.2_build, asset ghidra_12.2_PUBLIC_20261016.zip)",
+  "sha256_verified": "2c2cd776db3c1f6a097ba418922378ac3649cadd5e844a6f5f088ae628a7be67",
+  "language": "Hexagon:LE:32:default",
+  "language_desc": "Qualcomm Hexagon V69 processor (QDSP6) 32-bit little-endian",
+  "jdk": "Temurin 25.0.5+8 (Ghidra 12.2 requires Java 25; host JRE 21 insufficient)",
+  "memory_block": ["ram:0xc0002000-0xc05cd110"],
+  "import_base": "0xc0002000 (b06 phdr vaddr; filesz 6074641 exact)",
+  "auto_analysis": "partial (300s cap); all verification via explicit DisassembleCommand at targets",
+  "install_notes": "attempt1 404 (asset name guessed from release date 20261022; actual build date 20261016 per API); attempt2 OK first try; JDK21 rejected then JDK25 ok; project paths with dot-prefixed elements rejected (moved to /tmp/f26); -loader name lookup broken in headless (omit -loader, default Raw Binary works)"
+ },
+ "decode_verification": {
+  "method": "explicit DisassembleCommand(follow-flow) + CreateFunctionCmd at each F-23 pointer; saved to Ghidra project",
+  "handlers": {
+   "0xc02cd9cc": {"records": 47, "grp": "PDEV(4)+MGMT/SUSPEND(17)", "disassembled": true, "function_created": true, "function_body_bytes": 9828, "first_instruction": "bitsplit R5R4,R1,#0x8"},
+   "0xc031d8c8": {"records": 37, "grp": "VDEV(5)", "disassembled": true, "function_created": true, "function_body_bytes": 3864, "first_instruction": "call 0xc04e60f0"},
+   "0xc02d94bc": {"records": 20, "grp": "PEER(6)", "disassembled": true, "function_created": true, "function_body_bytes": 60, "first_instruction": "call 0xc04e6098"},
+   "0xc035d2e0": {"records": 22, "grp": "ROAM(11)", "disassembled": true, "function_created": true, "function_body_bytes": 88, "first_instruction": "call 0xc04e6098"},
+   "0xc0377b5c": {"records": 5, "grp": "BA_NEG(8)", "disassembled": true, "function_created": true, "function_body_bytes": 88, "first_instruction": "call 0xc04e60cc"},
+   "0xc03bd4c0": {"records": 5, "grp": "MGMT(7)", "disassembled": true, "function_created": true, "function_body_bytes": 2216, "first_instruction": "bitsplit R1R0,R1,#0x8"},
+   "0xc02df240": {"records": 4, "grp": "MGMT(7)", "disassembled": true, "function_created": true, "function_body_bytes": 336, "first_instruction": "immext #0x7000"},
+   "0xc0376c54": {"records": 4, "grp": "DFS(10)", "disassembled": true, "function_created": true, "function_body_bytes": 104, "first_instruction": "and R2,R1,#-0x100"},
+   "0xc03771b8": {"records": 4, "grp": "DFS(10)", "disassembled": true, "function_created": true, "function_body_bytes": 1212, "first_instruction": "call 0xc04e60f0"},
+   "0xc03c1ca8": {"records": 2, "grp": "P2P(13)", "disassembled": true, "function_created": true, "function_body_bytes": 4956, "first_instruction": "and R3,R1,#-0x100"},
+   "0xc03d3640": {"records": 2, "grp": "P2P(13)", "disassembled": true, "function_created": true, "function_body_bytes": 2848, "first_instruction": "immext #0x1f000"},
+   "0xc04b603c": {"records": 4, "grp": "PROFILE(16)", "disassembled": true, "function_created": true, "function_body_bytes": 4932, "first_instruction": "and R3,R1,#-0x100"},
+   "0xc04ecc3d": {"records": 4, "grp": "PROFILE(16)+SUSPEND(17)", "disassembled": false, "function_created": false, "function_body_bytes": null, "first_instruction": null},
+   "0xc03b9be8": {"records": 2, "grp": "BCN_FILTER(18)", "disassembled": true, "function_created": true, "function_body_bytes": 412, "first_instruction": "and R3,R1,#-0x100"},
+   "0xc0424740": {"records": 3, "grp": "WOW(19)", "disassembled": true, "function_created": true, "function_body_bytes": 4208, "first_instruction": "and R3,R1,#-0x100"},
+   "0xc03cffa0": {"records": 2, "grp": "WOW(19)", "disassembled": true, "function_created": true, "function_body_bytes": 1668, "first_instruction": "immext #0x5000"},
+   "0xc0400550": {"records": 2, "grp": "RTT(20)", "disassembled": true, "function_created": true, "function_body_bytes": 352, "first_instruction": "immext #0xfffebfc0"},
+   "0xc017612c": {"records": 2, "grp": "?", "disassembled": true, "function_created": true, "function_body_bytes": 904, "first_instruction": "call 0xc04e60f0"},
+   "0xc02df400": {"records": 2, "grp": "?", "disassembled": true, "function_created": true, "function_body_bytes": 2164, "first_instruction": "clrbit R3,R1,#0x0"},
+   "0xc02f2f20": {"records": 1, "grp": "SCAN(3)", "disassembled": true, "function_created": true, "function_body_bytes": 2316, "first_instruction": "call 0xc04e6098"},
+   "0xc02f382c": {"records": 1, "grp": "SCAN(3)", "disassembled": true, "function_created": true, "function_body_bytes": 92, "first_instruction": "allocframe #0x10"},
+   "0xc02f3888": {"records": 1, "grp": "SCAN(3)", "disassembled": true, "function_created": true, "function_body_bytes": 368, "first_instruction": "allocframe #0x8"}
+  },
+  "n_decode_ok": 21,
+  "n_total": 22,
+  "odd_ptr_0xc04ecc3d": "disassemble command applied but produced NO instruction and NO function at the odd address - Hexagon decode requires 4-byte packet alignment; F-23 anomaly suspicion CONFIRMED at decode level",
+  "eh_frame_starts": {
+   "n": 28,
+   "n_function_created": 28,
+   "body_bytes": {
+    "0xc04e6878": 56, "0xc04e68b4": 104, "0xc04e68d0": 56, "0xc04e6910": 4, "0xc04e69d8": 4, "0xc04e69f8": 4, "0xc04e6a18": 4, "0xc04e6a5c": 284, "0xc04e6b80": 448, "0xc04e6cb4": 140, "0xc04e6d40": 372, "0xc04e6eb0": 4, "0xc04e6ec0": 528, "0xc04e7010": 192, "0xc04e70d4": 332, "0xc04e7180": 160, "0xc04e724c": 136, "0xc04e72d4": 184, "0xc04e73d0": 96, "0xc04e7410": 124, "0xc04e74a0": 4, "0xc04e74c8": 92, "0xc04e74f8": 44, "0xc04e7580": 152, "0xc04e7620": 1032, "0xc04e7a30": 28, "0xc04e7a50": 32, "0xc04e7a70": 708
+   }
+  },
+  "prologue_shapes_observed": [
+   "bitsplit R5R4,R1,#0x8 (PDEV)",
+   "call 0xc04e60f0 / call 0xc04e6098 (VDEV/PEER/ROAM/scan stubs)",
+   "allocframe #0x10 / allocframe #0x8 (scan 0xc02f382c/0xc02f3888)",
+   "immext pairs (MGMT 0xc02df240, P2P 0xc03d3640, WOW 0xc03cffa0, RTT 0xc0400550)",
+   "and R3,R1,#-0x100 id-extract pattern (0xc0376c54,0xc03c1ca8,0xc04b603c,0xc0424740,0xc03b9be8)"
+  ],
+  "call_target_coherence": "VDEV/PEER/ROAM/BA_NEG/SCAN first instructions are calls landing 0xc04e6098-0xc04e60f0 - same cluster as the eh_frame starts (0xc04e6878+) - strong internal coherence of decode",
+  "listing_note": "30-unit Ghidra Hexagon listing at 0xc02cd9cc (saved program): real packet prologue (bitsplit + call + allocframe #0xd8), immext pairs building absolute pointers, and cmp.eq/jump dispatch trees comparing R4/R5 against 0x1/0x2/0x40/0x50/0x110/0x15f; decoded absolute access memw.if(P0) R2,(##0xc06bde64) lands inside wpss.b09 phdr range 0xc0667000-0xc06c4000 (outside registry window, b09 data nonetheless)"
+ },
+ "xrefs_to_registry": {
+  "b09_memory_block_add": "FAILED (API overload mismatch) - registry->handler data xrefs NOT established this pass",
+  "constant_scan": {
+   "method": "instruction operand scalars/addresses within F-22 registry window 0xc0682000-0xc06a0000",
+   "coverage": "partial: 150000 instructions, 120s budget, stopped early (full-auto analysis not completed; flat program has ~1.4M potential packets)",
+   "scalar_hits": [
+    ["c0146404", "immext #0xc0682340", "0xc0682340"],
+    ["c0146408", "assign R3,##0xc0682348", "0xc0682348"],
+    ["c014640c", "immext #0xc0682340", "0xc0682340"],
+    ["c014641c", "immext #0xc0682340", "0xc0682340"],
+    ["c0146464", "immext #0xc0682340", "0xc0682340"]
+   ],
+   "address_hits": [
+    ["c0146410", "memh (##0xc0682340),R2.L", "0xc0682340"],
+    ["c0146420", "memuh R2,(##0xc0682340)", "0xc0682340"],
+    ["c0146468", "memuh R2,(##0xc0682340)", "0xc0682340"]
+   ],
+   "raw_word_hits_count": 33,
+   "raw_word_hits_sample": [
+    ["0xc04e9a54", "0xc069f000"],
+    ["0xc04eaa84", "0xc069f014"],
+    ["0xc04eaac4", "0xc069f028"],
+    ["0xc04ebbd4", "0xc069f068"],
+    ["0xc054074c", "0xc068ac28"],
+    ["0xc054a260", "0xc068b3a8"],
+    ["0xc054a28c", "0xc068b3d8"],
+    ["0xc0551b40", "0xc068ecc0"],
+    ["0xc057a518", "0xc0692d18"],
+    ["0xc057a520", "0xc0692dc0"],
+    ["0xc057a528", "0xc0692cd0"],
+    ["0xc057a530", "0xc0692d00"]
+   ]
+  },
+  "significance": "FIRST decoded Hexagon-level cross-references from b06 code into b09 data: code at 0xc0146404-0xc0146468 builds absolute addresses 0xc0682340/0xc0682348 via immext constext pairs (assign R3,##0xc0682348; memh/memuh accesses). F-23 consumer-constant-search negative is overturned at decode level for the window start area (0xc0682340 is inside b09 phdr 0xc0667000-0xc06c4000 and inside the F-22 window 0xc0682000-0xc06a0000), but NOT yet tied to the F-22 record registry 0xc0691080+ specifically"
+ },
+ "decompiler": {
+  "status": "DecompInterface launches; all 4 big handlers FAILED with process timeout at 60s each",
+  "verdict": "decompiler capability unproven for Hexagon on this box (load-heavy host; 9.8KB functions); disassembly fully working"
+ },
+ "honest_negatives": [
+  "full auto-analysis timed out at 300s cap - program saved with partial analysis",
+  "b09 block add failed - registry->handler xref graph not built (known cause: MemoryBlockUtils overload; retryable)",
+  "constant scan partial (150k of larger instruction space)",
+  "prologue instruction lists lost to a JPype type error (first-instruction + body sizes captured instead)",
+  "decompiler timeouts on all 4 big handlers"
+ ],
+ "meta": {
+  "elapsed_s": 987.8,
+  "n_functions_in_program": 50,
+  "script": "tools-ghidra/scripts/hexagon_verify.py (kept out of git)",
+  "project": "/tmp/f26/ghidra-proj"
+ },
+ "pdev_listing_30": [
+  "c02cd9cc  bitsplit R5R4,R1,#0x8",
+  "c02cd9d0  call 0xc04e60cc",
+  "c02cd9d4  allocframe #0xd8",
+  "c02cd9d8  immext #0x10000",
+  "c02cd9dc  combine R17R16,##0x10000,R2",
+  "c02cd9e0  immext #0xc056c900",
+  "c02cd9e4  assign R18,##0xc056c90b",
+  "c02cd9e8  cmp.gt P0,R5,#0x15f",
+  "c02cd9ec  jump.if(P0) 0xc02cdaec",
+  "c02cd9f0  cmp.eq P0,R5,#0x40",
+  "c02cd9f4  add.if(P0.new) R2,R4,#-0x1",
+  "c02cd9f8  jump.if(P0.new):nt 0xc02cdb8c",
+  "c02cd9fc  cmp.eq P0,R5,#0x50",
+  "c02cda00  jump.if(P0.new):nt 0xc02cdc80",
+  "c02cda04  cmp.eq P0,R5,#0x110",
+  "c02cda08  jump.if(!P0.new):nt 0xc02cedcc",
+  "c02cda0c  cmp.eq P0,R4,#0x1",
+  "c02cda10  immext #0xc0bad800",
+  "c02cda14  assign R20,##0xc0bad838",
+  "c02cda18  memw.if(P0) R19,(R16)",
+  "c02cda1c  immext #0xc06bde40",
+  "c02cda20  memw.if(P0) R2,(##0xc06bde64)",
+  "c02cda24  jump.if(P0) 0xc02cdcd4",
+  "c02cda28  immext #0x1c0",
+  "c02cda2c  memw.if(P0) R17,(R2+##0x1e8)",
+  "c02cda30  immext #0x1380",
+  "c02cda34  cmp.eq P0,R4,#0x2 ; jump.if(!P0.new):nt 0xc02cedcc",
+  "c02cda38  assign R1,#0x0",
+  "c02cda3c  combine R3R2,#0x0,#0x0",
+  "c02cda40  memw R0,(R20)"
+ ]
+}

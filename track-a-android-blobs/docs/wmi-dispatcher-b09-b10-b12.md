@@ -14,7 +14,7 @@ cmd/event IDs in `file.c:` error text) with zero ID tables. `wpss.b12` is the
 X.509 secure-boot certificate chain (PT_NULL region) — no code, closed. The mdt
 program headers settle the F-20 puzzle: **b07/b08 are RW data segments** (no
 PF_X) — the only executable LOADs are b01/b02/b03/b05/b06, with b06 (6.07 MB,
-RWX, 0xc0002000–0xc05cb111) as the main code. F-20's "zero construction sites"
+RWX, 0xc0002000–0xc05bd111 (end-exclusive; canonical per filesz 6,074,641)) as the main code. F-20's "zero construction sites"
 is therefore fully explained: construction-site hunting was the wrong
 instrument for a table-driven dispatcher. Nothing about this registry exists in
 public literature (GitHub search, checked 2026-11-11, per F-20).

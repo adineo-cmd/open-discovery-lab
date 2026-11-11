@@ -1,7 +1,7 @@
 # WMI registry consumers: the b06 side of the F-22 message-ID registry (F-23)
 
-*Investigator: recovered session, 2026-11-11. Inputs: wpss.mdt / wpss.b06 /
-wpss.b09 (lineage-fp6, qca6750), instruments/ath11k/wmi.h. Tooling:
+*Investigator: F-23, 2026-11-11. Inputs: wpss.mdt / wpss.b06 / wpss.b09
+(lineage-fp6, qca6750), instruments/ath11k/wmi.h. Tooling:
 scratch-wmi-dispatch/wmi_b06_consumer_scan{,2,3}.py.*
 
 ## Claim
@@ -36,13 +36,13 @@ code. Two corrections and one mapping come out of this:
    in the 30 stride-12 runs of >= 2 records** (F-22's stricter ath11k-name
    filter got 225/16; both agree on the main-run area 0xc0691080–0xc06914d8).
 2. Byte-level scan of every exec segment (b01 0xfe000000, b02 0xfe002000,
-   b03, b05, b06 0xc0002000–0xc05bdb31) for RV32 `lui`/`auipc` words landing in
+   b03, b05, b06 0xc0002000–0xc05bd111 (end-exclusive; canonical per filesz 6,074,641)) for RV32 `lui`/`auipc` words landing in
    the registry window 0xc0682000–0xc06a0000, `addi rd,rd,12`, and `c.addi rd,12`;
    capstone decode of every hit context.
 3. Raw 32-bit literal search for all 12 representative registry run-start
    addresses across b01–b12.
-4. Hexagon immext scan: 4-byte-aligned words with top nibble 0xD whose
-   26-bit field at shifts 0..6 equals `target>>6` for the 12 run starts.
+4. Hexagon immext scan: 4-byte-aligned words with top nibble 0xD whose 26-bit
+   field at shifts 0..6 equals `target>>6` for the 12 run starts.
 5. eh_frame FDE parse of b09 (first 1072 bytes): DWARF32 FDEs with
    **absolute** pc_begin — all 28 land in b06 (0xc04e6878–0xc04e7a70),
    confirming F-22's "FDEs point into b06 ~0xC04E6BD0" and giving ground-truth
@@ -85,7 +85,7 @@ also 4-aligned, as are all 28 eh_frame function starts.
 
 ## The owner-pointer cluster 0xc02cd9cc
 
-Inside b06 exec range (b06 = 0xc0002000–0xc05bdb31), 4-byte aligned, dominant
+Inside b06 exec range (b06 = 0xc0002000–0xc05bd111 (end-exclusive; canonical per filesz 6,074,641)), 4-byte aligned, dominant
 ptr of the entire registry (51 of 193 records, groups 4/5/7/17). RV32-C decode
 at that address is mid-function noise (`c.lw s1, 0x10(s1)`...) — but so is the
 decode at eh_frame-verified starts, so this neither confirms nor refutes
@@ -118,16 +118,19 @@ sit outside the F-22 main window: 0xc0684da0 (3 recs) and 0xc069dfc8 (4 recs).
 
 1. **No Hexagon disassembler on host** (capstone 5.0.7 lacks
    `CS_ARCH_HEXAGON`): handler prologue validity is **not verifiable**; the
-   per-group pointer clustering is structural, not decode-verified.
-2. The odd pointer `0xc04ecc3d` and the 0xd000–0xe0xx id+hash records are
-   unidentified.
-3. b06's role as consumer rests on: all 28 eh_frame FDEs landing in b06 +
-   all record ptrs landing in b06's exec range + per-group clustering — three
-   independent structural lines, but no instruction-level confirmation.
+   "prologue-valid 1/18" style numbers from an RV32 lens are meaningless and
+   are retracted here. Next investigator needs a Hexagon decoder (llvm-objdump
+   --triple=hexagon or qdsp6 objdump) to do Q2 properly.
+2. Who *reads* the lists: expected to be an HTC/WMI rx dispatch loop in b06
+   reached via pointer variables set up at init. Constant search cannot find
+   that; needs Hexagon control-flow recovery around the anchors.
+3. The 0x16010/0x1d010-style slot IDs seen before some runs (grp 0x16 = 0x16
+   PROFILE, 0x1d = MISC per the ath11k enum, with cmd IDs in the low 12 bits)
+   and runs 0xc0684da0/0xc069dfc8 are unmapped to ath11k names.
+4. Odd pointer 0xc04ecc3d unexplained.
 
-## Reproduce
+## Data
 
-`scratch-wmi-dispatch/wmi_b06_consumer_scan{,2,3}.py` (paths inside); raw
-scan JSON preserved alongside. Registry re-derivation is filter-independent
-(both the strict ath11k-name filter and the loose filter agree on the main
-run area).
+results/wmi-registry-consumers.json (16 KB) — full runs, cluster table,
+sample decodes, FDE list, search counts. Raw scanner outputs kept in
+scratch-wmi-dispatch/results-wmi-b06-consumers{,2,3}.json.

@@ -41,8 +41,8 @@ code. Two corrections and one mapping come out of this:
    capstone decode of every hit context.
 3. Raw 32-bit literal search for all 12 representative registry run-start
    addresses across b01–b12.
-4. Hexagon immext scan: 4-byte-aligned words with top nibble 0xD whose 26-bit
-   field at shifts 0..6 equals `target>>6` for the 12 run starts.
+4. Hexagon immext scan: 4-byte-aligned words with top nibble 0xD whose
+   26-bit field at shifts 0..6 equals `target>>6` for the 12 run starts.
 5. eh_frame FDE parse of b09 (first 1072 bytes): DWARF32 FDEs with
    **absolute** pc_begin — all 28 land in b06 (0xc04e6878–0xc04e7a70),
    confirming F-22's "FDEs point into b06 ~0xC04E6BD0" and giving ground-truth
@@ -134,3 +134,17 @@ sit outside the F-22 main window: 0xc0684da0 (3 recs) and 0xc069dfc8 (4 recs).
 results/wmi-registry-consumers.json (16 KB) — full runs, cluster table,
 sample decodes, FDE list, search counts. Raw scanner outputs kept in
 scratch-wmi-dispatch/results-wmi-b06-consumers{,2,3}.json.
+
+## Update (F-28/F-29, 2026-11-11/12): handler mapping decode-verified; tie-in traced
+
+The "structural, not decode-verified" caveat and unknown #1 above are
+RESOLVED: F-28 installed Ghidra 12.2 (Hexagon:LE:32:default — see
+docs/hexagon-decode.md) and decode-verified the mapping — **21/22 dominant
+pointers (incl. PDEV 0xc02cd9cc = 9,828-byte dispatcher) accept functions as
+real Hexagon code; 28/28 eh_frame starts take functions; the odd pointer
+0xc04ecc3d decodes to nothing (confirmed dead)**. F-29 additionally traced
+the registry tie-in at instruction level: the PDEV dispatcher materializes
+the registry head (0xc0691050/68) and arms setbit() enable masks inside the
+record area — the registry is the group-routing level, per-event routing is
+via b06-resident jump tables (0xc056423c / 0xc05641fc). Remaining unknowns:
+per-record 12-stride consumption loop, dispatcher call-site.

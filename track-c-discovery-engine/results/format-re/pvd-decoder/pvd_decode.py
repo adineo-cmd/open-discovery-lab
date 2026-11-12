@@ -39,7 +39,7 @@ the audio bytes as mono PCM at --rate.
 Usage:
     python3 pvd_decode.py INPUT.pvd [-o OUTPUT.wav] [--rate HZ]
                           [--mode raw|embedded] [--zero-floor]
-                          [--keep-delimiters] [--no-wav] [--stats]
+                          [--keep-delimiters] [--no-wav] [--json]
 
 Exit status 0 = decoded and (unless --no-wav) WAV written.
 Requires only the Python standard library.
@@ -121,38 +121,53 @@ def parse_pvd(data):
 
 
 def parse_embedded_riff(audio):
-    """Detect and partially parse a RIFF/WAVE header at the start of audio."""
-    if len(audio) < 44 or audio[0:4] != b"RIFF" or audio[8:12] != b"WAVE" \
-            or audio[12:16] != b"fmt ":
+    """Detect and partially parse a RIFF/WAVE header at the start of audio.
+
+    Walks the chunk list properly (id at pos, size at pos+4, payload after),
+    so odd fmt sizes or extra chunks cannot desync the "data" lookup.
+    """
+    if len(audio) < 44 or audio[0:4] != b"RIFF" or audio[8:12] != b"WAVE":
         return None
-    try:
-        riff_size = struct.unpack_from("<I", audio, 4)[0]
-        fmt_size = struct.unpack_from("<I", audio, 16)[0]
-        fmt_tag, channels, rate, byte_rate, block_align, bits = (
-            struct.unpack_from("<HHIIHH", audio, 20)
-        )
-        data_chunk_at = 16 + fmt_size  # usually 36; "data" + size then PCM
-        has_data = audio[data_chunk_at : data_chunk_at + 4] == b"data"
-        data_size = (
-            struct.unpack_from("<I", audio, data_chunk_at + 4)[0]
-            if has_data else None
-        )
-    except struct.error:
+    fmt = None
+    data_chunk = None
+    pos = 12
+    while pos + 8 <= len(audio):
+        cid = audio[pos : pos + 4]
+        try:
+            csize = struct.unpack_from("<I", audio, pos + 4)[0]
+        except struct.error:
+            break
+        if cid == b"fmt " and fmt is None and pos + 8 + 16 <= len(audio):
+            (fmt_tag, channels, rate, byte_rate, block_align, bits) = (
+                struct.unpack_from("<HHIIHH", audio, pos + 8)
+            )
+            fmt = {
+                "fmt_chunk_size": csize,
+                "format_tag": fmt_tag,
+                "channels": channels,
+                "declared_rate": rate,
+                "byte_rate": byte_rate,
+                "block_align": block_align,
+                "bits_per_sample": bits,
+            }
+        elif cid == b"data" and data_chunk is None:
+            data_chunk = {"data_size_field": csize, "data_at": pos + 8}
+        pos += 8 + csize + (csize & 1)  # RIFF chunks are word-aligned
+        if csize == 0 and cid not in (b"fmt ", b"data"):
+            break  # avoid infinite loop on a zero-size non-audio chunk
+    if fmt is None:
         return None
+    available = 0
+    truncated = False
+    if data_chunk:
+        available = max(len(audio) - data_chunk["data_at"], 0)
+        truncated = data_chunk["data_size_field"] > available
     return {
-        "riff_size_field": riff_size,
-        "fmt_size": fmt_size,
-        "format_tag": fmt_tag,
-        "channels": channels,
-        "declared_rate": rate,
-        "byte_rate": byte_rate,
-        "block_align": block_align,
-        "bits_per_sample": bits,
-        "data_size_field": data_size,
-        "data_size_available": max(len(audio) - (data_chunk_at + 8), 0),
-        "truncated": bool(
-            data_size is not None and data_size > len(audio) - (data_chunk_at + 8)
-        ),
+        "riff_size_field": struct.unpack_from("<I", audio, 4)[0],
+        **fmt,
+        "data_size_field": data_chunk["data_size_field"] if data_chunk else None,
+        "data_size_available": available,
+        "truncated": truncated,
     }
 
 
@@ -185,10 +200,16 @@ def audio_stats(audio):
         return {"n_samples": 0}
     silence = sum(1 for b in audio if b == SILENCE_BYTE)
     dup = sum(1 for i in range(1, n) if audio[i] == audio[i - 1])
+    # Zero crossings: strict sign changes of (byte - 128), with samples
+    # exactly at 128 treated as neutral (sign 0; a run touching 128 counts
+    # one crossing when it moves between strictly positive and strictly
+    # negative sides).
+    def _sgn(v):
+        return (v > 0) - (v < 0)
+    signs = [_sgn(b - 128) for b in audio]
     zc = sum(
         1 for i in range(1, n)
-        if (audio[i] - 128) * (audio[i - 1] - 128) < 0
-        or (audio[i] != audio[i - 1] and audio[i] == 128)
+        if signs[i] * signs[i - 1] == -1
     )
     centered = [b - 128 for b in audio]
     mean = sum(centered) / n

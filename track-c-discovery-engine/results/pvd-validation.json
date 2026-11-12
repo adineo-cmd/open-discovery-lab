@@ -1,0 +1,257 @@
+{
+  "artifact": "results/pvd-validation.json",
+  "track": "C",
+  "date": "2026-11-12",
+  "decoder": "results/format-re/pvd-decoder/pvd_decode.py (Python 3 stdlib only)",
+  "claim": "FIRST public standalone ProLine .pvd decoder + first full format spec (prior-art check below)",
+  "prior_art_check": {
+    "date": "2026-11-12",
+    "queries": [
+      "github code search: 'Proline Voice File' / proline pvd voice",
+      "web search: ProLine BBS voice mail .pvd format"
+    ],
+    "found": "dexvert src/format/audio/prolineVoice.js: detection ONLY, 'unsupported = true' (never converts; its own comment doubts the files are sampled audio). TrID audio-pvd.trid.xml + file-signature lists: identification only. No decoder, no spec.",
+    "delta": "first standalone decoder (stdlib Python), first byte-level format spec with rate-ambiguity analysis, empirical refutation of dexvert's 'unlikely to be sampled audio' comment"
+  },
+  "sample_source": "https://sembiance.com/fileFormatSamples/audio/prolineVoice/ (DEX.PVD etc.; samples NOT committed - WAVs regenerable via committed decoder)",
+  "rate_decision": {
+    "default": 20502,
+    "basis": "header byte 0x17 = 0xAD = 173 constant in 5/5 files; Paula PAL clock 3546895/173 = 20501.7 Hz (NTSC 20685.0); Amiga-native formats store the Paula period, and this sits exactly where a fixed hardware parameter would live",
+    "alternatives": {
+      "20685_ntsc": "same period under NTSC clock; indistinguishable without hardware",
+      "8000": "no supporting evidence anywhere in header; makes UI clips 0.10-2.54 s (less plausible); KMERA/GELD content reaches Nyquist with no anti-alias cutoff under 8 kHz - unusual",
+      "11025_stereo": "declared by the WAVE header embedded INSIDE BOMB.pvd audio (fmt fully consistent: 11025 Hz, 2ch, 8bit, byterate 22050) - but only 1/5 files carries it, BOMB/DIA show stereo L=R duplication (corr 0.999, exact-equal 0.81/0.82) while KMERA/GELD/JUBEL are native mono (pairing 13-44%, corr 0.23) -> per-file WAV-import artifact, not the format"
+    },
+    "listening_proxy": "content is broadband BBS UI sound effects (KMERA=Kamera/camera, GELD=money, JUBEL=cheering, BOMB, DIA; German filenames): spectral support extends to ~Nyquist at ANY hypothesized rate (f99.5%=0.29-0.49 cycles/sample), so aliasing/formant analysis cannot settle the rate; 20502 recommended, marked UNRESOLVED-BY-LISTENING"
+  },
+  "files": [
+    {
+      "name": "DIA.pvd",
+      "size": 810,
+      "role_guess": "click ('di' bell?)",
+      "header": {
+        "version": 1,
+        "payload_len_field": 786,
+        "payload_len_actual": 786,
+        "0x00_delimiters_present": true,
+        "period_byte": "0xAD"
+      },
+      "audio": {
+        "bytes": 784,
+        "dur_at_20502_s": 0.0382,
+        "dur_at_8000_s": 0.098,
+        "silence_frac": 0.0753,
+        "dup_frac": 0.4585,
+        "exact_pair_frac": 0.8061,
+        "rms_lsb": 7.87,
+        "peak_lsb": 37,
+        "zc_per_sample": 0.1862,
+        "dc_lsb": -0.916
+      },
+      "wav": {
+        "path": "wav/DIA.wav",
+        "params": {
+          "channels": 1,
+          "sampwidth": 2,
+          "rate": 20502,
+          "frames": 784
+        },
+        "duration_s": 0.0382,
+        "silence_floor_value": -256,
+        "silence_floor_dbfs": -42.1,
+        "exact_u8_mapping": true,
+        "all_in_int16_range": true,
+        "peak_s16": 9472
+      },
+      "checks_pass": true,
+      "embedded_riff": null
+    },
+    {
+      "name": "KMERA.pvd",
+      "size": 7053,
+      "role_guess": "camera shutter (Kamera)",
+      "header": {
+        "version": 1,
+        "payload_len_field": 7029,
+        "payload_len_actual": 7029,
+        "0x00_delimiters_present": true,
+        "period_byte": "0xAD"
+      },
+      "audio": {
+        "bytes": 7027,
+        "dur_at_20502_s": 0.3427,
+        "dur_at_8000_s": 0.8784,
+        "silence_frac": 0.1752,
+        "dup_frac": 0.3748,
+        "exact_pair_frac": 0.3652,
+        "rms_lsb": 6.45,
+        "peak_lsb": 127,
+        "zc_per_sample": 0.2209,
+        "dc_lsb": -0.742
+      },
+      "wav": {
+        "path": "wav/KMERA.wav",
+        "params": {
+          "channels": 1,
+          "sampwidth": 2,
+          "rate": 20502,
+          "frames": 7027
+        },
+        "duration_s": 0.3427,
+        "silence_floor_value": -256,
+        "silence_floor_dbfs": -42.1,
+        "exact_u8_mapping": true,
+        "all_in_int16_range": true,
+        "peak_s16": 32512
+      },
+      "checks_pass": true,
+      "embedded_riff": null
+    },
+    {
+      "name": "BOMB.pvd",
+      "size": 7759,
+      "role_guess": "explosion (WAV import, truncated)",
+      "header": {
+        "version": 1,
+        "payload_len_field": 7735,
+        "payload_len_actual": 7735,
+        "0x00_delimiters_present": true,
+        "period_byte": "0xAD"
+      },
+      "audio": {
+        "bytes": 7733,
+        "dur_at_20502_s": 0.3772,
+        "dur_at_8000_s": 0.9666,
+        "silence_frac": 0.0497,
+        "dup_frac": 0.4942,
+        "exact_pair_frac": 0.8151,
+        "rms_lsb": 12.09,
+        "peak_lsb": 128,
+        "zc_per_sample": 0.1289,
+        "dc_lsb": -0.482
+      },
+      "wav": {
+        "path": "wav/BOMB.wav",
+        "params": {
+          "channels": 1,
+          "sampwidth": 2,
+          "rate": 20502,
+          "frames": 7733
+        },
+        "duration_s": 0.3772,
+        "silence_floor_value": -256,
+        "silence_floor_dbfs": -42.1,
+        "exact_u8_mapping": true,
+        "all_in_int16_range": true,
+        "peak_s16": 32768
+      },
+      "checks_pass": true,
+      "embedded_riff": {
+        "riff_size_field": 46636,
+        "fmt_size": 16,
+        "format_tag": 1,
+        "channels": 2,
+        "declared_rate": 11025,
+        "byte_rate": 22050,
+        "block_align": 2,
+        "bits_per_sample": 8,
+        "data_size_field": 46600,
+        "data_size_available": 7689,
+        "truncated": true
+      }
+    },
+    {
+      "name": "GELD.pvd",
+      "size": 20184,
+      "role_guess": "coin/money",
+      "header": {
+        "version": 1,
+        "payload_len_field": 20160,
+        "payload_len_actual": 20160,
+        "0x00_delimiters_present": true,
+        "period_byte": "0xAD"
+      },
+      "audio": {
+        "bytes": 20158,
+        "dur_at_20502_s": 0.9832,
+        "dur_at_8000_s": 2.5198,
+        "silence_frac": 0.5701,
+        "dup_frac": 0.436,
+        "exact_pair_frac": 0.4373,
+        "rms_lsb": 4.27,
+        "peak_lsb": 112,
+        "zc_per_sample": 0.4744,
+        "dc_lsb": -0.959
+      },
+      "wav": {
+        "path": "wav/GELD.wav",
+        "params": {
+          "channels": 1,
+          "sampwidth": 2,
+          "rate": 20502,
+          "frames": 20158
+        },
+        "duration_s": 0.9832,
+        "silence_floor_value": -256,
+        "silence_floor_dbfs": -42.1,
+        "exact_u8_mapping": true,
+        "all_in_int16_range": true,
+        "peak_s16": 28672
+      },
+      "checks_pass": true,
+      "embedded_riff": null
+    },
+    {
+      "name": "JUBEL.pvd",
+      "size": 20316,
+      "role_guess": "cheering",
+      "header": {
+        "version": 1,
+        "payload_len_field": 20292,
+        "payload_len_actual": 20292,
+        "0x00_delimiters_present": true,
+        "period_byte": "0xAD"
+      },
+      "audio": {
+        "bytes": 20290,
+        "dur_at_20502_s": 0.9897,
+        "dur_at_8000_s": 2.5363,
+        "silence_frac": 0.0407,
+        "dup_frac": 0.1298,
+        "exact_pair_frac": 0.129,
+        "rms_lsb": 16.78,
+        "peak_lsb": 109,
+        "zc_per_sample": 0.1971,
+        "dc_lsb": -1.161
+      },
+      "wav": {
+        "path": "wav/JUBEL.wav",
+        "params": {
+          "channels": 1,
+          "sampwidth": 2,
+          "rate": 20502,
+          "frames": 20290
+        },
+        "duration_s": 0.9897,
+        "silence_floor_value": -256,
+        "silence_floor_dbfs": -42.1,
+        "exact_u8_mapping": true,
+        "all_in_int16_range": true,
+        "peak_s16": 27904
+      },
+      "checks_pass": true,
+      "embedded_riff": null
+    }
+  ],
+  "negative_tests": [
+    "bad-magic-caught",
+    "trunc-caught"
+  ],
+  "bomb_embedded_mode": {
+    "ok": true,
+    "channels": 2,
+    "rate": 11025,
+    "frames": 3866
+  },
+  "all_pass": true
+}

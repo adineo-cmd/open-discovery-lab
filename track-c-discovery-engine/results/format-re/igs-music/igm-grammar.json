@@ -1,0 +1,88 @@
+{
+ "task": "F-41-or-next-free",
+ "date": "2026-11-13",
+ "target": "IGS .igm binary music stream grammar",
+ "samples": {
+  "corpus": 12,
+  "igm_files": 1,
+  "igm_file": "fifth.igm",
+  "source": "sembiance.com/fileFormatSamples/image/instantGraphicsAndSound/"
+ },
+ "method": "structural walk + musical known-plaintext (file is Beethoven's Symphony No. 5 opening; pitches G4=67/G3=55/G2=43, Eb, F, D stacks confirm raw-MIDI pitch field) + Rosetta cross-ref to ANSI-Music/IGS text protocol (DEVO3.IG n> events use the same raw-MIDI pitch space, e.g. Whip It riff 62=D4, 38=D2)",
+ "container": {
+  "verdict": "RESOLVED",
+  "rule": "one or more `N>1,<len>,` headers (first may carry G# prefix); each header followed by exactly <len> bytes of event stream; chunks concatenate into ONE continuous stream; a 6-byte record may straddle a chunk boundary with the next N> header spliced between its halves",
+  "chunks": [
+   {
+    "header_offset_in_file": 2,
+    "args": "N>1,9998,",
+    "declared": 9998,
+    "got": 9998
+   },
+   {
+    "header_offset_in_file": 10009,
+    "args": "N>1,3410,",
+    "declared": 3410,
+    "got": 3410
+   }
+  ],
+  "arg1_meaning": "always '1' observed; unresolved (version or voice-group)"
+ },
+ "record_grammar": {
+  "verdict": "RESOLVED (structure) / PARTIAL (flag semantics)",
+  "note_event_6B": {
+   "status": "0x90..0x94, low nibble = channel (all 1069 attacks use 0x90; 0x92-0x94 appear only as pitch-0 marker events)",
+   "f1": "flag 0/1, unresolved (differs between a note's attack and release, so NOT a voice id)",
+   "pitch": "raw MIDI note number 36..87, 0 = silence marker",
+   "f3": "flag 0/1, unresolved",
+   "dur": "0x57 (87) on every note attack, 0x00 on every release (attack/release discriminator)",
+   "delta": "ticks until next event, 0..255 observed (post-attached; delta 255 = fermata holds)"
+  },
+  "compressed_4B": "[status, f1, dur, delta] with pitch/f3 inherited from previous event; observed exactly once, at the chunk-1/chunk-2 boundary (offset 9996): decodes as a G4 re-articulation",
+  "control_events": "0xC0..0xD0, 4-byte [cN,0,0,x] and 10-byte forms; 17 consecutive codes c0..d0 at end of file; semantics open (MIDI-like program-change analogy is a hypothesis)",
+  "end_marker": "0xFE 0x00 final 2 bytes of file"
+ },
+ "validation": {
+  "stream_bytes": 13408,
+  "events_total": 2221,
+  "note_attacks": 1069,
+  "note_releases": 1073,
+  "silence_markers": 70,
+  "control_segments": 7,
+  "compressed_events": 1,
+  "skipped_bytes": 2,
+  "completed_note_pairs": 1066,
+  "unmatched_releases": 77,
+  "total_ticks": 21567,
+  "pitch_range": [36, 87],
+  "delta_range": [0, 255],
+  "declared_vs_got_all_chunks_match": true,
+  "beethoven5_opening_check": "first 12 attacks = 67,55,43 x3 (G octave stacks) then 51,39,63 (Eb stack) then F stack 53,41,65 then D stack 62,50,38 with 255-tick fermatas between - matches Symphony No.5 i. Allegro con brio opening",
+  "musical_coherence": "staggered chord attacks (1-tick voice spacing), 20-21 tick short notes, 255-tick fermatas, octave-alternating bass G2/G3 in the development - all coherent"
+ },
+ "rosetta_text_side": {
+  "DEVO3.IG": {
+   "n_events": 144,
+   "q_events": 47,
+   "fields": "n>inst,slot,vol,pitch,0,1",
+   "inst_set": [1, 8],
+   "slot_set": [0, 1, 2],
+   "vol_set": [15],
+   "pitch_range_raw_MIDI": [38, 96],
+   "q_range": [7, 69],
+   "identification": "Devo 'Whip It' synth riff (62=D4 69=A4 71=B4 67=G4 72=C5 over D2=38/A2=45 bass) - proves text pitch = raw MIDI, same space as .igm binary"
+  },
+  "alignment_conclusion": "text and binary music share the raw-MIDI pitch space and small-int tick deltas; text n> carries explicit inst/slot/vol where binary carries status nibble + f1/f3 flags and constant dur=0x57; no byte-for-byte text<->binary pair exists in the corpus (only one .igm file), so mapping is semantic, not cipher-keyed"
+ },
+ "open_questions": [
+  "meaning of f1/f3 flags (f1=1 on 57/1069 attacks; middle release of a chord often f1=1)",
+  "meaning of the 0x92-0x94 pitch-0 marker events (70x; channel nibble 2-4 only)",
+  "semantics of 0xC0-0xD0 control events (c0..d0 table at EOF; 4B and 10B forms)",
+  "delta unit vs the dur=0x57 constant (dur may be a velocity or PSG envelope period, not ticks)",
+  "77 releases whose attack was not found (compressed-event pitch inheritance and/or pre-boundary voices)",
+  "0x91 never observed; whether more N>1,<len> args exist (arg1 always '1')",
+  "only ONE .igm sample in corpus - grammar needs confirmation on more files (discmaster lists ~46 IGS files)"
+ ],
+ "decoder": "results/format-re/igs-music/igm_decode.py (stdlib; --events/--json/--mid)",
+ "prior_art": "none found as of 2026-11-13 (dexvert unsupported=true; F-37 census 2026-11-12) - believed first public decode of the IGS .igm binary music grammar"
+}

@@ -1,0 +1,18 @@
+{
+ "census": "ansi-music-mus2midi",
+ "date": "2026-11-13",
+ "finding": "F-40 (R-10)",
+ "summary": "9/9 files converted to Standard MIDI Files, 0 parse errors, 730 notes total; timing = 12*(octave+2)+semitone, quarter=60/T s, MN 7/8 MS 3/4 ML 1",
+ "validation": [
+  {"file": "bandplay.mus", "n_sequences": 4, "n_notes": 67, "total_sec": 6.56, "pitch_range": [48, 58], "parse_errors": 0},
+  {"file": "barenec.mus", "n_sequences": 8, "n_notes": 101, "total_sec": 3.28, "pitch_range": [48, 62], "parse_errors": 0},
+  {"file": "bethlehm.mus", "n_sequences": 4, "n_notes": 57, "total_sec": 7.0, "pitch_range": [48, 62], "parse_errors": 0},
+  {"file": "charge.mus", "n_sequences": 2, "n_notes": 25, "total_sec": 2.33, "pitch_range": [60, 67], "parse_errors": 0},
+  {"file": "daisy.mus", "n_sequences": 5, "n_notes": 51, "total_sec": 5.47, "pitch_range": [48, 60], "parse_errors": 0},
+  {"file": "mash.mus", "n_sequences": 7, "n_notes": 55, "total_sec": 4.38, "pitch_range": [49, 64], "parse_errors": 0},
+  {"file": "musicbox.mus", "n_sequences": 12, "n_notes": 148, "total_sec": 2.19, "pitch_range": [55, 72], "parse_errors": 0},
+  {"file": "ode2joy.ams", "n_sequences": 1, "n_notes": 31, "total_sec": 14.44, "pitch_range": [50, 77], "parse_errors": 0},
+  {"file": "wipeout1.ams", "n_sequences": 5, "n_notes": 195, "total_sec": 6.44, "pitch_range": [53, 77], "parse_errors": 0}
+ ],
+ "midi_outputs": "/tmp only, not committed"
+}

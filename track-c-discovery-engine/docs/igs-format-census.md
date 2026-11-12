@@ -23,6 +23,7 @@ Census date: 2026-11-12. Samples: NOT committed (all in /tmp only).
 - **`&>` macro command (partial)**: `&>n,...,subcmd-letter,vals,...,x,...` — repeat/macro construct with `x` placeholder tokens (e.g. `&>0,639,4,0,L,4,320,0,x,199`); grammar not fully resolved.
 - **Music layer**: `n>inst,slot,vol,pitch,0,1` text note events (DEVO3.IG: 144 events, inst ∈ {1,8}, slot cycles 0/1/2, vol = 15, pitch 38..96 — MIDI-range pitches); `q>n` tempo-like. `fifth.igm` (.igm, 13.4 KB): single `G#N>1,9998,` command followed by a **binary variable-length MIDI-like event stream** (13,416 B): most common non-zero bytes 0x90–0x94 (note-on, channels 0–4 shape), pitch bytes cluster 36–79 (MIDI note range), velocity-like bytes 0–127. Full event grammar NOT resolved in this timebox (honest negative).
 - **CLRDEMO.IGS**: full BBS session capture — ANSI login/menu text interleaved with IG command lines (205 non-ASCII bytes = ESC sequences); shows the in-the-wild transport (terminal stream, not a standalone file format).
+- **Version marker (bonus)**: TYPE3.IGS self-identifies via `W>` text: "Instant Graphics! Online Interpreter / Version 2.15 / VDI Graphics, Sound Effects and Music using" — confirms the protocol implements Atari GEM VDI drawing primitives and that multiple protocol revisions were in the field (G#-prefixed vs not).
 
 ## Crack verdict
 
@@ -32,7 +33,7 @@ Census date: 2026-11-12. Samples: NOT committed (all in /tmp only).
 
 ## Decoder
 
-`results/format-re/igs-census/igs_decode.py` (stdlib Python): tokenizes command streams, unwraps `_` continuations, histograms commands, validates x<=639/y<=199, extracts `W>` text payloads and `n>` events; `--svg` renders L/D polylines to SVG as proof-of-decode (generated `igs-census/shut_med-render.svg` from SHUT_MED.IGS: 780 line elements, no coordinates outside the 640x200 viewport).
+`results/format-re/igs-census/igs_decode.py` (stdlib Python): tokenizes command streams, unwraps `_` continuations, histograms commands, validates x<=639/y<=199, extracts `W>` text payloads and `n>` events; `--svg OUT.svg SAMPLE` renders L/D polylines to SVG as proof-of-decode (run on SHUT_MED.IGS locally: 780 line elements, no coordinates outside the 640x200 viewport; artifact not committed — regenerate with the flag).
 
 Validation (`igs-census/igs-validation.json`): 12/12 samples tokenized; 0 coordinate violations; XNET_LST .IG/.IGS pair parses identically (1432 commands each).
 

@@ -1,0 +1,60 @@
+{
+  "target": "Sony IC voice recorder DVF/MSV (LPEC / TRC codecs)",
+  "census_date": "2026-11-12",
+  "sample_source": "https://sembiance.com/fileFormatSamples/audio/sonyCompressedVoiceFile/ (dexvert sample corpus; samples NOT committed here)",
+  "prior_art": {
+    "pronom_research_submission_2023": "https://github.com/digital-preservation/PRONOM_Research/blob/main/Submissions/Complete/Sony%20Voice%20Recorders/readme.md — identification BOF patterns only; states formats 'can only be played and converted using Sony software'",
+    "github_code_search_2026_11_12": "queries 'sony dvf voice', 'LPEC sony voice': no decoder hits (only PRONOM research readme, mmreg.h FOURCC tables, file-signature lists)",
+    "web_search_2026_11_12": "No open-source LPEC decoder found; conversion paths = Sony ICS Converter (Windows), Sony Sound Organizer, commercial Sound Forge; preservation problem documented at preservation.tylerthorsted.com 2023-04-21"
+  },
+  "files": [
+    {
+      "name": "07011600.MSV", "size": 22528, "codec_hint": "LPEC", "creator@0x20": "ICD-BM1",
+      "overall_entropy": 7.761,
+      "entropy_bands_1kb": [4.3, 7.7, 7.7, 7.7, 7.7, 7.7, 7.7, 7.6, 7.7, 7.7, 7.7],
+      "date_decoded@0x34": "2007-01-16 16:12", "be_u16@0x3c": 42, "be_u32@0x40": 16000, "be_u32@0x44": 2000,
+      "note": "date matches filename 07011600; 0x44 == 0x40/8"
+    },
+    {
+      "name": "WelcometoPinkstonMiddleSchoolLibrarytest.dvf", "size": 15360, "codec_hint": "TRC (PVoice.dll)", "creator@0x20": "PVoice.dll",
+      "overall_entropy": 7.42,
+      "entropy_bands_1kb": [3.5, 0.0, 7.7, 7.8, 7.8, 7.8, 7.7, 7.7, 7.8, 7.7, 7.7, 7.8, 7.8, 7.7, 4.2],
+      "date_decoded@0x34": "2008-01-29 20:39", "be_u16@0x3c": 48, "be_u32@0x40": 19200, "be_u32@0x44": 2400,
+      "note": "band[1] = 0.0 => 1KB of constant fill between header/TOC and audio; trailing 0xFF pad; embeds annotation string 'Jane Ann Knowles'"
+    },
+    {
+      "name": "budgtele.dvf", "size": 2451456, "codec_hint": "LPEC per bytes 01 01 00 00 (STVoice.dll creator)", "creator@0x20": "STVoice.dll",
+      "overall_entropy": 7.918,
+      "entropy_bands_1kb": [7.6, 7.7, 7.7, 7.7, 7.7, 7.7, 7.7, 7.7, 7.7, 7.7, 7.3],
+      "date_decoded@0x34": "2006-02-06 13:02", "be_u16@0x3c": 44, "be_u32@0x40": 6000, "be_u32@0x44": 750,
+      "note": "LPEC bytes in a .dvf — PRONOM's DVF-TRC regex does not cover this file"
+    },
+    {
+      "name": "taxis.dvf", "size": 83968, "codec_hint": "TRC (PVoice.dll)", "creator@0x20": "PVoice.dll",
+      "overall_entropy": null,
+      "date_decoded@0x34": "unset (all 0xFF)", "be_u16@0x3c": 48, "be_u32@0x40": 19200, "be_u32@0x44": 2400,
+      "note": "0x30-0x39 zeroed/0xFF: date fields optional"
+    }
+  ],
+  "container_map": {
+    "0x00": "magic 'MS_VOICE' (8B) + 00 00 00 50 (4B, semantics unknown)",
+    "0x0c": "codec family: 01 01 00 00 = LPEC-family (MSV sample and budgtele.dvf), 01 02 00 00 = TRC (PVoice.dll files) — matches PRONOM 2023 BOF patterns; NOTE PRONOM ties 01 02 to '.dvf TRC' but extension is not a reliable codec indicator",
+    "0x10": "16-byte creator string: 'SONY CORPORATION' constant",
+    "0x20": "16-byte origin string: recorder model ('ICD-BM1') or codec DLL ('PVoice.dll', 'STVoice.dll')",
+    "0x30": "4B codec flags (01 01 00 00 on LPEC files, 00 00 00 00 on TRC files)",
+    "0x34": "BE date/time block: u16 year, u8 month, u8 day, u8 hour, u8 min — validated against filenames on 2 files; 0xFF = unset (taxis.dvf)",
+    "0x3a": "1-2B unknown (18 02 / 0e 02)",
+    "0x3c": "BE u16 codec submode constant: 42 (MSV LPEC) / 44 (STVoice LPEC) / 48 (TRC); followed by 00 01 (PRONOM regex tail)",
+    "0x40": "BE u32 bitrate bits/s: 16000 / 19200 / 6000 across the three codec variants seen",
+    "0x44": "BE u32 == 0x40 / 8 exactly in all 3 decoded files (2000 / 2400 / 750 bytes-per-second) — first public statement of this relation",
+    "0x48": "04 00 00 01 (constant so far)",
+    "0x50": "8-byte-stride tag/size table: [tag u32 LE][value/size u32 BE-ish], tags seen 01,02,05,06,07,09,0a,0b,03,04,03 — then zero padding; TOC semantics unverified",
+    "audio_start": "not yet pinned; WelcometoPinkstonMiddleSchoolLibrarytest.dvf shows a constant-fill block at 1-2KB, audio entropy from ~2KB"
+  },
+  "codec_region": "audio payload entropy 7.7-7.9 bits/byte = compressed bitstream (LPEC/TRC), no structure visible at byte level",
+  "re_next_steps": [
+    "pin audio start offset + frame size from bitrate field (bytes/s predicts exact frame count if fixed-frame)",
+    "map the 0x50 tag/size TOC against files with >1 voice memo segment",
+    "LPEC is the open prize: no public decoder; candidate route = bitstream statistics on files with known text annotations"
+  ]
+}

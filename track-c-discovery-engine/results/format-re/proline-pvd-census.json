@@ -1,0 +1,31 @@
+{
+  "target": "ProLine Voice Data (.pvd) — Amiga ProLine BBS voice-mail clips",
+  "census_date": "2026-11-12",
+  "sample_source": "https://sembiance.com/fileFormatSamples/audio/prolineVoice/ (8 samples listed; 5 fetched to /tmp; samples NOT committed here)",
+  "prior_art": {
+    "github_code_search_2026_11_12": "'proline pvd voice': only identification artifacts — Sembiance/dexvert src/format/audio/prolineVoice.js (detection only, unsupported=true, comment: 'only 16 unique files on discmaster, small file size, unlikely to be sampled audio'), TrID defs (audio-pvd.trid.xml), file-signature lists. No decoder, no doc.",
+    "web_search_2026_11_12": "No spec, no RE write-up, no forum thread on the structure. ProLine = Amiga BBS software with voice-mail feature."
+  },
+  "files": [
+    {"name": "DIA.PVD",   "size": 810,    "payload_len@0x14": 786,   "file-24": 786,   "overall_entropy": 4.687, "distinct_body_bytes": 57},
+    {"name": "KMERA.PVD", "size": 7053,   "payload_len@0x14": 7029,  "file-24": 7029,  "overall_entropy": null,  "distinct_body_bytes": null},
+    {"name": "BOMB.PVD",  "size": 7759,   "payload_len@0x14": 7735,  "file-24": 7735,  "overall_entropy": 4.869, "distinct_body_bytes": null},
+    {"name": "GELD.PVD",  "size": 20184,  "payload_len@0x14": 20160, "file-24": 20160, "overall_entropy": 2.193, "distinct_body_bytes": 93},
+    {"name": "JUBEL.PVD", "size": 20316,  "payload_len@0x14": 20292, "file-24": 20292, "overall_entropy": null,  "distinct_body_bytes": 153}
+  ],
+  "container_map": {
+    "0x00": "u8 length prefix 0x12 = 18, then 18-byte Pascal string 'Proline Voice File'",
+    "0x13": "version byte 0x01 (constant, 5/5 files)",
+    "0x14": "24-bit LE payload length — equals filesize-24 exactly in 5/5 files",
+    "0x17": "constant 0x00AD (173) + 0x00 in every file — hypothesis: Amiga Paula audio period register (PAL clock 3546895/173 = 20502 Hz; NTSC 3579545/173 = 20685 Hz); UNCONFIRMED",
+    "0x19": "audio body: unsigned 8-bit PCM, silence = 0x7F (GELD/JUBEL open with runs of 0x7F)",
+    "body_note": "many consecutive duplicate bytes = smooth/oversampled audio, NOT a structural doubling (self-corrected: KMERA contains non-doubled transitions like 80 7f 7e)"
+  },
+  "interpretation": "At ~20.5 kHz, JUBEL (10146 samples) = ~0.5 s event sound; DIA (393 samples) = ~19 ms click; BOMB ~0.38 s — consistent with BBS UI voice/event clips. If rate were 8 kHz clips are 0.05-1.26 s.",
+  "re_next_steps": [
+    "test Paula-period hypothesis by listening/resampling at 20502 Hz vs 8000 Hz against filename semantics (JUBEL=greeting? DIA=click?)",
+    "confirm version byte semantics via the 3 remaining unfetched samples",
+    "BOMB.PVD body begins with ASCII 'RIFF' + implausible length — judged audio-data false positive, but worth one look"
+  ],
+  "honest_negative": "dexvert's own comment doubts these are sampled audio at all; census shows real PCM-like body (0x7F silence floor, smooth waveform), refuting that doubt."
+}

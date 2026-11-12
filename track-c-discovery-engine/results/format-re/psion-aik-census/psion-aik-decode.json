@@ -1,0 +1,56 @@
+{
+  "format": "Psion Series 3 AIK Audio (AICASoundFile) - nibble codebook",
+  "decode_date": "2026-11-13",
+  "agent": "Track C, R-5 follow-up to F-39 (F-44-or-next-free)",
+  "samples": {
+    "source": "https://sembiance.com/fileFormatSamples/audio/psionAIKAudio/",
+    "files": ["TETRIS_2.AIK", "TETRIS_3.AIK", "TETRIS_4.AIK"],
+    "refetched": true,
+    "local_wavs": "/tmp only, not committed"
+  },
+  "hypotheses_tested": [
+    {"name": "IMA/DVI ADPCM (standard mapping, sign=bit3, 89-entry step table, index table [-1,-1,-1,-1,2,4,6,8])",
+     "result": "NEGATIVE",
+     "evidence": "repeated silence code 5 decodes as +1.5*step ramp with index+4 per sample; silence tails (pure 0x55, 313-487 bytes) decode to tail_rms 27000-30700 of 32767 full scale in all 3 files; SFM -5 to -12 dB (noise-like)"},
+    {"name": "OKI/Dialogic (VOX) ADPCM (49-entry 12-bit table, same nibble convention)",
+     "result": "NEGATIVE",
+     "evidence": "same silence contradiction: 16x code 5 ramps [2816, 6864, 12848, 21648, 32752...] to full scale; tail_rms 31200-32700"},
+    {"name": "Direct companded PCM (nibble = amplitude code, sign=bit3, L[5]=0)",
+     "result": "NEGATIVE (weaker family)",
+     "evidence": "best of 5040 level permutations reaches only SFM -10.5 dB vs -20 to -23 dB for DPCM family; also contradicted by +/-1 blips of codes 4/12 amid hold codes at TETRIS_2 opener (clicks implausible for silence)"},
+    {"name": "Unit-step signed-magnitude DPCM: diff(code) = +/-L[mag], sign=bit3, L[5]=0",
+     "result": "POSITIVE - codec family identified",
+     "evidence": "per-256-nibble-frame reset decode: in-range fraction 0.995-0.996 (vs ~0.5 random-walk baseline) for a narrow perm family across all 3 files; decode is tonal (SFM -20 to -23 dB), bounded (clip 0.000-0.003), plausible 8-bit RMS 22-49"},
+    {"name": "Full-file predictor carry (no per-frame reset)",
+     "result": "NEGATIVE for decode quality",
+     "evidence": "no-clip cumsum never stays bounded (best 0.53); clip-carry decode drifts monotonically into the -128 rail (rms 105-114, clip 6-15%, range capped at -128..+14/+87) - rail-clipping harmonics inflate SFM, metric artifact identified"},
+    {"name": "Per-frame 1-byte predictor seed (frame = seed byte + 254 nibbles)",
+     "result": "NEGATIVE",
+     "evidence": "silence frames (all-hold nibbles) decode to the seed DC value (sil_rms 85, e.g. 0xdd = -35), contradicting silence = zero; frame jumps 73-83"}
+  ],
+  "winner": {
+    "codec": "unit-step signed-magnitude DPCM (closed-loop, 8-bit signed output)",
+    "nibble": "bit3 = sign, bits2-0 = magnitude index",
+    "level_table_best_fit": [2, 1, 7, 4, 6, 0, 0, 3],
+    "hold_zero_diff_codes": [5, 13, 6, 14],
+    "max_level_code_asymmetry": "code 2 (+7) occurs 0 times in 61440 nibbles while code 10 (-7) occurs 1015 times: consistent with L[2]=max level and one-sided saturation",
+    "residual_ambiguity": "exact assignment of levels {0..3} among mags {0,1,7} and L[3]=3 vs 4, L[4]=5 vs 6: top candidates within 0.5 dB SFM; needs known-content AIK to pin",
+    "mirror_stat_support": "nibble counts of bit3 mirror pairs nearly equal (e.g. 0/8 = 3932/3952, 3/11 = 5372/5207 in TETRIS_2), confirming sign-bit structure; pairs (5,13) and (2,10) asymmetric, explained by zero/saturation roles"
+  },
+  "validation": {
+    "per_frame_reset_decode": {"inrange_frac": [0.996, 0.996, 0.996], "sfm_db": [-20.5, -22.7, -19.9], "rms": [25.0, 48.6, 26.2], "clip_frac": [0.000, 0.003, 0.003]},
+    "pitch": "melodic f0 tracks recovered (descending sequences, lags 5-30 samples); several near-exact equal-tempered fits at 8192 Hz (292.6 Hz vs D4 293.7, 390.1 vs G4 392, 327.7 vs E4 329.6)",
+    "open_items": [
+      "frame-boundary discontinuities in reset decode (mean jump 26-70 vs median sample step 2) unexplained - suggests a per-frame state mechanism not yet recovered",
+      "rate 4096 vs 8192 not arbitrated (pitch-ratio structure is rate-invariant); 8192 Hz favored only by census N-unit hypothesis",
+      "exact small-level table assignment"
+    ]
+  },
+  "prior_art_update": {
+    "websearch_marco_aicardi_2026-11-13": "no public documentation of the AICA compressor or Marco Aicardi's Psion audio work found; prior-art verdict of F-39 stands"
+  },
+  "artifacts": {
+    "decoder": "track-c-discovery-engine/results/format-re/psion-aik-census/psion_aik_decode.py",
+    "doc": "track-c-discovery-engine/docs/psion-aik-decode.md"
+  }
+}

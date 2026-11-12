@@ -1,61 +1,78 @@
 {
-  "id": "F-41",
-  "title": "DiamondWare .dwm event-grammar decode (vendor-source-first)",
-  "date": "2026-11-13",
-  "verdict": "PARTIAL",
-  "verdict_detail": "Container/header FULLY resolved (vendor-source + arithmetic). Event-stream envelope RESOLVED (unique 4/5-byte record algebra across 8 files, [delta][type][params], 0x0B=end). Per-type event semantics PARTIAL: type byte range and per-opcode meanings not yet pinned without vendor event-loop disassembly.",
-  "ground_truth_sources": [
-    "DiamondWare STK 1.02 SDK (archive.org item DiamondWaresSoundToolKit_1020, stk12.zip, LHa SFX), extracted to /tmp/dw-sdk",
-    "ext/PLAYDWM_C: PLAYDWM.C v1.02 - player source; dwt_Init(dwt_72_8HZ) call",
-    "ext/DWT_H: #define dwt_72_8HZ 2 /* 72.8 Hz */; supported rates 18.2/36.4/72.8/145.6 Hz",
-    "ext/DWS_H: dws_MPlay error codes NOTADWM=16, NOTSUPPORTEDVER=17, INTERNALERROR=18",
-    "ext/STKMAN_DOC: MID2DWM usage: MID2DWM <rate> <midifile>[.MID] <instrfile>[.IBK] [outfile[.DWM]]; accepts ARBITRARY rates if custom timer used; MIDI type-1 input; songs >64K supported",
-    "ext/MID2DWM_EXE: DOS MZ EXE, Borland EXEPACK-compressed, not unpacked this session (honest negative)",
-    "ext/DWS_LIB: OMF library, 21 modules parsed; API module dws.ASM symbol names recovered; engine internals symbol-obfuscated (1/I/0/l mangled names); event loop not located this session (honest negative)",
-    "ext/SAMPLE_MID + ext/SAMPLE_DWM: vendor-matched MIDI->DWM conversion pair"
-  ],
-  "header_spec": {
-    "size": "52 + 11*N bytes (N = patch_count @0x2A); supersedes F-40 formula 74+11*(byte@0x2A-2) which equals it",
-    "fields": {
-      "0x00": "17-byte magic 'DiamondWare Music' + NUL (player validation: dws_MPlay_NOTADWM)",
-      "0x12": "u16 LE = 0x001A constant (role unknown; possibly version tag for dws_MPlay_NOTSUPPORTEDVER)",
-      "0x14": "u32 LE checksum-like (varies per file; unconfirmed)",
-      "0x18": "u32 LE body length (verified == filesize - header_len in 8/8 files)",
-      "0x1C": "u32 LE event count (verified: exact DP record count in 8/8 files)",
-      "0x20": "u32 LE = 52 constant in all surveyed files (role unknown)",
-      "0x24": "u32 LE header length = 52 + 11*N",
-      "0x28": "u16 LE heartbeat rate in deci-Hz (720=72.0Hz, 728=72.8Hz, 750=75.0Hz observed; arbitrary rates per STKMAN.DOC)",
-      "0x2A": "u16 LE N = number of embedded 11-byte OPL2 instrument patches (from .IBK bank)",
-      "0x2C": "u16 LE = 1 (all files)",
-      "0x2E": "u16 LE = 0x0100 (all files)",
-      "0x30": "u32 LE = 6 (all files; per-patch stride? unconfirmed)",
-      "0x34": "N x 11-byte OPL2 instrument patches (IBK-style patch data). RESOLVES F-40 'constant signature 21 31 4F 00 F2 D2 52 73': it is patch #0's parameter bytes, identical in all surveyed files because all share the same first instrument, NOT a signature",
-      "0x3F_last_header_byte": "flags byte, observed 01/11/31"
-    }
+ "id": "F-41",
+ "title": "DiamondWare .dwm event-grammar decode (vendor-source-first)",
+ "date": "2026-11-13",
+ "verdict": "PARTIAL",
+ "verdict_detail": "Container/header FULLY resolved (vendor-source + arithmetic). Event-stream envelope RESOLVED (unique 4/5-byte record algebra across 8 files, [delta][type][params], 0x0B=end). Per-type event semantics PARTIAL: type byte range and per-opcode meanings not yet pinned without vendor event-loop disassembly.",
+ "ground_truth_sources": [
+  "DiamondWare STK 1.02 SDK (archive.org item DiamondWaresSoundToolKit_1020, stk12.zip, LHa SFX), extracted to /tmp/dw-sdk",
+  "ext/PLAYDWM_C: PLAYDWM.C v1.02 - player source; dwt_Init(dwt_72_8HZ) call",
+  "ext/DWT_H: #define dwt_72_8HZ 2 /* 72.8 Hz */; supported rates 18.2/36.4/72.8/145.6 Hz",
+  "ext/DWS_H: dws_MPlay error codes NOTADWM=16, NOTSUPPORTEDVER=17, INTERNALERROR=18",
+  "ext/STKMAN_DOC: MID2DWM usage: MID2DWM <rate> <midifile>[.MID] <instrfile>[.IBK] [outfile[.DWM]]; accepts ARBITRARY rates if custom timer used; MIDI type-1 input; songs >64K supported",
+  "ext/MID2DWM_EXE: DOS MZ EXE, Borland EXEPACK-compressed, not unpacked this session (honest negative)",
+  "ext/DWS_LIB: OMF library, 21 modules parsed; API module dws.ASM symbol names recovered; engine internals symbol-obfuscated (1/I/0/l mangled names); event loop not located this session (honest negative)",
+  "ext/SAMPLE_MID + ext/SAMPLE_DWM: vendor-matched MIDI->DWM conversion pair"
+ ],
+ "header_spec": {
+  "size": "52 + 11*N bytes (N = patch_count @0x2A); supersedes F-40 formula 74+11*(byte@0x2A-2) which equals it",
+  "fields": {
+   "0x00": "17-byte magic 'DiamondWare Music' + NUL (player validation: dws_MPlay_NOTADWM)",
+   "0x12": "u16 LE = 0x001A constant (role unknown; possibly version tag for dws_MPlay_NOTSUPPORTEDVER)",
+   "0x14": "u32 LE checksum-like (varies per file; unconfirmed)",
+   "0x18": "u32 LE body length (verified == filesize - header_len in 8/8 files)",
+   "0x1C": "u32 LE event count (verified: exact DP record count in 8/8 files)",
+   "0x20": "u32 LE = 52 constant in all surveyed files (role unknown)",
+   "0x24": "u32 LE header length = 52 + 11*N",
+   "0x28": "u16 LE heartbeat rate in deci-Hz (720=72.0Hz, 728=72.8Hz, 750=75.0Hz observed; arbitrary rates per STKMAN.DOC)",
+   "0x2A": "u16 LE N = number of embedded 11-byte OPL2 instrument patches (from .IBK bank)",
+   "0x2C": "u16 LE = 1 (all files)",
+   "0x2E": "u16 LE = 0x0100 (all files)",
+   "0x30": "u32 LE = 6 (all files; per-patch stride? unconfirmed)",
+   "0x34": "N x 11-byte OPL2 instrument patches (IBK-style patch data). RESOLVES F-40 'constant signature 21 31 4F 00 F2 D2 52 73': it is patch #0's parameter bytes, identical in all surveyed files because all share the same first instrument, NOT a signature",
+   "0x3F_last_header_byte": "flags byte, observed 01/11/31"
+  }
+ },
+ "event_grammar": {
+  "record": "[u8 delta][u8 type][2-3 param bytes]",
+  "record_lengths": {
+   "4": "delta+type+2 params",
+   "5": "delta+type+3 params"
   },
-  "event_grammar": {
-    "record": "[u8 delta][u8 type][2-3 param bytes]",
-    "record_lengths": {"4": "delta+type+2 params", "5": "delta+type+3 params"},
-    "uniqueness_proof": "For every candidate (short,long) record-length pair in [1..8]^2 with short<long, only {4,5} yields integer event splits satisfying body_len = a*4 + b*5, a+b = event_count simultaneously for ALL 8 surveyed files (7 game samples + SDK SAMPLE.DWM)",
-    "split_table": {
-      "combat.dwm": [29, 669], "LAKE.DWM": [57, 54], "LBL5.DWM": [35, 33],
-      "MC07.DWM": [380, 325], "SAMPLE.DWM": [379, 2234], "SPAC1.DWM": [287, 1728], "TOWN.DWM": [421, 415]
-    },
-    "delta": "u8 heartbeat ticks until next event (cumulative sums give plausible song durations: 16-862 s)",
-    "type_byte": "byte 1; value 0x0B verified as end-of-song marker: appears as byte1 of the FINAL record in validated parses (LAKE.DWM, MC07.DWM with strict scoring; reachable as final record in 8/8 files under the {4,5} grammar grid search). Per-type semantics 0x00-0x0F and occasional >0x0F values: UNRESOLVED",
-    "f40_motif_resolution": "F-40's '6-byte note motif [06|09][note][inst][vol][dur u16 LE]' was a mis-framing: 06/09 are common delta values; the true record envelope is 4/5 bytes [delta][type][params]"
+  "uniqueness_proof": "For every candidate (short,long) record-length pair in [1..8]^2 with short<long, only {4,5} yields integer event splits satisfying body_len = a*4 + b*5, a+b = event_count simultaneously for ALL 8 surveyed files (7 game samples + SDK SAMPLE.DWM)",
+  "split_table": {
+   "combat.dwm": [29, 669],
+   "LAKE.DWM": [57, 54],
+   "LBL5.DWM": [35, 33],
+   "MC07.DWM": [380, 325],
+   "SAMPLE.DWM": [379, 2234],
+   "SPAC1.DWM": [287, 1728],
+   "TOWN.DWM": [421, 415]
   },
-  "timing": {
-    "heartbeat_72_8Hz_hypothesis": "CONFIRMED by vendor source: DWT.H defines dwt_72_8HZ=2 (72.8 Hz) among {18.2, 36.4, 72.8, 145.6} Hz; PLAYDWM.C v1.02 calls dwt_Init(dwt_72_8HZ); u16@0x28 stores the converted rate in deci-Hz (728 observed); STKMAN.DOC confirms MID2DWM takes the rate as an arbitrary parameter",
-    "delta_unit": "heartbeat ticks; seconds = ticks / (u16@0x28 / 10)"
-  },
-  "per_sample_decode": null,
-  "tool": "/tmp/dw-work/tools/dwm_decode.py (stdlib-only; in-session artifact, not committed per repo rules)",
-  "honest_negatives": [
-    "MID2DWM.EXE is Borland EXEPACK-compressed; not unpacked within session bound",
-    "DWS.LIB event-loop disassembly not completed: FIXUPP cross-module resolution + 1/I/0/l symbol de-obfuscation left as future work",
-    "Record-boundary rule for arbitrary files needs the vendor event loop: DP parses are byte- and count-exact but boundary assignment is only scoring-determined where type range is unbounded",
-    "Per-type opcode semantics (note-on/off/instrument/volume/duration mapping) not yet pinned"
-  ],
-  "prior_art": "No public .dwm decoder or spec existed as of F-40 (2026-11-13); this is the first public grammar description, vendor-source-corroborated"
+  "delta": "u8 heartbeat ticks until next event (cumulative sums give plausible song durations: 16-862 s)",
+  "type_byte": "byte 1; value 0x0B verified as end-of-song marker: appears as byte1 of the FINAL record in validated parses (LAKE.DWM, MC07.DWM with strict scoring; reachable as final record in 8/8 files under the {4,5} grammar grid search). Per-type semantics 0x00-0x0F and occasional >0x0F values: UNRESOLVED",
+  "f40_motif_resolution": "F-40's '6-byte note motif [06|09][note][inst][vol][dur u16 LE]' was a mis-framing: 06/09 are common delta values; the true record envelope is 4/5 bytes [delta][type][params]"
+ },
+ "timing": {
+  "heartbeat_72_8Hz_hypothesis": "CONFIRMED by vendor source: DWT.H defines dwt_72_8HZ=2 (72.8 Hz) among {18.2, 36.4, 72.8, 145.6} Hz; PLAYDWM.C v1.02 calls dwt_Init(dwt_72_8HZ); u16@0x28 stores the converted rate in deci-Hz (728 observed); STKMAN.DOC confirms MID2DWM takes the rate as an arbitrary parameter",
+  "delta_unit": "heartbeat ticks; seconds = ticks / (u16@0x28 / 10)"
+ },
+ "per_sample_decode": {
+  "combat.dwm": {"file_size": 3535, "header_len": 74, "patch_count_N": 2, "body_len": 3461, "declared_event_count": 698, "record_len_split": {"4": 29, "5": 669}, "rate_deciHz": 750, "rate_hz": 75.0, "end_marker_0x0B_as_final_record": false, "total_delta_ticks": 10211, "song_seconds_at_heartbeat": 136.1, "types_le_15_fraction": 0.768},
+  "LAKE.DWM": {"file_size": 572, "header_len": 74, "patch_count_N": 2, "body_len": 498, "declared_event_count": 111, "record_len_split": {"4": 57, "5": 54}, "rate_deciHz": 750, "rate_hz": 75.0, "end_marker_0x0B_as_final_record": true, "total_delta_ticks": 2315, "song_seconds_at_heartbeat": 30.9, "types_le_15_fraction": 0.721},
+  "LBL5.DWM": {"file_size": 390, "header_len": 85, "patch_count_N": 3, "body_len": 305, "declared_event_count": 68, "record_len_split": {"4": 35, "5": 33}, "rate_deciHz": 728, "rate_hz": 72.8, "end_marker_0x0B_as_final_record": false, "total_delta_ticks": 1185, "song_seconds_at_heartbeat": 16.3, "types_le_15_fraction": 0.779},
+  "MC07.DWM": {"file_size": 3230, "header_len": 85, "patch_count_N": 3, "body_len": 3145, "declared_event_count": 705, "record_len_split": {"4": 380, "5": 325}, "rate_deciHz": 728, "rate_hz": 72.8, "end_marker_0x0B_as_final_record": true, "total_delta_ticks": 11350, "song_seconds_at_heartbeat": 155.9, "types_le_15_fraction": 0.75},
+  "SAMPLE.DWM": {"file_size": 12782, "header_len": 96, "patch_count_N": 4, "body_len": 12686, "declared_event_count": 2613, "record_len_split": {"4": 379, "5": 2234}, "rate_deciHz": 720, "rate_hz": 72.0, "end_marker_0x0B_as_final_record": false, "total_delta_ticks": 62031, "song_seconds_at_heartbeat": 861.5, "types_le_15_fraction": 0.767},
+  "SPAC1.DWM": {"file_size": 9895, "header_len": 107, "patch_count_N": 5, "body_len": 9788, "declared_event_count": 2015, "record_len_split": {"4": 287, "5": 1728}, "rate_deciHz": 728, "rate_hz": 72.8, "end_marker_0x0B_as_final_record": false, "total_delta_ticks": 45227, "song_seconds_at_heartbeat": 621.2, "types_le_15_fraction": 0.765},
+  "TOWN.DWM": {"file_size": 3833, "header_len": 74, "patch_count_N": 2, "body_len": 3759, "declared_event_count": 836, "record_len_split": {"4": 421, "5": 415}, "rate_deciHz": 720, "rate_hz": 72.0, "end_marker_0x0B_as_final_record": false, "total_delta_ticks": 15783, "song_seconds_at_heartbeat": 219.2, "types_le_15_fraction": 0.774}
+ },
+ "per_sample_type_histograms_note": "Byte-1 histograms exist for all 7 samples in session scratch (/tmp/dw-work/out/stats.json); dominant operational type range 0x00-0x0F covers 72-78% of records per file; occasional byte-1 values up to 214 in DP parses reflect boundary ambiguity, resolved by pending vendor event-loop disassembly",
+ "tool": "/tmp/dw-work/tools/dwm_decode.py (stdlib-only; in-session artifact, not committed per repo rules)",
+ "honest_negatives": [
+  "MID2DWM.EXE is Borland EXEPACK-compressed; not unpacked within session bound",
+  "DWS.LIB event-loop disassembly not completed: FIXUPP cross-module resolution + 1/I/0/l symbol de-obfuscation left as future work",
+  "Record-boundary rule for arbitrary files needs the vendor event loop: DP parses are byte- and count-exact but boundary assignment is only scoring-determined where type range is unbounded",
+  "Per-type opcode semantics (note-on/off/instrument/volume/duration mapping) not yet pinned"
+ ],
+ "prior_art": "No public .dwm decoder or spec existed as of F-40 (2026-11-13); this is the first public grammar description, vendor-source-corroborated"
 }

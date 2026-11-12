@@ -1,0 +1,47 @@
+{
+  "format": "Psion Series 3 AIK Audio (AICASoundFile)",
+  "census_date": "2026-11-12",
+  "agent": "Track C, R-5, F-39",
+  "samples": {
+    "source": "https://sembiance.com/fileFormatSamples/audio/psionAIKAudio/ (dexvert mirror)",
+    "committed": false,
+    "files": [
+      {"name": "TETRIS_2.AIK", "size": 15392, "duration_blocks": 120, "size_rule_ok": true},
+      {"name": "TETRIS_3.AIK", "size": 15392, "duration_blocks": 120, "size_rule_ok": true},
+      {"name": "TETRIS_4.AIK", "size": 7712, "duration_blocks": 60, "size_rule_ok": true}
+    ]
+  },
+  "prior_art": [
+    {"item": "dexvert src/format/audio/psionAIKAudio.js @ b126fe4f", "date_checked": "2026-11-12", "verdict": "unsupported=true; only 3 unique files on discmaster; magic string 'Psion serie 3 AICA Sound Compressor audio'"},
+    {"item": "TrID2 database yaml (Papyrus7914/TrId2-file-type-identifier)", "date_checked": "2026-11-12", "verdict": "identification-only: BOF AsciiString 'AICASoundFile**'; description 'Audio compressor by Marco Aicardi' - provenance of AICA name"},
+    {"item": "psiconv (kianryan/psiconv fork of Frodo Looijaard psiconv)", "date_checked": "2026-11-12", "verdict": "AIK NOT covered; psiconv handles Word/TextEd/Sketch/MBM/Sheet/Database (Series 5 era); Series 3 sound absent"},
+    {"item": "GitHub code search 'AICASoundFile'", "date_checked": "2026-11-12", "verdict": "2 hits: TrId2 yaml + theseus-rs/file-type wikidata-105854924 signature test stub (15-byte signature file, not a real sample). No decoder found anywhere"},
+    {"item": "Wikidata Q105854924 via theseus-rs/file-type", "date_checked": "2026-11-12", "verdict": "registry entry only"},
+    {"item": "WebSearch psiconv/psion aik", "date_checked": "2026-11-12", "verdict": "no spec, no decoder; Series 5 .WVE (IMA ADPCM) is the documented sibling, not AIK"}
+  ],
+  "verdict_prior_art": "dexvert 'unsupported' + 'no code-search hits' note is CURRENT as of 2026-11-12. Prior art = identification artifacts only (TrID sig, wikidata). psiconv does NOT cover AIK (R-5 open question answered).",
+  "findings": [
+    {"field": "magic", "offset": "0x00", "value": "15-char Pascal-prefixed string 'AICASoundFile**' + NUL (16 bytes)", "status": "RESOLVED"},
+    {"field": "info block", "offset": "0x10-0x1F", "value": "0x0f 0x10 constant (candidate: 0x0f = 15 = magic strlen, 0x10 = 16 = header size); u16 BE @0x12 = N; @0x14-0x17 zero; @0x18 = 0x01; rest zero", "status": "PARTIAL"},
+    {"field": "size relation", "offset": "-", "value": "filesize == 32 + N*128 EXACT in 3/3 files (N=120,120,60). N = duration/blocks; body = N fixed 128-byte frames", "status": "RESOLVED (arithmetic)"},
+    {"field": "body codec packing", "offset": "0x20", "value": "4-bit nibble codes, 2 per byte (hi/lo nibble histograms near-identical per file); N*256 samples; => 4096 Hz if N unit = 1/16 s, or 8192 Hz if N unit = 1/32 s (EPOC16 tick). Rate not independently confirmed", "status": "PARTIAL"},
+    {"field": "silence code", "offset": "body tails", "value": "nibble 5 = silence; all three files end in runs of 0x55 bytes; leading frames may be constant-code (TETRIS_2 opens dd dd... = code 13)", "status": "RESOLVED (observed)"},
+    {"field": "code alphabet", "offset": "-", "value": "nibble 2 NEVER occurs in any sample (histogram across 61,440 nibbles); codes {4,10,12,13} rare. Suggests codebook/compander mapping, not linear PCM. Mapping NOT solved", "status": "NEGATIVE (open)"},
+    {"field": "entropy", "offset": "body", "value": "4.9-6.8 bits/byte per 1KB block; last KB of TETRIS_4 = 0.49 (pure 0x55 silence pad)", "status": "MEASURED"}
+  ],
+  "crack_verdict": {
+    "structure": "RESOLVED: 16-byte magic block + 16-byte info block + N x 128-byte frames; exact size arithmetic cracked",
+    "codec": "NEGATIVE so far: 4-bit code stream characterized (silence=5, code 2 unused, nibble-aligned) but amplitude mapping not recovered; two candidate rates (4096/8192 Hz) pending listening test; candidate-mapping WAV emitted by aik_decode.py for A/B (not committed)",
+    "next_steps": [
+      "Obtain a known-content AIK (e.g. a Psion Series 3 alarm tone with known waveform) and match periods to pin the codebook",
+      "Check EPOC16 ROM/system docs for 'AICA' (Marco Aicardi compressor) API to get the exact sample rate",
+      "N unit test: decode at 8192 Hz assuming 1/32 s tick; autocorrelation pitch sanity 70-400 Hz"
+    ]
+  },
+  "validation": {
+    "files_checked": 3,
+    "size_rule_pass": 3,
+    "magic_pass": 3,
+    "nibble2_missing_in": 3
+  }
+}

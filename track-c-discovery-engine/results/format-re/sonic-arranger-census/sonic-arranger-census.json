@@ -1,0 +1,46 @@
+{
+  "format": "Sonic Arranger standalone instrument (SASI)",
+  "census_date": "2026-11-12",
+  "agent": "Track C, R-7, F-39",
+  "samples": {
+    "source": "Aminet mus/misc/Sonic_ArrangI.lha ('Sonic Arranger instruments'), recovered from Aminet CD-ROM #12 (Jun 1996), archive.org item aminet-12, ISO9660 range-read; NOT committed, /tmp only",
+    "files": 36,
+    "sizes": "all exactly 672 bytes (matches dexvert fileSize=672; dexvert saw 43 unique on discmaster)",
+    "note": "sembiance.com mirror has no sonicArrangerInstrument dir; dexvert-samples repo 404 for our token; Aminet mirrors unreachable - CD-ROM image route used instead"
+  },
+  "prior_art": [
+    {"item": "dexvert src/format/audio/sonicArrangerInstrument.js @ b126fe4f", "date_checked": "2026-11-12", "verdict": "unsupported=true, notes 'No known converter', fileSize=672, 43 unique files on discmaster"},
+    {"item": "dexvert src/format/music/sonicArranger.js", "date_checked": "2026-11-12", "verdict": "SUPPORTED sibling format: 'Sonic Arrange Module' .sa via uade123; website fileformats.archiveteam.org/wiki/Sonic_Arranger (wiki unreachable from this network, 2026-11-12)"},
+    {"item": "TrID def sa-inst.trid.xml (digipres.github.io mirror)", "date_checked": "2026-11-12", "verdict": "magic 'SASI' (53 41 53 49) at BOF, no extension, 47 files scanned, def dated 2018-04-19 by Marco Pontello"},
+    {"item": "Wikidata Q105852416 (theseus-rs/file-type source)", "date_checked": "2026-11-12", "verdict": "'Sonic Arranger instrument', no extensions, SASI BOF signature - registry entry only, no spec"},
+    {"item": "nuade player (emoon/nuade players/sonicarranger/sonic_arranger.c) + UADE amifilemagic.c (dv1/uade)", "date_checked": "2026-11-12", "verdict": "MODULE format fully implemented open-source: unpacked 'SOARV1.0' + chunks STBL/OVTB/NTBL/INST/SD8B/SYWT/SYAR/SYAF; compiled 68k .pc form with offsets block + 'deadbeef' trailer; module magic 'SOARV1.0', packed 'SA-P'. Standalone SASI instrument NOT handled by UADE/nuade"},
+    {"item": "horsicq/xxfclib die_music entry", "date_checked": "2026-11-12", "verdict": "catalogs 'BrainTrace Design/MEDIA Verlags Sonic Arranger synth instrument' (DieMusic spec DB), generated stub only"},
+    {"item": "Aminet CD-12 index (AmigaTextFiles/docs) + SONIC_ARRANGI.README / SONICARRANGTUN.README (from the CD itself)", "date_checked": "2026-11-12", "verdict": "player source credits: (c) BrainTrace Design / Carsten Schlote, Lich, Germany; 'Sonic_Arranger_Replay_Ex.s' shipped 1992-1996; instrument archive dated 1990-1992"}
+  ],
+  "verdict_prior_art": "SASI standalone instrument: identification artifacts only (TrID/wikidata) + module-format source (nuade/UADE). No standalone-instrument parser found anywhere as of 2026-11-12; dexvert 'No known converter' note is CURRENT. The 672-byte SASI census below is, to our knowledge, the first public structural write-up.",
+  "findings": [
+    {"field": "container", "value": "672 B = 8-byte magic 'SASI\\0\\0\\0\\0' + 152-byte instrument record + 4 x 128-byte tables (8+152+512=672). EXACT on 36/36 files", "status": "RESOLVED"},
+    {"field": "instrument record", "value": "byte layout IDENTICAL to the per-instrument INST entry inside SA modules (nuade reader layout): type/waveform_number/waveform_length/repeat_length u16s, 8 reserved, volume(+16, 0-64), fine_tuning(i8), portamento, vibrato delay/speed/level, amf number/delay/length/repeat, adsr number/delay/length/repeat, sustain point/delay, 16 reserved, effect arg1/effect/arg2/arg3/delay, 3 arpeggios {len,repeat,14xi8}, 30-byte NUL-padded name at record offset 122 (= file offset 130)", "status": "RESOLVED (cross-validated against real module 'time to death.sa': 4 records x 152 B parsed, same field ranges)"},
+    {"field": "observed ranges", "value": "type=1 (synth) in 36/36; waveform_length in {1,16,32,64}; volume 30..64; vibrato_delay 0..255 or 65535(off); effect args 0..127 plus 65408=0xFF80; instrument names match file names (some truncated/aliased e.g. 'Bell's\\0--')", "status": "MEASURED"},
+    {"field": "blk0 @160", "value": "waveform, signed 8-bit: Light_Sine = textbook sine; Acomp_Bass = ramp; snare = noise; nonzero bytes = 2..128, correlates with waveform_length", "status": "RESOLVED (role)"},
+    {"field": "blk1 @288", "value": "ADSR/amplitude table, values 0..64 (Amiga volume scale), 128 entries; present in 36/36", "status": "RESOLVED (role, 0-64 scale)"},
+    {"field": "blk2 @416", "value": "AMF-style modulation table, signed/63-centered sine-shaped curves; nonzero in only ~5/36 instruments", "status": "PARTIAL (role candidate: AMF)"},
+    {"field": "blk3 @544", "value": "second waveform-like signed table (square/noise shapes, 0..128 nonzero); exact role unverified - candidates: synth-effect waveform / morph target (cf. 'SineMorf')", "status": "PARTIAL (open)"},
+    {"field": ".sadir companion", "value": "SA directory file: stride-44 entries = 42-byte NUL-padded name + u16 BE size (0x02A0 = 672); lists instruments AND .pc modules", "status": "PARTIAL"}
+  ],
+  "crack_verdict": {
+    "structure": "RESOLVED: full 672-byte layout + exact size identity + record layout equivalence with module INST entries",
+    "open": "blk2/blk3 role semantics; whether the 4 tables map 1:1 to SYWT/SYAR/SYAF + one extra (module chunk order: waveforms, ADSR, AMF); player-accurate synth semantics belong to the module RE (nuade) not the container",
+    "next_steps": [
+      "Diff an instrument saved from a module (INST entry + its SYWT/SYAR/SYAF tables) against a standalone SASI export of the same patch to pin the 4-table mapping",
+      "Search 1992-1996 Sonic Arranger docs (MEDIA Verlag / MediaPoint manuals) for the save format",
+      "Write a SASI->pipewire/WAV renderer using nuade's synth engine as reference"
+    ]
+  },
+  "validation": {
+    "sasi_files_parsed": 36,
+    "valid": 36,
+    "size_rule_pass": 36,
+    "module_crosscheck": {"module": "time to death.sa (SOARV1.0 unpacked)", "instrument_records": 4, "record_bytes": 152, "parse_pass": true}
+  }
+}

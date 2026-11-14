@@ -1,0 +1,34 @@
+{
+  "finding": "F-53-or-next-free: bit-exact SAMPLE.MID -> SAMPLE.DWM re-encode attempt validating the F-53 grammar",
+  "date": "2026-11-14",
+  "verdict": "NEAR_FULL",
+  "encoder": "results/format-re/diamondware-census/dwm_encode_v2.py (first public MIDI->DWM encoder; prior art none per F-50)",
+  "match": {
+    "file_size": {"mine": 12512, "truth": 12782},
+    "header": "92/96 bytes exact; only body-size (0x18) and event-count (0x1C) differ, because the stream diverges later (12416/2550 vs 12686/2613)",
+    "body": "byte-exact from body byte 0 through 517 (99 consecutive records), first divergence at body byte 518",
+    "records_emitted": 2550, "records_truth": 2613,
+    "type_counts": {"mine": {"0x00": 1557, "0x02": 898, "0x03": 95}, "truth": {"0x00": 1575, "0x02": 916, "0x03": 122}},
+    "drums": "659/659 drum onsets exact (voice, vol, pitch word)",
+    "voice_allocation_accuracy": "833/916 = 91.0% of melodic voice choices reproduced"
+  },
+  "rules_derived": {
+    "quantizer": "hb = (9*tick + 24)//50 = round-half-DOWN(tick*0.18); proven by 8 onsets at fractional exactly 0.5 all rounding down (e.g. 2200.5 -> 2200) while 908 match nearest; drums 659/659",
+    "note_off": "off record at hb(off_tick) - 1 (916/916 ground truth)",
+    "voice_release": "voice busy through hb(off_tick) + 1 (proven at hb 599: off record 598 but v0 not reused at 599)",
+    "allocator_tiers": ["channel's last voice if free and patch-matching", "lowest free voice with matching patch", "lowest free voice with any patch (emit [03][p][v] first, before the note-on)", "lowest never-patched voice", "none free -> drop the note (no record)"],
+    "same_heartbeat_order": "drum records before melodic records at equal heartbeat; melodic patch record before its note-on; stream strictly time-ordered, no end-of-song marker",
+    "pitch": "fnum ladder [513,544,576,611,647,685,726,769,815,864,915,969], idx=(note-31)%12, block=1+(note-31)//12; drum 35->v6 fixed (15,3); 42->v7 (201,7); 39/40->v9 melodic pair of the note",
+    "patch_table": "[drum patch 21 31 4f 00 f2 d2 52 73 00 00 06 (internal default, not an IBK slot)][IBK slot 18][38][80]; melodic channels sorted ascending; patch index = table position",
+    "header": "magic 18B + unknown constant 6B 00 1a 58 a9 f6 b2 + u32 body_size + u32 event_count + u32 52 (patch offset) + u32 96 (body offset) + u16 720 (rate deciHz) + u16 patch_count + u16 1 + u16 0x0100 + u32 6 (melodic voices) + 4x11B patches"
+  },
+  "divergences": {
+    "voice_choices_wrong": 83,
+    "drops": {"mine": 36, "truth": 18, "note": "all 18 true drops are MIDI ch1/ch2; 3 true drops occur with a patch-matching time-free voice in the model, so the converter's busy-state diverges around dropped-note cascades (voice-centric off-release vs instance FIFO)"},
+    "cascade_effect": "every dropped/mis-voiced note shifts the strictly time-ordered stream; byte equality ends at first divergence (record 99, body byte 518)",
+    "open": "exact release/tie-break tail of the allocator (per-channel rotation memory or off-instance pairing suspected)"
+  },
+  "significance": "confirms the F-53 grammar is complete and correct as an encoding spec; the remaining gap is one algorithmic component (allocator tail), not any unknown record type, field, or transform",
+  "method_scripts": ["/tmp/dw-bitexact/: fullparse.py, canon.py, alloc2-6.py, streamdiff.py, encode_final.py"],
+  "prior_art": "none public (F-40/F-41/F-46/F-50 verified); dwm_encode_v2.py is the first working MIDI->DWM encoder"
+}

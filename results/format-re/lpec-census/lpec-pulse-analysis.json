@@ -1,0 +1,65 @@
+{
+  "id": "F-47-or-next-free",
+  "title": "LPEC pulse-position generation extracted from decompiled LPEC.dll",
+  "date": "2026-11-14",
+  "track": "track-c-discovery-engine/format-re/lpec",
+  "prior": ["F-47", "F-48", "F-49", "F-50", "F-51", "F-52"],
+  "functions_analyzed": {
+    "FUN_10004450": "band pulse allocator: distributes per-subframe bit budget across bands and 3 value-codebook classes (4:2:1 bit-cost model), parity/byte fix-ups, leftovers to extra pulses",
+    "FUN_10003d80": "per-band class split from band weight w and positions-per-band n (quadratic in w, factor 0x71c7 = 0.8567)",
+    "FUN_100060e0": "pulse reader/placer: reads codes0+codes1+codes2 8-bit codes class-major then extras 1-bit signs; consumes value rows sequentially across bands; places values at record positions; sign 0 -> +0.6, 1 -> -0.6",
+    "FUN_1000c680": "pitch-synchronous coarse-position word generator (not bitstream-driven): int16 LSF vector + scaled comb-shape value -> integer base; lag%3==0 window table DAT_10047f10 stride 1536/lag else DAT_10046f10 stride 2048/lag; output word = accumulator*0x2000 + (frac >> 6)",
+    "FUN_10005040": "frame orchestrator: field order, per-type budgets, tail skip",
+    "FUN_10005bf0": "LSF read: first stage-0 index stored to state+0x140+4*set (fallback +0x144+4*set) = band-weight row selector (pgidx)",
+    "FUN_10005ca0": "lag/comb read: state+0xa0 lag bits (10 LP / 16 SP) + 6-bit comb shape when lag != 0"
+  },
+  "constants": {
+    "state_0x14": 19,
+    "value_table_row_lengths_DAT_10046984": [2, 4, 8, 256, 256, 256],
+    "extra_pulse_amplitudes": {"DAT_1006b458": -0.6, "DAT_1006b460": 0.6},
+    "allocator_factor_0x71c7_over_0x8000": 0.8567,
+    "frame_bit_totals": {"formula": "T0=T3=F, T1=3F/4, T2=5F/4", "LP_F": 384, "SP_F": 1024},
+    "value_tables": {
+      "LP_8000": {"class0": "DAT_10030440", "class1": "DAT_10031440", "class2": "DAT_10033440"},
+      "SP_16000": {"class0": "DAT_10029440", "class1": "DAT_1002a440", "class2": "DAT_1002c440"}
+    },
+    "band_weight_tables": {
+      "LP_6000": "DAT_100388b0",
+      "LP_other": "DAT_10038cc0",
+      "SP": "DAT_100383a0",
+      "layout": "64 rows (6-bit LSF stage-0 index) x bands shorts; LP table 0x400 B"
+    },
+    "positions_per_band": {"LP": 32, "SP": "512/bands (state+0x30, exact rounding unconfirmed)"}
+  },
+  "derived_algorithm": {
+    "bit_economy": "8-bit code = 8 bits = one row of 2 (class0, 4 bits/value), 4 (class1, 2 bits/value) or 8 (class2, 1 bit/value) pulse values; extra pulse = 1 bit (sign)",
+    "pgidx": "first LSF stage-0 index selects band-weight table row; weight calibrated per slot: w += (short)((budget - state[0xec+4*slot]) * state[0xfc+4*slot] >> 9)",
+    "allocator": "per band: p0=((w*w>>15)*0x71c7>>15)*n>>15; p1=(((0x5000-(w>>1))*w>>14)^2>>15)*0x71c7>>13)*n>>15; p2=(w*n>>13)-4*p0-2*p1; if p2>n-p0-p1: p2=0, p0=((w-0x4000)*n+0x2000)>>14, p1=n-p0; then: sum(p0) even fix (p0->p1 as +2 units, stride-2 scan from end); sum(p1)%4==0 fix (direction by budget-cost<1); cost floor-aligned to multiple of 8 (drain or half-step grow of p2, capacity-capped); leftovers become extra pulses, per band capped so p0+p1+p2+p3 <= n",
+    "packing_order": "codes0 codes then codes1 then codes2 (8-bit, MSB-first), then extras 1-bit signs; per band: class0,1,2 values from rows (row = table + rowlen*code*8, sequential consumption with cross-band carry), then extras at next record positions",
+    "positions": "per band ppb records (16 B each); position = (FUN_1000c680 word & ~0x7F) | pulse_index_within_band; word stream per band advances ppb starting at state+0x40+4*slot",
+    "budget": "slot_bits - 19; slot_bits = div2(remaining at type start) - (1 or 8 by pitch flag) for T0 halves; T1/T3: type total - consumed; T2: half at F then remainder at 5F/4"
+  },
+  "validation": {
+    "method": "Python port of FUN_10003d80/FUN_10004450 with raw table weights (calibration term zeroed), budgets and LSF-index rows from F-51 bit-exact parser",
+    "budgtele_dvf_LP6k": {"frames": 50545, "invalid": 0, "subframes": 94600, "capacity_violations": 0, "bits_exact": 70243, "bits_exact_pct": 74.2, "alignment_invariants": 63897, "alignment_pct": 67.5, "codes_class0": 208103, "codes_class1": 569827, "codes_class2": 956211, "extras": 261438},
+    "07011600_MSV_SP": {"frames": 159, "invalid": 0, "subframes": 313, "capacity_violations": 0, "bits_exact": 197, "bits_exact_pct": 62.9, "alignment_invariants": 192, "alignment_pct": 61.3, "codes_class0": 5589, "codes_class1": 6144, "codes_class2": 5945, "extras": 802},
+    "interpretation": "structural invariants (per-band capacity) hold on 100% of real subframes; exact bit-economy closure ~2/3-3/4 with raw weights; residuals attributed to unmodeled per-slot weight calibration (state+0xec/0xfc) and two port simplifications"
+  },
+  "negatives": [
+    "FUN_1000c450 (FUN_1000c680 window preparation) and FUN_1000b110 (record initializer) not decompiled: Ghidra installation absent this session; characterized from caller evidence only",
+    "state+0xec+4*slot / state+0xfc+4*slot weight-calibration constants unattributed; allocator model uses raw table weights",
+    "FUN_1000c680 numeric path characterized but not reimplemented end-to-end; physical positions not synthesized in the validator",
+    "FUN_1000ef20 bit pump order taken from F-50/F-51 (not re-decompiled this session)",
+    "validation is structural (bit accounting, capacity, alignment), not sample-accurate PCM comparison"
+  ],
+  "next": [
+    "decompile FUN_1000c450 + FUN_1000b110; attribute state+0xec/0xfc",
+    "implement FUN_1000c680 end-to-end in lpec_synthesis.py with runtime-extracted value tables; replace impulse-train approximation",
+    "Wine Rosetta PCM diff to close calibration constants"
+  ],
+  "provenance": {
+    "decompile_source": "F-48 Ghidra project /tmp/f48 (LPEC.dll, x86:LE:32) + F-52 pass decompile outputs on disk; no re-analysis needed",
+    "data_constants": "read from user-owned LPEC.dll PE image at fixed VAs; addresses committed, contents never",
+    "samples": ["budgtele.dvf", "07011600.MSV"]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "experiment": "F-47",
+  "date": "2026-11-14",
+  "track": "C",
+  "goal": "MIDI->DWM encoder validated against SAMPLE.MID<->SAMPLE.DWM ground-truth pair; bypass EXEPACK blocker (F-46)",
+  "verdict": "PARTIAL",
+  "inputs": {
+    "sample_mid": "/tmp/dw-sdk/SAMPLE.MID (13261 B)",
+    "sample_dwm": "/tmp/dw-sdk/SAMPLE.DWM (12782 B)",
+    "gm1_ibk": "/tmp/dw-sdk/GM1.IBK (3204 B)",
+    "vendor_docs": ["STKMAN.DOC", "DWS.H", "PLAYDWM.C"]
+  },
+  "midi_decode": {
+    "format": 1, "tracks": 7, "division": 240, "tempo_us_per_qn": 600000,
+    "channels": {"9": {"prog": 0, "note_ons": 659, "notes": [35, 39, 40, 42]}, "0": {"prog": 18, "note_ons": 418}, "1": {"prog": 38, "note_ons": 324}, "2": {"prog": 80, "note_ons": 192}},
+    "total_note_ons": 1593, "cc7": {"0": 86, "1": 123, "2": 127, "9": 127},
+    "total_ticks": 35560
+  },
+  "dwm_header": {
+    "magic": "DiamondWare Music\\0",
+    "body_len": 12686, "events": 2613, "header_len": 96, "patches": 4, "rate_decihz": 720
+  },
+  "confirmed": {
+    "patch_provenance": "4 patches byte-identical to GM1.IBK slots 0/18/38/80 = IBK slots of the file's MIDI programs (drums->0, ch0->18, ch1->38, ch2->80); IBK record = 11 patch bytes + 5 pad at stride 16 after IBK\\x1A magic",
+    "patch_layout": "interleaved [m20,c20,m40,c40,m60,c60,m80,c80,mE0,cE0,C0]; block layout falsified by waveform bytes >3",
+    "timing": "delta = heartbeats @72.0Hz; 0.18 hb/tick (240 tpqn, 600000us/qn); tick-0 events at delta 0; drum delta chains sum to quantized onset times (hat@tick120 = 22 hb)",
+    "drum_note_on": "6B [delta][type 0x00][voice][vol][pitch_lo][pitch_hi]; voice 6=kick,7=hat,9=snare; vol=velocity>>1 (proven on 4 pairs incl. melodic); pitch pair constant per note: 35->0F03, 39->2F07, 40->6007, 42->C907",
+    "drum_note_off": "absent as same-shape events (435 hat quads == 435 hat ons exactly)",
+    "extra_types_observed": "3B [delta][02][00] at non-MIDI times (filler/advance); type 0x03 at tick 0 (voice/patch setup, size 4-13 unresolved)"
+  },
+  "unresolved": [
+    "full per-type record size table (652 drum anchors pinned; mid-file melodic/other records ambiguous)",
+    "melodic note-off encoding",
+    "pitch-pair formula (4 ground-truth pairs only)",
+    "type 0x02/0x03 semantics",
+    "end-of-song marker (last record is a voice-6 event, not 0x0B-typed)"
+  ],
+  "encoder_status": {
+    "implemented": "header writer, IBK patch loader, drum-channel event encoding (voice map, vol transform, timing quantization), envelope decoder for round-trip",
+    "validated_against_sample_dwm": false,
+    "reason": "full 2613-record parse incomplete at session bound; melodic pitch formula open",
+    "round_trip": "decoder re-implemented; round-trip test deferred until full grammar"
+  },
+  "fit_for_f46": "opcode table majority-pinned from WRITE side without unpacking MID2DWM.EXE; type 0x00 semantics, timing model, patch provenance proven"
+}

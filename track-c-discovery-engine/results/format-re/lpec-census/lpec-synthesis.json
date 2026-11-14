@@ -1,0 +1,117 @@
+{
+ "id": "lpec-synthesis",
+ "ledger_label": "F-52-or-next-free",
+ "date": "2026-11-14",
+ "claim": "First open-source LPEC decoder producing actual PCM audio from Sony .dvf/.msv files. The synthesis chain is wired on top of the F-51 bit-exact frame parser: per-frame LSF vector reconstruction from the LPEC.dll codebook stages (exact, decompile-derived), LSF-to-LPC conversion (public Chebyshev P/Q math incl. the (1+-z^-1) factors), per-frame 16-step (or 2x8-step for dual-LSP frames) linear LSF interpolation with a direct-form synthesis filter, and a best-effort excitation path (pitch-lag impulse/noise excitation with the per-band amplitude rows, codebook-page 4-segment cross-fade blend per the decompiled FUN_10004960 formula, single per-file peak normalization). Output is plausibility-validated (duration exactness, frame continuity, energy structure), NOT sample-validated against Sony reference output.",
+ "validation_basis": "plausibility only - no Sony decoder output available for ground truth comparison",
+ "inputs": {
+  "bitstream_parser": "results/format-re/lpec-census/lpec_decoder.py (F-51, byte-exact)",
+  "codec_tables": "LPEC.dll (user-owned Digital Voice Editor 3.3.01) read at runtime via embedded PE VA->offset mapping; table addresses from F-48/F-52 decompilation; table VALUES are not committed",
+  "samples": {
+   "budgtele.dvf": "LpecLp 8000 Hz / 6000 bps (F-47 archive)",
+   "07011600.MSV": "LpecSp 16000 Hz / 16000 bps (F-47 archive)"
+  }
+ },
+ "synthesis_model": {
+  "exact_from_decompile": [
+   "LSF vector = sum of stage tables at state+0xb4/0xb8/0xbc/(+0xc0 for 4-group SP): FUN_100064b0",
+   "LSF domain: cycles/sample normalized (short path scale 65536.0 confirms 0..0.5 range)",
+   "LSF min-gap/monotonic repair exists (FUN_100096c0); gap constant approximated 0.001",
+   "frame LSF schedule: type0 block0 -> 16 linear steps prev->cur; type0 block1 -> 2x8 steps prev->avg->cur with avg=(prev+cur)/2 (const _DAT_1006b418=0.5); types 1/2/3 -> 16 steps (FUN_1000f1c0, FUN_10005040)",
+   "dual-LSP frames read two sets into +0x1d8/+0x260 slots (FUN_10005bf0 param 1/2, stride 0x88)",
+   "excitation page blending: 8-double page = 4-segment cross-fade weights, formula per FUN_10004960 (page[3-s] weights held path, page[4+s] weights current path, A84/A88 window tables runtime-filled)",
+   "pitch block semantics: 7-bit index -> 128-entry double table at state+0xcc used as per-subframe scale; 6-bit rows A/B -> per-band (8/10) amplitude rows at state+0xd0/+0xd4, band amp = rowB[idxB][k] + rowA[idxA][k], clamped >0 (FUN_10005d50)",
+   "gain field re-interpreted: 7/8-bit g is a pitch lag for an IIR comb post-filter (FUN_1000f430/FUN_1000e4a0, delay g, taps from FUN_1000e4a0 with shape table at state+0xc4 stride 0x18), 6-bit sh selects the comb shape; g=0 bypasses the comb",
+   "PCM16 output: round(+0.5) saturating at +-32767/-32768 (FUN_100059e0, consts read: 0.5/32767/-32768)",
+   "frame sizes: 512 samples @8k, 1024 @16k per decoder state (+4=bytes, +8=samples, +0xc/+0x10 sub-slices); three gain segments per frame [held, sub1, sub2]"
+  ],
+  "approximated": [
+   "excitation source signal: pitch-lag impulse train (lag = g, voiced) or band-limited noise (g=0) with per-band amplitude envelope, positions evenly spread per band - Sony generates pulse positions from the coarse int16 LSF path (FUN_10004b10/FUN_1000a110/FUN_1000c680) and pulse values from three 8-bit-code-indexed tables (state+0xe0/0xe4/0xe8 with row lengths at DAT_10046984); not mirrored in this pass",
+   "comb post-filter replaced by periodicity in the excitation itself (mathematically overlapping effect, not sample-equivalent)",
+   "A84/A88 runtime windows (FUN_1000fa90 fills DAT_1004a040/DAT_1004b040) approximated as linear half-frame cross-fade ramps",
+   "absolute gain chain (f0-table scale x band rows x pulse values) not fully calibrated; one per-file peak normalization (0.7 FS) applied instead",
+   "FUN_10009dd0 LSF->LPC replaced by public Chebyshev P/Q recursion (verified stable, decaying impulse response)"
+  ]
+ },
+ "per_file": {
+  "budgtele.dvf": {
+   "synthesis": {
+    "frames": 50545,
+    "types": {
+     "0": 43479,
+     "2": 576,
+     "3": 5917,
+     "1": 573
+    },
+    "clipped": 0,
+    "raw_peak": 463.6897359969218,
+    "g0_subframes": 19613,
+    "pages_present": 17990,
+    "scale_applied": 49.466050721796144,
+    "duration_s": 3234.88,
+    "expected_duration_s": 3234.88,
+    "fs": 8000,
+    "order": 10,
+    "bands": 8,
+    "samples": 25879040
+   },
+   "spectral": {
+    "rms": 4.08,
+    "zero_cross_rate": 0.1526,
+    "mean_spectral_centroid_hz": 2000.0,
+    "frames_analyzed": 50545,
+    "rms_per_frame_mean": 159.1
+   },
+   "wav": "/tmp/lpec-synth/wav/budgtele.decoded.wav",
+   "continuity": {
+    "mean_frame_edge_rms_jump": 70.3,
+    "mean_interior_quarter_rms_jump": 65.39,
+    "peak_pcm": 22936
+   }
+  },
+  "07011600.MSV": {
+   "synthesis": {
+    "frames": 159,
+    "types": {
+     "0": 152,
+     "2": 2,
+     "3": 3,
+     "1": 2
+    },
+    "clipped": 0,
+    "raw_peak": 580.5204448936959,
+    "g0_subframes": 28,
+    "pages_present": 117,
+    "scale_applied": 39.510925414866605,
+    "duration_s": 10.176,
+    "expected_duration_s": 10.176,
+    "fs": 16000,
+    "order": 16,
+    "bands": 10,
+    "samples": 162816
+   },
+   "spectral": {
+    "rms": 28.79,
+    "zero_cross_rate": 0.0242,
+    "mean_spectral_centroid_hz": 4000.0,
+    "frames_analyzed": 318,
+    "rms_per_frame_mean": 556.7
+   },
+   "wav": "/tmp/lpec-synth/wav/07011600.decoded.wav",
+   "continuity": {
+    "mean_frame_edge_rms_jump": 528.61,
+    "mean_interior_quarter_rms_jump": 74.65,
+    "peak_pcm": 22936
+   }
+  }
+ },
+ "remaining_gaps": [
+  "pulse position/value generation (FUN_10004450 band allocator mirror + FUN_100060e0 table walk + FUN_1000c680 position transform) - largest remaining quality gap",
+  "comb post-filter coefficient computation FUN_1000e4a0 (lag-dependent 3-tap from shape tables) not mirrored",
+  "pitch pulse shaper FUN_1000f4e0 (1024-entry ramp tables DAT_10042970/DAT_10044970) not mirrored",
+  "A84/A88 window computation FUN_1000fa90 not mirrored",
+  "excitation value/sign bitstream fields are parsed as opaque budget blocks (F-51); their intra-band split is only derived, not read",
+  "absolute output level mapping uncalibrated (per-file normalization substituted)"
+ ],
+ "policy": "No Sony binaries, no decompiled code, no extracted table values committed. Decoder reads the user-owned LPEC.dll at runtime; committed artifacts are derived addresses, formulas, and statistics only."
+}

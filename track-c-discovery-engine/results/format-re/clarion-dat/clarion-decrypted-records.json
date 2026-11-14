@@ -1,0 +1,1593 @@
+{
+ "meta": {
+  "date": "2026-11-14",
+  "agent": "F-47",
+  "track": "track-c-discovery-engine",
+  "claim": "First full decryption of Clarion .DAT record bodies (all 6 encrypted samples from sembiance clarionDatabase corpus), using the 2-byte per-file XOR keys cracked in F-39 with the body-phase model; bodies validated against the F-38 schema and yield readable 1989-1992 business data.",
+  "sample_source": "sembiance.com/fileFormatSamples/document/clarionDatabase/ (re-fetched 2026-11-14 to /tmp only; sizes match F-38 census and F-39 metadata)",
+  "keys_source": "results/format-re/clarion-dat/clarion-encryption-keys.json (F-39)",
+  "schema_source": "results/format-re/clarion-dat/clarion-dat-format.md (F-38)",
+  "bounds": "raw sample bytes kept in /tmp only; only derived facts committed here"
+ },
+ "mechanism_confirmed": {
+  "model": "per-file 2-byte periodic XOR (k0,k1); plaintext = cipher XOR k0 at even keystream index, k1 at odd; keystream phase resets at: header body @0x04, each 27-byte field descriptor, each 19-B KEYSECT and 6-B KEYPART, picture/array sections; record slot = 5-byte rhd/rptr header stored CLEAR + body encrypted with phase reset to k0 at body byte 0",
+  "evidence": [
+   "with this model all 6 encrypted files satisfy F-38 header arithmetic: desc_end==offset and filesize==offset+numrecs*reclen (6/6), same as 43 plain files",
+   "record-slot bytes 0-4 read CLEAR give rhd in {0x01,0x05} active / {0x11,0x15} deleted and rptr values that reproduce the GEORGEE freelist chain exactly (17 deleted slots == numdels 17)",
+   "GEORGEX 68-char TEXT fields that fill the field completely end in letters ('d','y','w') under the model; the last body byte IS encrypted (raw 0x5e/0x43/0x4d = letter XOR k1 0x3a)",
+   "HHCNTRL last byte decrypts to 0x70 'p' = HHC:REGISTERED; GEORGEA password field decrypts to 12 spaces (empty)",
+   "alternating-phase control: wrong phase (k1 first) yields non-printable garbage throughout; whole-slot phase (repo decoder records()) would corrupt the clear rhd/rptr bytes"
+  ]
+ },
+ "decimal_format_correction": {
+  "finding": "F-38/F-39 read DECIMAL by dropping the LAST nibble; the evidence shows the pad nibble is LEADING: stored nibbles = (pad if total digits odd) + integer digits (decsig) + fraction digits (decdec); no sign nibble observed in these samples",
+  "evidence": [
+   "TAXRATE.DAT NJ TAX:RATE nibbles 00000700 (decsig 3, decdec 4) -> drop leading 0 -> digits 0000700 -> 000.0700 = 7.00% New Jersey sales tax; F-38 reading gives 000.0070",
+   "HHNAMES.DAT slot 1 HHN:PHONE_NO nibbles 0000008044885506 -> 8044885506 = (804) 488-5506, Chesapeake VA - matches the record's own address 'Chesapeake, VA 23321'; F-38 reading gives 9-digit 804488550 (not a valid number)",
+   "HHCNTRL.DAT HHC:POLICE/FIRE/AMBULANCE nibbles 0000000000000911 -> 911 (US emergency number); F-38 reading gave 091",
+   "HHCNTRL.DAT HHC:DOCTOR -> 4542323, OTHERPHONE1 -> 4345678, OTHERPHONE2 -> 5456787 (7-digit local numbers)"
+  ]
+ },
+ "validation": {
+  "header_arithmetic": "6/6 encrypted + 3/3 plain re-fetched samples: desc_end==offset, filesize==offset+numrecs*reclen",
+  "georgee_longs": "29/29 NTR:DATE values decode to valid calendar dates 1991-01-01..1991-05-19; 29/29 NTR:TIME values in 1..8640000 (07:39..22:26, all 1991 plausibility)",
+  "default_times": "15/15 first-pattern time fields decode to 08:00:00.00 in / 12:00:00.00 lunch / 17:00:00.00 out; second/third patterns are 0 (empty) as stored",
+  "deleted_slots": "rhd bit 0x10 works on decrypted bodies: GEORGEE 17 deleted slots (== numdels 17), HHNAMES 5 deleted slots; freelist chain from freerec 6 = 6->28->27->26->25->1->23->22->21->20->19->18->17->16->14->13->12 (17 slots, ends rptr 0)",
+  "deleted_content": "REFUTES the expectation that GEORGEE deleted slots are empty/password-cleared: all 17 deleted slots retain fully readable, correctly decrypted bodies (titles, dates, times intact) - deletion is a soft delete (rhd bit + freelist rptr chain), body not wiped; same for HHNAMES deleted slots (incl. author's own test records)",
+  "cross_file_integrity": "GEORGEX TXT:NTRYREC references only valid GEORGEE slots {2,3,4,5,7,8,9,10,11,15,24,29} (12 active entries) plus 0 (empty text slot 23, whose GEORGEE slot 23 is itself deleted); TXT:TEXTNUM is contiguous 1..n per entry - the two tables join into one journal"
+ },
+ "anomalies": {
+  "default_last_byte": "DEFAULT.DAT: 300/301 body bytes decrypt consistently; the final file byte (raw 0x00) decrypts to 0xd8 under the model, making DEF:WD5OUTIME3 read -671088640 instead of 0 (F-39 published 0, i.e. treated that byte as clear). All 45 other LONG fields and all STRING fields are clean.",
+  "genesoft_last_byte": "GENESOFT.DAT: 180/181 body bytes decrypt consistently; the final file byte (raw 0x20) decrypts to 0xf3, leaving a stray high-bit byte after GEN:WEXDJNBMK 'qawsedrft' + padding (F-39 published 'qawsedrft').",
+  "pattern": "the two anomalous files share k1=0xc6 (d8c6, d3c6); the four clean files (3e3a x3, 5056) encrypt their final byte consistently. Interpretation open: per-driver-version trailing-byte handling (GENESOFT is the oldest file, 1989), or a clear EOF/flush byte. Affects exactly 1 byte per file; no other byte deviates."
+ },
+ "files": {
+  "DEFAULT.DAT": {
+   "key_hex": "d8c6",
+   "size": 3037,
+   "sfatr": "0x66",
+   "recnam": "RECORD",
+   "filpre": "DEF",
+   "chgdate": "1991-05-05",
+   "chgtime": "14:33:37.81",
+   "numflds": 98,
+   "numbkeys": 0,
+   "numrecs": 1,
+   "numdels": 0,
+   "reclen": 306,
+   "offset": 2731,
+   "checks": {
+    "desc_end_eq_offset": true,
+    "size_eq": true
+   },
+   "records": [
+    {
+     "slot": 1,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "decimals": {
+      "DEF:AREA": {
+       "stored_nibbles": "0000",
+       "leading_pad_nibble": "0",
+       "digits": "000",
+       "integer_part": "000",
+       "fraction_part": "",
+       "value": 0,
+       "f38_reading_dropped_tail": "000"
+      }
+     },
+     "values": {
+      "DEF:OVERRIDE": "Y",
+      "DEF:WINDOW": 5.0,
+      "DEF:LUNCH": 60.0,
+      "DEF:DEDUCT": "N",
+      "DEF:STATE": "",
+      "DEF:AREA": "000",
+      "DEF:PWDEXIT": "Y",
+      "DEF:MAXHOUR": 7.0,
+      "DEF:WD1INDAY1": "MO",
+      "DEF:WD1INTIME1": 2880001,
+      "DEF:WD1LCHDAY1": "MO",
+      "DEF:WD1LCHTIME1": 4320001,
+      "DEF:WD1OUTDAY1": "MO",
+      "DEF:WD1OUTIME1": 6120001,
+      "DEF:WD2INDAY1": "TU",
+      "DEF:WD2INTIME1": 2880001,
+      "DEF:WD2LCHDAY1": "TU",
+      "DEF:WD2LCHTIME1": 4320001,
+      "DEF:WD2OUTDAY1": "TU",
+      "DEF:WD2OUTIME1": 6120001,
+      "DEF:WD3INDAY1": "WE",
+      "DEF:WD3INTIME1": 2880001,
+      "DEF:WD3LCHDAY1": "WE",
+      "DEF:WD3LCHTIME1": 4320001,
+      "DEF:WD3OUTDAY1": "WE",
+      "DEF:WD3OUTIME1": 6120001,
+      "DEF:WD4INDAY1": "TH",
+      "DEF:WD4INTIME1": 2880001,
+      "DEF:WD4LCHDAY1": "TH",
+      "DEF:WD4LCHTIME1": 4320001,
+      "DEF:WD4OUTDAY1": "TH",
+      "DEF:WD4OUTIME1": 6120001,
+      "DEF:WD5INDAY1": "FR",
+      "DEF:WD5INTIME1": 2880001,
+      "DEF:WD5LCHDAY1": "FR",
+      "DEF:WD5LCHTIME1": 4320001,
+      "DEF:WD5OUTDAY1": "FR",
+      "DEF:WD5OUTIME1": 6120001,
+      "DEF:WD1INDAY2": "",
+      "DEF:WD1INTIME2": 0,
+      "DEF:WD1LCHDAY2": "",
+      "DEF:WD1LCHTIME2": 0,
+      "DEF:WD1OUTDAY2": "",
+      "DEF:WD1OUTIME2": 0,
+      "DEF:WD2INDAY2": "",
+      "DEF:WD2INTIME2": 0,
+      "DEF:WD2LCHDAY2": "",
+      "DEF:WD2LCHTIME2": 0,
+      "DEF:WD2OUTDAY2": "",
+      "DEF:WD2OUTIME2": 0,
+      "DEF:WD3INDAY2": "",
+      "DEF:WD3INTIME2": 0,
+      "DEF:WD3LCHDAY2": "",
+      "DEF:WD3LCHTIME2": 0,
+      "DEF:WD3OUTDAY2": "",
+      "DEF:WD3OUTIME2": 0,
+      "DEF:WD4INDAY2": "",
+      "DEF:WD4INTIME2": 0,
+      "DEF:WD4LCHDAY2": "",
+      "DEF:WD4LCHTIME2": 0,
+      "DEF:WD4OUTDAY2": "",
+      "DEF:WD4OUTIME2": 0,
+      "DEF:WD5INDAY2": "",
+      "DEF:WD5INTIME2": 0,
+      "DEF:WD5LCHDAY2": "",
+      "DEF:WD5LCHTIME2": 0,
+      "DEF:WD5OUTDAY2": "",
+      "DEF:WD5OUTIME2": 0,
+      "DEF:WD1INDAY3": "",
+      "DEF:WD1INTIME3": 0,
+      "DEF:WD1LCHDAY3": "",
+      "DEF:WD1LCHTIME3": 0,
+      "DEF:WD1OUTDAY3": "",
+      "DEF:WD1OUTIME3": 0,
+      "DEF:WD2INDAY3": "",
+      "DEF:WD2INTIME3": 0,
+      "DEF:WD2LCHDAY3": "",
+      "DEF:WD2LCHTIME3": 0,
+      "DEF:WD2OUTDAY3": "",
+      "DEF:WD2OUTIME3": 0,
+      "DEF:WD3INDAY3": "",
+      "DEF:WD3INTIME3": 0,
+      "DEF:WD3LCHDAY3": "",
+      "DEF:WD3LCHTIME3": 0,
+      "DEF:WD3OUTDAY3": "",
+      "DEF:WD3OUTIME3": 0,
+      "DEF:WD4INDAY3": "",
+      "DEF:WD4INTIME3": 0,
+      "DEF:WD4LCHDAY3": "",
+      "DEF:WD4LCHTIME3": 0,
+      "DEF:WD4OUTDAY3": "",
+      "DEF:WD4OUTIME3": 0,
+      "DEF:WD5INDAY3": "",
+      "DEF:WD5INTIME3": 0,
+      "DEF:WD5LCHDAY3": "",
+      "DEF:WD5LCHTIME3": 0,
+      "DEF:WD5OUTDAY3": "",
+      "DEF:WD5OUTIME3": -671088640
+     }
+    }
+   ],
+   "fields_compact": [
+    "DEF:OVERRIDE:STRING:1@0",
+    "DEF:WINDOW:REAL:8@1",
+    "DEF:LUNCH:REAL:8@9",
+    "DEF:DEDUCT:STRING:1@17",
+    "DEF:STATE:STRING:2@18",
+    "DEF:AREA:DECIMAL:2@20",
+    "DEF:PWDEXIT:STRING:1@22",
+    "DEF:MAXHOUR:REAL:8@23",
+    "DEF:WD1INDAY1:STRING:2@31",
+    "DEF:WD1INTIME1:LONG:4@33",
+    "DEF:WD1LCHDAY1:STRING:2@37",
+    "DEF:WD1LCHTIME1:LONG:4@39",
+    "DEF:WD1OUTDAY1:STRING:2@43",
+    "DEF:WD1OUTIME1:LONG:4@45",
+    "DEF:WD2INDAY1:STRING:2@49",
+    "DEF:WD2INTIME1:LONG:4@51",
+    "DEF:WD2LCHDAY1:STRING:2@55",
+    "DEF:WD2LCHTIME1:LONG:4@57",
+    "DEF:WD2OUTDAY1:STRING:2@61",
+    "DEF:WD2OUTIME1:LONG:4@63",
+    "DEF:WD3INDAY1:STRING:2@67",
+    "DEF:WD3INTIME1:LONG:4@69",
+    "DEF:WD3LCHDAY1:STRING:2@73",
+    "DEF:WD3LCHTIME1:LONG:4@75",
+    "DEF:WD3OUTDAY1:STRING:2@79",
+    "DEF:WD3OUTIME1:LONG:4@81",
+    "DEF:WD4INDAY1:STRING:2@85",
+    "DEF:WD4INTIME1:LONG:4@87",
+    "DEF:WD4LCHDAY1:STRING:2@91",
+    "DEF:WD4LCHTIME1:LONG:4@93",
+    "DEF:WD4OUTDAY1:STRING:2@97",
+    "DEF:WD4OUTIME1:LONG:4@99",
+    "DEF:WD5INDAY1:STRING:2@103",
+    "DEF:WD5INTIME1:LONG:4@105",
+    "DEF:WD5LCHDAY1:STRING:2@109",
+    "DEF:WD5LCHTIME1:LONG:4@111",
+    "DEF:WD5OUTDAY1:STRING:2@115",
+    "DEF:WD5OUTIME1:LONG:4@117",
+    "DEF:WD1INDAY2:STRING:2@121",
+    "DEF:WD1INTIME2:LONG:4@123",
+    "DEF:WD1LCHDAY2:STRING:2@127",
+    "DEF:WD1LCHTIME2:LONG:4@129",
+    "DEF:WD1OUTDAY2:STRING:2@133",
+    "DEF:WD1OUTIME2:LONG:4@135",
+    "DEF:WD2INDAY2:STRING:2@139",
+    "DEF:WD2INTIME2:LONG:4@141",
+    "DEF:WD2LCHDAY2:STRING:2@145",
+    "DEF:WD2LCHTIME2:LONG:4@147",
+    "DEF:WD2OUTDAY2:STRING:2@151",
+    "DEF:WD2OUTIME2:LONG:4@153",
+    "DEF:WD3INDAY2:STRING:2@157",
+    "DEF:WD3INTIME2:LONG:4@159",
+    "DEF:WD3LCHDAY2:STRING:2@163",
+    "DEF:WD3LCHTIME2:LONG:4@165",
+    "DEF:WD3OUTDAY2:STRING:2@169",
+    "DEF:WD3OUTIME2:LONG:4@171",
+    "DEF:WD4INDAY2:STRING:2@175",
+    "DEF:WD4INTIME2:LONG:4@177",
+    "DEF:WD4LCHDAY2:STRING:2@181",
+    "DEF:WD4LCHTIME2:LONG:4@183",
+    "DEF:WD4OUTDAY2:STRING:2@187",
+    "DEF:WD4OUTIME2:LONG:4@189",
+    "DEF:WD5INDAY2:STRING:2@193",
+    "DEF:WD5INTIME2:LONG:4@195",
+    "DEF:WD5LCHDAY2:STRING:2@199",
+    "DEF:WD5LCHTIME2:LONG:4@201",
+    "DEF:WD5OUTDAY2:STRING:2@205",
+    "DEF:WD5OUTIME2:LONG:4@207",
+    "DEF:WD1INDAY3:STRING:2@211",
+    "DEF:WD1INTIME3:LONG:4@213",
+    "DEF:WD1LCHDAY3:STRING:2@217",
+    "DEF:WD1LCHTIME3:LONG:4@219",
+    "DEF:WD1OUTDAY3:STRING:2@223",
+    "DEF:WD1OUTIME3:LONG:4@225",
+    "DEF:WD2INDAY3:STRING:2@229",
+    "DEF:WD2INTIME3:LONG:4@231",
+    "DEF:WD2LCHDAY3:STRING:2@235",
+    "DEF:WD2LCHTIME3:LONG:4@237",
+    "DEF:WD2OUTDAY3:STRING:2@241",
+    "DEF:WD2OUTIME3:LONG:4@243",
+    "DEF:WD3INDAY3:STRING:2@247",
+    "DEF:WD3INTIME3:LONG:4@249",
+    "DEF:WD3LCHDAY3:STRING:2@253",
+    "DEF:WD3LCHTIME3:LONG:4@255",
+    "DEF:WD3OUTDAY3:STRING:2@259",
+    "DEF:WD3OUTIME3:LONG:4@261",
+    "DEF:WD4INDAY3:STRING:2@265",
+    "DEF:WD4INTIME3:LONG:4@267",
+    "DEF:WD4LCHDAY3:STRING:2@271",
+    "DEF:WD4LCHTIME3:LONG:4@273",
+    "DEF:WD4OUTDAY3:STRING:2@277",
+    "DEF:WD4OUTIME3:LONG:4@279",
+    "DEF:WD5INDAY3:STRING:2@283",
+    "DEF:WD5INTIME3:LONG:4@285",
+    "DEF:WD5LCHDAY3:STRING:2@289",
+    "DEF:WD5LCHTIME3:LONG:4@291",
+    "DEF:WD5OUTDAY3:STRING:2@295",
+    "DEF:WD5OUTIME3:LONG:4@297"
+   ],
+   "keynames": []
+  },
+  "GENESOFT.DAT": {
+   "key_hex": "d3c6",
+   "size": 595,
+   "sfatr": "0xe6",
+   "recnam": "RECORD",
+   "filpre": "GEN",
+   "chgdate": "1989-08-28",
+   "chgtime": "09:17:00.24",
+   "numflds": 12,
+   "numbkeys": 0,
+   "numrecs": 1,
+   "numdels": 0,
+   "reclen": 186,
+   "offset": 409,
+   "checks": {
+    "desc_end_eq_offset": true,
+    "size_eq": true
+   },
+   "records": [
+    {
+     "slot": 1,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "GEN:SOIFXCFRJ": "ooqwxsqde",
+      "GEN:OWLDMESQX": "asmnjuwrt",
+      "GEN:PASSWORDS": "psdjxczny",
+      "GEN:HIURTSRSP": "shkj",
+      "GEN:PASQOEXZR": "wrclk",
+      "GEN:SLKEEIXXA": "weuyhbnvc",
+      "GEN:IPYHWSQIP": "fgvbnmxzs",
+      "GEN:DKAPMBHSL": "shareware",
+      "GEN:YHIKLZCBA": "djkmnbvcw",
+      "GEN:SWERCFJKL": "woikmj",
+      "GEN:POEXDSLSG": "yuhjlxcva",
+      "GEN:WEXDJNBMK": "qawsedrft          \u00f3"
+     }
+    }
+   ],
+   "fields_compact": [
+    "GEN:SOIFXCFRJ:STRING:20@0",
+    "GEN:OWLDMESQX:STRING:17@20",
+    "GEN:PASSWORDS:STRING:20@37",
+    "GEN:HIURTSRSP:STRING:5@57",
+    "GEN:PASQOEXZR:STRING:7@62",
+    "GEN:SLKEEIXXA:STRING:20@69",
+    "GEN:IPYHWSQIP:STRING:18@89",
+    "GEN:DKAPMBHSL:STRING:20@107",
+    "GEN:YHIKLZCBA:STRING:11@127",
+    "GEN:SWERCFJKL:STRING:8@138",
+    "GEN:POEXDSLSG:STRING:15@146",
+    "GEN:WEXDJNBMK:STRING:20@161"
+   ],
+   "keynames": []
+  },
+  "GEORGEA.DAT": {
+   "key_hex": "3e3a",
+   "size": 365,
+   "sfatr": "0x86",
+   "recnam": "",
+   "filpre": "",
+   "chgdate": "1991-05-24",
+   "chgtime": "12:06:26.50",
+   "numflds": 5,
+   "numbkeys": 0,
+   "numrecs": 1,
+   "numdels": 0,
+   "reclen": 145,
+   "offset": 220,
+   "checks": {
+    "desc_end_eq_offset": true,
+    "size_eq": true
+   },
+   "records": [
+    {
+     "slot": 1,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "ATH:AUTHOR": "George Tanner",
+      "ATH:ADDRESS1": "123 Main Street",
+      "ATH:ADDRESS2": "Anywhere, USA",
+      "ATH:TITLE": "GEORGE'S JOURNAL",
+      "ATH:PASSWORD": ""
+     }
+    }
+   ],
+   "fields_compact": [
+    "ATH:AUTHOR:STRING:32@0",
+    "ATH:ADDRESS1:STRING:32@32",
+    "ATH:ADDRESS2:STRING:32@64",
+    "ATH:TITLE:STRING:32@96",
+    "ATH:PASSWORD:STRING:12@128"
+   ],
+   "keynames": []
+  },
+  "GEORGEE.DAT": {
+   "key_hex": "3e3a",
+   "size": 1545,
+   "sfatr": "0xa6",
+   "recnam": "",
+   "filpre": "",
+   "chgdate": "1991-05-22",
+   "chgtime": "17:58:40.63",
+   "numflds": 3,
+   "numbkeys": 2,
+   "numrecs": 29,
+   "numdels": 17,
+   "reclen": 45,
+   "offset": 240,
+   "checks": {
+    "desc_end_eq_offset": true,
+    "size_eq": true
+   },
+   "records": [
+    {
+     "slot": 1,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 23,
+     "values": {
+      "NTR:DATE": 69445,
+      "NTR:TIME": 2813784,
+      "NTR:NAME": "AMY, THE STAR"
+     }
+    },
+    {
+     "slot": 2,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69400,
+      "NTR:TIME": 2756321,
+      "NTR:NAME": "NEW YEAR'S DAY"
+     }
+    },
+    {
+     "slot": 3,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69409,
+      "NTR:TIME": 2758002,
+      "NTR:NAME": "REPORT CARDS"
+     }
+    },
+    {
+     "slot": 4,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69411,
+      "NTR:TIME": 2759122,
+      "NTR:NAME": "RIDE IN THE VAN"
+     }
+    },
+    {
+     "slot": 5,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69431,
+      "NTR:TIME": 2760204,
+      "NTR:NAME": "A NEW MONTH"
+     }
+    },
+    {
+     "slot": 6,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 28,
+     "values": {
+      "NTR:DATE": 69538,
+      "NTR:TIME": 7507783,
+      "NTR:NAME": "CHURCH TODAY"
+     }
+    },
+    {
+     "slot": 7,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69537,
+      "NTR:TIME": 7569497,
+      "NTR:NAME": "CAMPING TRIP"
+     }
+    },
+    {
+     "slot": 8,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69401,
+      "NTR:TIME": 8029394,
+      "NTR:NAME": "BACK TO WORK"
+     }
+    },
+    {
+     "slot": 9,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69403,
+      "NTR:TIME": 8036495,
+      "NTR:NAME": "NORMAL DAY"
+     }
+    },
+    {
+     "slot": 10,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69405,
+      "NTR:TIME": 8038006,
+      "NTR:NAME": "CHURCH"
+     }
+    },
+    {
+     "slot": 11,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69407,
+      "NTR:TIME": 8042169,
+      "NTR:NAME": "NORMAL DAY"
+     }
+    },
+    {
+     "slot": 12,
+     "rhd": "0x15",
+     "deleted": true,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69413,
+      "NTR:TIME": 8042922,
+      "NTR:NAME": "NORMAL DAY"
+     }
+    },
+    {
+     "slot": 13,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 12,
+     "values": {
+      "NTR:DATE": 69414,
+      "NTR:TIME": 8050765,
+      "NTR:NAME": "NORMAL DAY"
+     }
+    },
+    {
+     "slot": 14,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 13,
+     "values": {
+      "NTR:DATE": 69417,
+      "NTR:TIME": 8051973,
+      "NTR:NAME": "ANOTHER NORMAL DAY"
+     }
+    },
+    {
+     "slot": 15,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69418,
+      "NTR:TIME": 8053006,
+      "NTR:NAME": "ACTIVITY DAY"
+     }
+    },
+    {
+     "slot": 16,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 14,
+     "values": {
+      "NTR:DATE": 69425,
+      "NTR:TIME": 8056126,
+      "NTR:NAME": "MOW THE LAWN DAY"
+     }
+    },
+    {
+     "slot": 17,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 16,
+     "values": {
+      "NTR:DATE": 69426,
+      "NTR:TIME": 8057164,
+      "NTR:NAME": "CHURCH DAY"
+     }
+    },
+    {
+     "slot": 18,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 17,
+     "values": {
+      "NTR:DATE": 69428,
+      "NTR:TIME": 8058575,
+      "NTR:NAME": "MONTH'S ALMOST OVER"
+     }
+    },
+    {
+     "slot": 19,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 18,
+     "values": {
+      "NTR:DATE": 69432,
+      "NTR:TIME": 8061388,
+      "NTR:NAME": "ACTIVITY DAY"
+     }
+    },
+    {
+     "slot": 20,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 19,
+     "values": {
+      "NTR:DATE": 69434,
+      "NTR:TIME": 8063008,
+      "NTR:NAME": "CHILDREN'S SCHOOL WORK"
+     }
+    },
+    {
+     "slot": 21,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 20,
+     "values": {
+      "NTR:DATE": 69436,
+      "NTR:TIME": 8064222,
+      "NTR:NAME": "TED'S PROBLEMS"
+     }
+    },
+    {
+     "slot": 22,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 21,
+     "values": {
+      "NTR:DATE": 69438,
+      "NTR:TIME": 8065419,
+      "NTR:NAME": "AMY LEARNS A LESSON"
+     }
+    },
+    {
+     "slot": 23,
+     "rhd": "0x15",
+     "deleted": true,
+     "rptr": 22,
+     "values": {
+      "NTR:DATE": 69440,
+      "NTR:TIME": 8065963,
+      "NTR:NAME": "WHAT A DAY!"
+     }
+    },
+    {
+     "slot": 24,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69448,
+      "NTR:TIME": 8070176,
+      "NTR:NAME": "AMY, THE STAR!"
+     }
+    },
+    {
+     "slot": 25,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 1,
+     "values": {
+      "NTR:DATE": 69449,
+      "NTR:TIME": 8072384,
+      "NTR:NAME": "NORMAL DAY"
+     }
+    },
+    {
+     "slot": 26,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 25,
+     "values": {
+      "NTR:DATE": 69452,
+      "NTR:TIME": 8073394,
+      "NTR:NAME": "NORMAL DAY"
+     }
+    },
+    {
+     "slot": 27,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 26,
+     "values": {
+      "NTR:DATE": 69454,
+      "NTR:TIME": 8074449,
+      "NTR:NAME": "NORMAL DAY"
+     }
+    },
+    {
+     "slot": 28,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 27,
+     "values": {
+      "NTR:DATE": 69459,
+      "NTR:TIME": 8076272,
+      "NTR:NAME": "THE BEGINNING OF MARCH"
+     }
+    },
+    {
+     "slot": 29,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "NTR:DATE": 69479,
+      "NTR:TIME": 8077272,
+      "NTR:NAME": "SPRING BEGINS"
+     }
+    }
+   ],
+   "fields_compact": [
+    "NTR:DATE:LONG:4@0",
+    "NTR:TIME:LONG:4@4",
+    "NTR:NAME:STRING:32@8"
+   ],
+   "keynames": [
+    "DATEKEY(comps=3)",
+    "NAMEKEY(comps=3)"
+   ]
+  },
+  "GEORGEX.DAT": {
+   "key_hex": "3e3a",
+   "size": 3123,
+   "sfatr": "0xa6",
+   "recnam": "",
+   "filpre": "",
+   "chgdate": "1991-05-24",
+   "chgtime": "12:06:49.35",
+   "numflds": 3,
+   "numbkeys": 1,
+   "numrecs": 38,
+   "numdels": 0,
+   "reclen": 77,
+   "offset": 197,
+   "checks": {
+    "desc_end_eq_offset": true,
+    "size_eq": true
+   },
+   "records": [
+    {
+     "slot": 1,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 2,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     Today is New Year's Day. I'm home with the family. My wife and"
+     }
+    },
+    {
+     "slot": 2,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 5,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     February has begun. The kids went to the mountains last"
+     }
+    },
+    {
+     "slot": 3,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 2,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "I and the kids all stayed up to welcome in the New Year. We stayed"
+     }
+    },
+    {
+     "slot": 4,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 2,
+      "TXT:TEXTNUM": 3,
+      "TXT:TEXT": "home and played games last night.\u00ff"
+     }
+    },
+    {
+     "slot": 5,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 2,
+      "TXT:TEXTNUM": 4,
+      "TXT:TEXT": "     This morning we were all so tired that we never woke up until"
+     }
+    },
+    {
+     "slot": 6,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 2,
+      "TXT:TEXTNUM": 5,
+      "TXT:TEXT": "11 o'clock. My wife went out for a bit of shopping while the kids"
+     }
+    },
+    {
+     "slot": 7,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 2,
+      "TXT:TEXTNUM": 6,
+      "TXT:TEXT": "and I watched TV.\u00ff"
+     }
+    },
+    {
+     "slot": 8,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 3,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     The kids all brought home their report cards today. Billy got"
+     }
+    },
+    {
+     "slot": 9,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 11,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     Another normal day. The kids are all doing well in school."
+     }
+    },
+    {
+     "slot": 10,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 10,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "usual.\u00ff"
+     }
+    },
+    {
+     "slot": 11,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 10,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     The family went to church today. There was a boring sermon as"
+     }
+    },
+    {
+     "slot": 12,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 8,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "vacation. The holidays are over. No New Year resolutions for me.\u00ff"
+     }
+    },
+    {
+     "slot": 13,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 8,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     I went back to work today after a long four day weekend"
+     }
+    },
+    {
+     "slot": 14,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 11,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "Report cards come out in two days. I think they should all have good"
+     }
+    },
+    {
+     "slot": 15,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 4,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     It was a quiet day today.  We went for a ride in the van to"
+     }
+    },
+    {
+     "slot": 16,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 9,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     Just another normal day at the office. It's hard to want to"
+     }
+    },
+    {
+     "slot": 17,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 24,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "very well and we were all pleased. The whole family attended and we"
+     }
+    },
+    {
+     "slot": 18,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 24,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     This evening Amy had a piano recital. Her teacher said she did"
+     }
+    },
+    {
+     "slot": 19,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 15,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     We had an activity day today at the school. All of the"
+     }
+    },
+    {
+     "slot": 20,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 15,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "children ran races and got some ribbons. We had a fun time.\u00ff"
+     }
+    },
+    {
+     "slot": 21,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 11,
+      "TXT:TEXTNUM": 3,
+      "TXT:TEXT": "grades.\u00ff"
+     }
+    },
+    {
+     "slot": 22,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 3,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "straight A's. He is doing real well. Julie has been attending a"
+     }
+    },
+    {
+     "slot": 23,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 0,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "\u00ff"
+     }
+    },
+    {
+     "slot": 24,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 5,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "weekend to go tubing. They had a fun time. I wish I had been able"
+     }
+    },
+    {
+     "slot": 25,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 5,
+      "TXT:TEXTNUM": 3,
+      "TXT:TEXT": "to go, but had some other things to do.\u00ff"
+     }
+    },
+    {
+     "slot": 26,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 29,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     The trees are budding and spring is coming. I had to work on my"
+     }
+    },
+    {
+     "slot": 27,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 9,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "get back to work after the holidays.\u00ff"
+     }
+    },
+    {
+     "slot": 28,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 7,
+      "TXT:TEXTNUM": 1,
+      "TXT:TEXT": "     We went on a camping trip on Friday night. I always have a"
+     }
+    },
+    {
+     "slot": 29,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 3,
+      "TXT:TEXTNUM": 3,
+      "TXT:TEXT": "special art class which she enjoys. She only got one B, the rest"
+     }
+    },
+    {
+     "slot": 30,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 3,
+      "TXT:TEXTNUM": 4,
+      "TXT:TEXT": "A's. Good kids!\u00ff"
+     }
+    },
+    {
+     "slot": 31,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 4,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "see the countryside.\u00ff"
+     }
+    },
+    {
+     "slot": 32,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 24,
+      "TXT:TEXTNUM": 3,
+      "TXT:TEXT": "enjoyed Amy's performance.\u00ff"
+     }
+    },
+    {
+     "slot": 33,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 29,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "lawn mower to get it ready. The spring rains will make the lawn grow"
+     }
+    },
+    {
+     "slot": 34,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 29,
+      "TXT:TEXTNUM": 3,
+      "TXT:TEXT": "like a jungle.\u00ff"
+     }
+    },
+    {
+     "slot": 35,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 7,
+      "TXT:TEXTNUM": 2,
+      "TXT:TEXT": "hard time sleeping on the ground. I told the kids some scary"
+     }
+    },
+    {
+     "slot": 36,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 7,
+      "TXT:TEXTNUM": 3,
+      "TXT:TEXT": "stories and they kept me up to late.\u00ff"
+     }
+    },
+    {
+     "slot": 37,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 7,
+      "TXT:TEXTNUM": 4,
+      "TXT:TEXT": "     The next morning we went for a hike. We found a nice"
+     }
+    },
+    {
+     "slot": 38,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TXT:NTRYREC": 7,
+      "TXT:TEXTNUM": 5,
+      "TXT:TEXT": "tarzan-swing type vine that we played on for hours.\u00ff"
+     }
+    }
+   ],
+   "fields_compact": [
+    "TXT:NTRYREC:SHORT:2@0",
+    "TXT:TEXTNUM:SHORT:2@2",
+    "TXT:TEXT:STRING:68@4"
+   ],
+   "keynames": [
+    "TEXTKEY(comps=2)"
+   ]
+  },
+  "HHCNTRL.DAT": {
+   "key_hex": "5056",
+   "size": 928,
+   "sfatr": "0x26",
+   "recnam": "RECORD",
+   "filpre": "HHC",
+   "chgdate": "1990-07-24",
+   "chgtime": "21:19:51.71",
+   "numflds": 22,
+   "numbkeys": 1,
+   "numrecs": 1,
+   "numdels": 0,
+   "reclen": 224,
+   "offset": 704,
+   "checks": {
+    "desc_end_eq_offset": true,
+    "size_eq": true
+   },
+   "records": [
+    {
+     "slot": 1,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "decimals": {
+      "HHC:POLICE": {
+       "stored_nibbles": "0000000000000911",
+       "leading_pad_nibble": "0",
+       "digits": "000000000000911",
+       "integer_part": "000000000000911",
+       "fraction_part": "",
+       "value": 911,
+       "f38_reading_dropped_tail": "000000000000091"
+      },
+      "HHC:FIRE": {
+       "stored_nibbles": "0000000000000911",
+       "leading_pad_nibble": "0",
+       "digits": "000000000000911",
+       "integer_part": "000000000000911",
+       "fraction_part": "",
+       "value": 911,
+       "f38_reading_dropped_tail": "000000000000091"
+      },
+      "HHC:AMBULANCE": {
+       "stored_nibbles": "0000000000000911",
+       "leading_pad_nibble": "0",
+       "digits": "000000000000911",
+       "integer_part": "000000000000911",
+       "fraction_part": "",
+       "value": 911,
+       "f38_reading_dropped_tail": "000000000000091"
+      },
+      "HHC:DOCTOR": {
+       "stored_nibbles": "0000000004542323",
+       "leading_pad_nibble": "0",
+       "digits": "000000004542323",
+       "integer_part": "000000004542323",
+       "fraction_part": "",
+       "value": 4542323,
+       "f38_reading_dropped_tail": "000000000454232"
+      },
+      "HHC:PEDIATRICIAN": {
+       "stored_nibbles": "0000000000000000",
+       "leading_pad_nibble": "0",
+       "digits": "000000000000000",
+       "integer_part": "000000000000000",
+       "fraction_part": "",
+       "value": 0,
+       "f38_reading_dropped_tail": "000000000000000"
+      },
+      "HHC:POISON": {
+       "stored_nibbles": "0000000000000000",
+       "leading_pad_nibble": "0",
+       "digits": "000000000000000",
+       "integer_part": "000000000000000",
+       "fraction_part": "",
+       "value": 0,
+       "f38_reading_dropped_tail": "000000000000000"
+      },
+      "HHC:OTHERPHONE1": {
+       "stored_nibbles": "0000000004345678",
+       "leading_pad_nibble": "0",
+       "digits": "000000004345678",
+       "integer_part": "000000004345678",
+       "fraction_part": "",
+       "value": 4345678,
+       "f38_reading_dropped_tail": "000000000434567"
+      },
+      "HHC:OTHERPHONE2": {
+       "stored_nibbles": "0000000005456787",
+       "leading_pad_nibble": "0",
+       "digits": "000000005456787",
+       "integer_part": "000000005456787",
+       "fraction_part": "",
+       "value": 5456787,
+       "f38_reading_dropped_tail": "000000000545678"
+      },
+      "HHC:OTHERPHONE3": {
+       "stored_nibbles": "0000000000000000",
+       "leading_pad_nibble": "0",
+       "digits": "000000000000000",
+       "integer_part": "000000000000000",
+       "fraction_part": "",
+       "value": 0,
+       "f38_reading_dropped_tail": "000000000000000"
+      }
+     },
+     "values": {
+      "HHC:SERIAL_NO": "S10000004",
+      "HHC:HH_NO": 1,
+      "HHC:NOTICE": "  Copyright 1990 Torbert Data Systems, INC.",
+      "HHC:PWORD": "Police",
+      "HHC:POLICE": "000000000000911",
+      "HHC:FWORD": "Fire",
+      "HHC:FIRE": "000000000000911",
+      "HHC:AWORD": "Ambulance",
+      "HHC:AMBULANCE": "000000000000911",
+      "HHC:DWORD": "Doctor",
+      "HHC:DOCTOR": "000000004542323",
+      "HHC:PEWORD": "Pediatrician",
+      "HHC:PEDIATRICIAN": "000000000000000",
+      "HHC:POWORD": "Poison",
+      "HHC:POISON": "000000000000000",
+      "HHC:OTHERNAME1": "Power Company",
+      "HHC:OTHERPHONE1": "000000004345678",
+      "HHC:OTHERNAME2": "Gas Company",
+      "HHC:OTHERPHONE2": "000000005456787",
+      "HHC:OTHERNAME3": "",
+      "HHC:OTHERPHONE3": "000000000000000",
+      "HHC:REGISTERED": "p"
+     }
+    }
+   ],
+   "fields_compact": [
+    "HHC:SERIAL_NO:STRING:9@0",
+    "HHC:HH_NO:BYTE:1@9",
+    "HHC:NOTICE:STRING:45@10",
+    "HHC:PWORD:STRING:6@55",
+    "HHC:POLICE:DECIMAL:8@61",
+    "HHC:FWORD:STRING:4@69",
+    "HHC:FIRE:DECIMAL:8@73",
+    "HHC:AWORD:STRING:9@81",
+    "HHC:AMBULANCE:DECIMAL:8@90",
+    "HHC:DWORD:STRING:6@98",
+    "HHC:DOCTOR:DECIMAL:8@104",
+    "HHC:PEWORD:STRING:12@112",
+    "HHC:PEDIATRICIAN:DECIMAL:8@124",
+    "HHC:POWORD:STRING:6@132",
+    "HHC:POISON:DECIMAL:8@138",
+    "HHC:OTHERNAME1:STRING:16@146",
+    "HHC:OTHERPHONE1:DECIMAL:8@162",
+    "HHC:OTHERNAME2:STRING:16@170",
+    "HHC:OTHERPHONE2:DECIMAL:8@186",
+    "HHC:OTHERNAME3:STRING:16@194",
+    "HHC:OTHERPHONE3:DECIMAL:8@210",
+    "HHC:REGISTERED:STRING:1@218"
+   ],
+   "keynames": [
+    "HHKEY(comps=1)"
+   ]
+  }
+ },
+ "plain_cross_reference": {
+  "HHNAMES.DAT": {
+   "records": [
+    {
+     "slot": 1,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 2,
+     "values": {
+      "HHN:FIRST_NAME": "William",
+      "HHN:MIDDLE_INIT": "V",
+      "HHN:LAST_NAME": "Torbert",
+      "HHN:ADDRESS_1": "3916 Plum Lane",
+      "HHN:ADDRESS_2": "Chesapeake, VA 23321",
+      "HHN:ADDRESS_3": "",
+      "HHN:PHONE_NO": "000008044885506"
+     },
+     "decimals": {
+      "HHN:PHONE_NO": {
+       "stored_nibbles": "0000008044885506",
+       "leading_pad_nibble": "0",
+       "digits": "000008044885506",
+       "integer_part": "000008044885506",
+       "fraction_part": "",
+       "value": 8044885506,
+       "f38_reading_dropped_tail": "000000804488550"
+      }
+     }
+    },
+    {
+     "slot": 2,
+     "rhd": "0x15",
+     "deleted": true,
+     "rptr": 6,
+     "values": {
+      "HHN:FIRST_NAME": "Torbert",
+      "HHN:MIDDLE_INIT": "",
+      "HHN:LAST_NAME": "  David       W",
+      "HHN:ADDRESS_1": "3916 Plum Lane",
+      "HHN:ADDRESS_2": "Chesapeake, VA 23321",
+      "HHN:ADDRESS_3": "",
+      "HHN:PHONE_NO": "000008044885506"
+     },
+     "decimals": {
+      "HHN:PHONE_NO": {
+       "stored_nibbles": "0000008044885506",
+       "leading_pad_nibble": "0",
+       "digits": "000008044885506",
+       "integer_part": "000008044885506",
+       "fraction_part": "",
+       "value": 8044885506,
+       "f38_reading_dropped_tail": "000000804488550"
+      }
+     }
+    },
+    {
+     "slot": 3,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 1,
+     "values": {
+      "HHN:FIRST_NAME": "123456789012",
+      "HHN:MIDDLE_INIT": "3",
+      "HHN:LAST_NAME": "451234567890121",
+      "HHN:ADDRESS_1": "123456789012345678901234567890",
+      "HHN:ADDRESS_2": "2nd line",
+      "HHN:ADDRESS_3": "3rd line",
+      "HHN:PHONE_NO": "000001234567890"
+     },
+     "decimals": {
+      "HHN:PHONE_NO": {
+       "stored_nibbles": "0000001234567890",
+       "leading_pad_nibble": "0",
+       "digits": "000001234567890",
+       "integer_part": "000001234567890",
+       "fraction_part": "",
+       "value": 1234567890,
+       "f38_reading_dropped_tail": "000000123456789"
+      }
+     }
+    },
+    {
+     "slot": 4,
+     "rhd": "0x15",
+     "deleted": true,
+     "rptr": 3,
+     "values": {
+      "HHN:FIRST_NAME": "Smith",
+      "HHN:MIDDLE_INIT": "",
+      "HHN:LAST_NAME": "  Robert      E",
+      "HHN:ADDRESS_1": "345 Little Creek Rd.",
+      "HHN:ADDRESS_2": "Baltamore, MD 54321",
+      "HHN:ADDRESS_3": "",
+      "HHN:PHONE_NO": "000008094446712"
+     },
+     "decimals": {
+      "HHN:PHONE_NO": {
+       "stored_nibbles": "0000008094446712",
+       "leading_pad_nibble": "0",
+       "digits": "000008094446712",
+       "integer_part": "000008094446712",
+       "fraction_part": "",
+       "value": 8094446712,
+       "f38_reading_dropped_tail": "000000809444671"
+      }
+     }
+    },
+    {
+     "slot": 5,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "HHN:FIRST_NAME": "Sample",
+      "HHN:MIDDLE_INIT": "",
+      "HHN:LAST_NAME": "  Cathy       M",
+      "HHN:ADDRESS_1": "4252 Orange Lane",
+      "HHN:ADDRESS_2": "Houston, TX 76590",
+      "HHN:ADDRESS_3": "",
+      "HHN:PHONE_NO": "000001234567890"
+     },
+     "decimals": {
+      "HHN:PHONE_NO": {
+       "stored_nibbles": "0000001234567890",
+       "leading_pad_nibble": "0",
+       "digits": "000001234567890",
+       "integer_part": "000001234567890",
+       "fraction_part": "",
+       "value": 1234567890,
+       "f38_reading_dropped_tail": "000000123456789"
+      }
+     }
+    },
+    {
+     "slot": 6,
+     "rhd": "0x11",
+     "deleted": true,
+     "rptr": 0,
+     "values": {
+      "HHN:FIRST_NAME": "Sue",
+      "HHN:MIDDLE_INIT": "L",
+      "HHN:LAST_NAME": "Torbert",
+      "HHN:ADDRESS_1": "3916 Plum Lane",
+      "HHN:ADDRESS_2": "Chesapeake, VA 23321",
+      "HHN:ADDRESS_3": "",
+      "HHN:PHONE_NO": "000008044885506"
+     },
+     "decimals": {
+      "HHN:PHONE_NO": {
+       "stored_nibbles": "0000008044885506",
+       "leading_pad_nibble": "0",
+       "digits": "000008044885506",
+       "integer_part": "000008044885506",
+       "fraction_part": "",
+       "value": 8044885506,
+       "f38_reading_dropped_tail": "000000804488550"
+      }
+     }
+    },
+    {
+     "slot": 7,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "HHN:FIRST_NAME": "Doe",
+      "HHN:MIDDLE_INIT": "",
+      "HHN:LAST_NAME": "  John        H",
+      "HHN:ADDRESS_1": "7654 Doe St.",
+      "HHN:ADDRESS_2": "Virginia Beach, VA 23322",
+      "HHN:ADDRESS_3": "",
+      "HHN:PHONE_NO": "000008041234567"
+     },
+     "decimals": {
+      "HHN:PHONE_NO": {
+       "stored_nibbles": "0000008041234567",
+       "leading_pad_nibble": "0",
+       "digits": "000008041234567",
+       "integer_part": "000008041234567",
+       "fraction_part": "",
+       "value": 8041234567,
+       "f38_reading_dropped_tail": "000000804123456"
+      }
+     }
+    }
+   ],
+   "numrecs": 7,
+   "numdels": 5
+  },
+  "TAXRATE.DAT": {
+   "records": [
+    {
+     "slot": 1,
+     "rhd": "0x05",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TAX:STATE": "NT",
+      "TAX:DESCRIPTION": "NON TAXABLE",
+      "TAX:RATE": "0000000"
+     },
+     "decimals": {
+      "TAX:RATE": {
+       "stored_nibbles": "00000000",
+       "leading_pad_nibble": "0",
+       "digits": "0000000",
+       "integer_part": "000",
+       "fraction_part": "0000",
+       "value": 0.0,
+       "f38_reading_dropped_tail": "000"
+      }
+     }
+    },
+    {
+     "slot": 2,
+     "rhd": "0x01",
+     "deleted": false,
+     "rptr": 0,
+     "values": {
+      "TAX:STATE": "NJ",
+      "TAX:DESCRIPTION": "NEW JERSEY",
+      "TAX:RATE": "0000700"
+     },
+     "decimals": {
+      "TAX:RATE": {
+       "stored_nibbles": "00000700",
+       "leading_pad_nibble": "0",
+       "digits": "0000700",
+       "integer_part": "000",
+       "fraction_part": "0700",
+       "value": 0.07,
+       "f38_reading_dropped_tail": "000"
+      }
+     }
+    }
+   ],
+   "numrecs": 2,
+   "numdels": 0
+  },
+  "APPOINTS.DAT": {
+   "numrecs": 5,
+   "numdels": 0,
+   "note": "5 DAILY records, all 5 date LONGs decode to valid calendar dates; array sections + COMMENTS memo out of scope",
+   "records": "omitted"
+  }
+ },
+ "text_0xff_sentinel": {
+  "finding": "GEORGEX TXT:TEXT fields (and only those) carry a plaintext 0xFF end-of-text sentinel byte written immediately after the last content byte of the final line of an entry (space padding follows it); the emptied text slot 23 contains a single 0xFF with no text. 15/38 records carry it: slots 4,7,10,12,20,21,23,25,27,30,31,32,34,36,38 - exactly the final line of each of the 12 recovered entries plus the emptied slot.",
+  "evidence": "raw bytes at sentinel positions alternate 0xC1 (even phase) / 0xC5 (odd phase) = plaintext 0xFF XOR k(3e3a); F-39 published texts without the sentinel (stripped silently)",
+  "interpretation": "per-string end-of-used-data marker used by the journal text table to locate the logical end of a multi-line entry; it is a body-content byte, not part of the slot header or encryption model",
+  "handling": "kept raw in files[].records values; stripped in the reassembled journal text in clarion-decrypted-records.md"
+ },
+ "journal_assembly_recipe": "recovered_journal omitted for compactness: join GEORGEE entries (title/date) with GEORGEX lines by TXT:NTRYREC==slot, order by TXT:TEXTNUM, strip trailing 0xFF sentinel; full reassembled text is in clarion-decrypted-records.md"
+}

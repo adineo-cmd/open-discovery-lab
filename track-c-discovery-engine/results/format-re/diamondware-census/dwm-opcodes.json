@@ -1,0 +1,56 @@
+{
+  "id": "dwm-opcodes",
+  "session": "F-46",
+  "date": "2026-11-14",
+  "track": "C-discovery-engine",
+  "target_format": "DiamondWare Sound ToolKit .dwm (music event stream)",
+  "verdict": "PARTIAL",
+  "summary": "MID2DWM.EXE packer identified as Borland TLINK EXEPACK variant; decompressor stub fully reverse-engineered and published (first public documentation of this format variant). Pure-Python unpacker decodes the stream; first 42 bytes of the unpacked image verified as coherent Borland C0 startup code. Long-run distance encoding remains the single blocking unknown (56-variant brute force negative), so the .dwm opcode table is NOT yet pinned. Envelope facts of F-41 unchanged.",
+  "provenance": {
+    "sdk": "archive.org DiamondWaresSoundToolKit_1020 stk12.zip -> STK102.EXE (LHa SFX v2.13S), all 38 files extracted at exact sizes",
+    "converter": "MID2DWM.EXE 48923 bytes, MZ load module 48891 B @0x20, entry CS:IP 0x0BDA:0x000E, e_crlc=0",
+    "tools": "capstone 5.0.7 16-bit disassembly; hand-written pure-Python lh5 decoder (lhasa lh_new_decoder.c port); token-walk unpacker"
+  },
+  "exepack_stub": {
+    "variant": "Borland TLINK EXEPACK (distinct from Microsoft EXEPACK 4.x on moddingwiki)",
+    "header_7_words_at_CS0": {
+      "real_ip": "0x0010", "real_cs": "0x135F", "real_sp": "0x0080", "real_ss": "0x1444",
+      "payload_paragraphs": "0x0BDA", "shift_paragraphs": "0x07E1", "stub_len": "0x015B"
+    },
+    "packed_reloc_table_at_stub_0x158": "00 01 00 (terminator-only: zero fixups)",
+    "runtime_flow": "stub self-copies +0x7E1 paras; payload (0x0BDA paras) moved up 0x7E1 paras freeing image hole; forward unpack from DS:SI=0/ES:DI=0; reloc walk (none); ljmp real_cs:real_ip",
+    "unpacked_image": {"real_cs_ip": "0x135F:0x0010", "real_ss_sp": "0x1444:0x0080", "approx_size": "~79KB (CS at byte 0x135F0), larger than 48.5KB payload (expansion via runs)", "relocations": 0}
+  },
+  "token_grammar": {
+    "bitstream": "16-bit little-endian flag words via lodsw; bits consumed LSB-first (shr bp,1); raw payload bytes (literals, distance bytes, long words) interleaved in the same stream sharing SI",
+    "literal": "flag bit 1 -> append next raw byte",
+    "run": {
+      "short": "flag bit 0 (bit2=0): count = 2 flag bits + 2 (2..5); 1 raw byte; dist = 0x100 - byte (1..256)",
+      "long": "flag bit 0 (bit2=1): 1 raw word w; count-code = (w>>8)&7: nonzero -> count = code+2 (3..9); zero -> 1 raw byte c: 0 = END-OF-STREAM, 1 = pointer-normalize marker (DI->0x2000+(DI&0xF), ES-=-0x200; DS/SI likewise), >=2 -> count = c+1 (3..256); DIST ENCODING OPEN (natural reading 0x10000-((0xE0|(hi>>3))<<8|lo) rejected by stream at token 37)"
+    },
+    "verification": "36 consecutive tokens reproduce exact Borland C0 startup (A1 44 00 / 0B 06 42 00 / 74 0D / FF 36 ... / 55 / E8 ...) — machine-code coherent",
+    "brute_force": "7 distance formulas x 2 count variants x 2 short-count bit orders x 4 short-dist formulas = 56 combos: no full decode"
+  },
+  "lha_sfx_header_variant": {
+    "note": "STK102.EXE LHa SFX uses non-standard headers (no skip/attr bytes); breaks lhafile C extension",
+    "layout": "[method 5B][packed u32le][orig u32le][time u32le][res u16=0x0020][nlen u8][name][crc u16][ext u16]; data at method+24+nlen; next header at data_end (chain-verified 38/38)"
+  },
+  "dwm_grammar_status": {
+    "envelope": "PROVEN (F-41): records [delta:u8][type:u8][params] of 4 or 5 bytes; exactly one {4,5} solution satisfies body_len=4a+5b, a+b=event_count on all 8 files; 0x0B = end-of-song",
+    "timing": "seconds = delta_ticks / (u16@0x28 deci-Hz / 10); 72.8 Hz vendor-confirmed (dwt_72_8HZ)",
+    "opcode_semantics": "NOT PINNED — converter unpack blocked; PLAYDWM.C has no event dispatch (API caller only); DWS.H/DWT.H/STKMAN.DOC contain no opcode enumeration; DWS.LIB event loop is OMF with obfuscated symbols"
+  },
+  "sample_revalidation": {
+    "file": "SAMPLE.DWM (SDK sample, fresh extraction)",
+    "header": {"magic": "DiamondWare Music\\0", "ver_0x12": "0x001A", "body": 12686, "events": 2613, "const52": 52, "hdr_len": 96, "rate_deciHz": 720, "patches": 4, "patch0": "21314f00f2d25273000006"},
+    "record_split": {"four_byte": 379, "five_byte": 2234},
+    "end_marker_note": "body holds 42 0x0B bytes; final tail ...06 3F 0F 03 — 0x0B not the naive final type byte (consistent with F-41 'reachable' status)",
+    "game_samples": "7 game .dwm files not re-fetched this session (budget)"
+  },
+  "next_lever": [
+    "Resolve LONG-run distance encoding (single field): try copy-from-source-stream semantics, 13-bit window with bias, or word fetch offset by one byte",
+    "Finish unpack -> disassemble from CS:IP 0x135F:0x0010 -> mine write-side event switch",
+    "Alternative: align SAMPLE.MID <-> SAMPLE.DWM (both extracted) to derive opcode semantics empirically without the binary"
+  ],
+  "prior_art": "None public on Borland EXEPACK token format (Microsoft EXEPACK 4.x documented at shikadi.net/moddingwiki is a different format); .dwm opcode table unpublished anywhere (F-40/F-41)"
+}

@@ -1,0 +1,64 @@
+{
+  "id": "dwm-exepack-resolution",
+  "session": "F-47-or-next-free",
+  "date": "2026-11-14",
+  "track": "C",
+  "target": "MID2DWM.EXE Borland TLINK EXEPACK stub / packed load module",
+  "verdict": "MECHANISM PINNED (partial): candidate (b) writer/reader overtake confirmed as designed; candidate (a) corrected (three-region bucket map; forward reads only valid pre-first-NORM); candidate (c) dead; one flag-side reconciliation step remains",
+  "artifacts": {
+    "stub_bytes": 347,
+    "stub_source": "MID2DWM.EXE load module offset 0xBDA0 (e_cs=0xBDA, e_ip=0x0E)",
+    "stub_header_words": {
+      "real_ip": "0x0010", "real_cs": "0x135F", "real_sp": "0x0080",
+      "real_ss": "0x1444", "pay_para": "0x0BDA", "shift_para": "0x07E1", "stub_len": "0x015B"
+    },
+    "sim_tools": ["/tmp/f47-attack/verify.py", "/tmp/f47-attack/harness.py"]
+  },
+  "corrections_to_f56": [
+    "true physical output at END = 17814 bytes (ES*16+DI invariant-verified), not 19334; 19334 was final DI (0x4B86) inflated by the NORM +0x2000 window base",
+    "exactly one NORM fires (token 1181, DI=0x1A1C, ES dips 0x5F paras below image base)",
+    "170 backward references reach below image base (first at token 1223); on real 8086 hardware these wrap to top-of-memory and cannot be packer-planned",
+    "writer touches the moved stream zero times through the END (gap 14458 B at END)",
+    "F-56 sibling cross-validation invalid: sim hardcoded MID2DWM geometry (pay=0xBDA0, shift=0x7E1); per-binary headers are FINDSB pay=0x4D50/shift=0x2AE0, PLAYDWD pay=0x5340/shift=0x2C70, VOC2DWD pay=0x5680/shift=0x4140"
+  ],
+  "candidate_verdicts": {
+    "b_writer_reader_overtake": {
+      "verdict": "CONFIRMED as designed mechanism",
+      "evidence": [
+        "MID2DWM: stream [0x7E10,0x13BB0) ends 80848 B < SS base 0x13D10=81489 B; entry 0x13600 inside moved-stream region -> image necessarily overwrites stream tail",
+        "overtake computation: expansion r=4.363 (17814/4081); writer=reader when output = 0x7E10 + output/4.363 -> output ~ 41855 (0xA379), well inside >=83008 B image",
+        "post-overtake flag words are decoded output reinterpreted as tokens (self-referential phase by design)",
+        "siblings: FINDSB stream [0x2AE0,0x7830) vs SS 0x86E0 (writer crosses stream start ~25.7K output); PLAYDWD and VOC2DWD likewise SS base > stream end"
+      ]
+    },
+    "a_forward_bucket_geometry": {
+      "verdict": "CORRECTED",
+      "bucket_map": {
+        "backward_wrapping": "dist=0x10000-BX<=0x2000, source=decoded output at write_phys-dist; always valid",
+        "forward_non_wrapping": "physically possible ONLY before the first NORM (post-NORM DI>=0x2000 with BX>=0xE0-or forces wrap); F-56 formula (stream offset = BX+DI-0x7E10) valid only for MID2DWM pre-NORM window mapping [0xE000,0xFFFF] -> stream offsets [0x61F0,0x81F0]; has no referent for siblings",
+        "new_reverse_overtake": "empirical: forward references resolved at src=write+dist (dist=0x10000-BX reinterpreted as forward distance) decode real strings where F-56 formula yields noise (FINDSB: '-95 DiamondW','MAD16=iBLA','DWS_I11I'; VOC2DWD: 'Run-Time Library',' - Copyright (c)'); dictionary includes the packer's own future stream bytes at write-relative offsets"
+      }
+    },
+    "c_hidden_second_pass": {
+      "verdict": "DEAD",
+      "evidence": "all 347 stub bytes accounted: header 0x00-0x0D; stub copy+retf 0x0E-0x2A; chunked backward payload move 0x2B-0x5A; decode loop 0x5B-0xFB; DONE 0xFC-0x108; reloc walker 0x109-0x135; exit 0x136-0x157; reloc data 00 01 00 at 0x158-0x15A; padding 0xF7-0xFB"
+    }
+  },
+  "structural_invariance_proof": {
+    "statement": "the token-2759 END is invariant under every dictionary variant",
+    "argument": [
+      "flag words/literals/operands consumed by SI; token counts explicit in bit stream; output size at any consumed offset is fixed (17814 at consumed 4081)",
+      "dictionary misreads change copied bytes, never counts, never SI",
+      "flag region [0x7E10,0x8E71) untouched by any write through the END (zero stream hits; writer below image_base+0x4596)",
+      "flags read from old copy would be garbage (writer overwrites old-copy byte k once output >= k; r=4.36) contradicting bit-exact first 36 tokens"
+    ],
+    "consequence": "the divergence letting the true decoder skip the END must be on the flag-read side: flag trajectory must couple to the write-relative stream window (same mechanism as the reverse-overtake dictionary); with the trajectory shifted, stream offset 0xFF0 (00=END) is re-read as data (payload[0xFEF]=0x80 -> count 129 run)"
+  },
+  "end_token_location": {"consumed": 4081, "stream_offset": "0xFF0", "byte": "0x00", "payload_hex_context": "3e1a28d2c99c4949c2b0b381ffe1c18000d1e103c8 (payload[0xFE0:0xFF5])"},
+  "open_questions": [
+    "exact machine-level encoding of write-relative forward references given or bh,0xE0 forces BX>=0xE000 and post-NORM non-wrap is impossible",
+    "re-simulation with flag trajectory coupled to the write-relative stream window (single next step toward full unpack)"
+  ],
+  "opcode_table_status": "unpinned; F-41/F-53 envelope and event-type facts stand",
+  "prior_art": "none public; F-56 published token grammar and forward-into-stream reading (corrected here); this session documents the self-referential overtake mechanism and computes it"
+}

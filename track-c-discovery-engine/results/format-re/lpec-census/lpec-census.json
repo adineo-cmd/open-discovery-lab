@@ -1,0 +1,93 @@
+{
+  "target": "Sony LPEC / TRC voice codec bitstream (DVF/MSV audio payload)",
+  "census_date": "2026-11-14",
+  "attempt": "first structural pass (F-47-or-next-free); codec interior NOT decoded",
+  "sample_source": "https://sembiance.com/fileFormatSamples/audio/sonyCompressedVoiceFile/ fetched 2026-11-14 (complete public dir, 4 files; sizes match sony-msv-dvf-census.json); samples NOT committed",
+  "prior_art": {
+    "multimedia_wiki_msv_last_edited_2009_04_11": "only public bitstream write-up: 1024-byte packets, header '00 xbyte 00 0A 04 00 0E 30 81 cbyte' from one sample; listed under Undiscovered Audio Codecs; this session confirms pattern on all 4 files and decodes bytes[4:6] = payload-size field",
+    "pronom_research_submission_2023": "BOF identification only; 'can only be played and converted using Sony software'",
+    "preservation_tylerthorsted_2023_04_21": "preservation problem documented; LPEC = 'Long-term Predicated Excitation Coding' (Sony trademark)",
+    "github_code_search_2026_11_14": "no LPEC/TRC decoder, tables, or parser exists; dexvert (updated 2026-11-12) uses external Sony tools only",
+    "reference_impl_boundary": "decoders are Windows-only binaries: PVoice.dll (TRC), STVoice.dll (6kbps LPEC), Sony ICS Converter / Digital Voice Editor / Sound Organizer; not analyzed this session"
+  },
+  "packet_layer": {
+    "audio_start": "0x400, or 0x800 when preceded by 1KB 0xFF annotation block (Pinkston, taxis)",
+    "packet_size": 1024,
+    "header_10B": "00 NN | 00 0a | SIZES be_u16 | AA BB CC | DD",
+    "SIZES": "bytes used in packet INCLUDING 10B header; 0x0400=1024 full; partial final packets: MSV 82, Pinkston 442, budgtele 718, taxis 40",
+    "const_000a": "constant all files",
+    "AA_BB_CC": "per-file constant triple: MSV 0e3081, budgtele 0c4668, Pinkston 103da4, taxis ffffff (unset)",
+    "DD": "slow monotonic counter +1 per ~2s: MSV 8c->91 (1 per 4 pkts), budgtele 48->5b, Pinkston e7->e9, taxis ff (unset); semantics unknown",
+    "NN": {
+      "TRC_taxis_pinkston": "identical strict 12-cycle both files: 10,76,70,64,58,52,46,40,34,28,22,16 (step -6, wrap +72, mod-78 skipping 4); content-independent",
+      "MSV_16k": "NN = (10k+10) mod 128 verified k=0,2..20; packet 1 anomalous (0x34=52 vs 20)",
+      "budg_6k": "-6 descending runs over {58..10} with ~10 irregular wraps/plus-steps in 90 pkts (only content-correlated candidate)",
+      "semantics": "UNRESOLVED"
+    },
+    "toc_tag4_fixed": "[04][u24 BE unused-tail][u32 BE audio-bytes]; unused-tail = 1024 - last-packet size field; verified MSV 942=0x3ae, Pinkston 582=0x246, budgtele 306=0x132 (F-34 listed this entry as unverified)",
+    "post_audio_trailer": "MSV 942B high-entropy (unverified index/metadata); Pinkston 582B, budgtele 306B, taxis 984B all 0xFF",
+    "metadata_strings": "pre-audio region: 'SONY CORP.' + 'Ortap' (MSV) / 'Jane Ann Knowles' (Pinkston) / 'koko' (budgtele) / 'SONY ICD-P330F' (taxis device model)"
+  },
+  "frame_layer": {
+    "TRC_19200_pvoice": {
+      "frame_bytes": 24,
+      "frame_bits": 192,
+      "autocorr_peak": "0.057 at stride 24 (14.6x noise); harmonics 48/72/96/120",
+      "frame_rate": "100 fps = 10 ms",
+      "bitrate_closure": "192x100 = 19200 exact",
+      "totals": "Pinkston 12600 = 525x24 exact; taxis 80136 = 3339x24 exact"
+    },
+    "LPEC_6000_stvoice": {
+      "frame_bytes": 48,
+      "frame_bits": 384,
+      "autocorr_peak": "0.0291 at stride 48 (7.5x noise); only multiples of 48",
+      "frame_rate": "15.625 fps = 64 ms",
+      "bitrate_closure": "384x15.625 = 6000 exact",
+      "totals": "2426196 = 50545x48 + 36 (final frame truncated)"
+    },
+    "LPEC_16000_icd_bm1": {
+      "frame_bytes": "UNRESOLVED among 24 / 48 / 128",
+      "evidence": "total 20352 divisible by all three (848x24, 424x48, 159x128); only weak autocorr 0.0088 at 128 (1.9x noise); no repetition signal (encoder emits no repeated silence code)",
+      "leading_hypothesis": "128 B at 64 ms — shares budgtele's 15.625 fps frame rate (only cross-variant constant); bitrate closure 128x15.625 = 16000 exact"
+    },
+    "data_area_and_trailer": {
+      "full_packet_data": 1014,
+      "tiling": "1014 = 42x24 + 6 = 21x48 + 6",
+      "two_models": "per-packet frame reset + 6-byte trailer (data[1008:1014]) vs continuous stream straddling packets",
+      "evidence_for_reset": "per-packet best-phase locks to offset 0: Pinkston 9/13, budgtele 368/400 (straddle predicts phase cycling 6/12/18)",
+      "trailer_bytes": "statistically random, not padding (constant); consistent with 48-bit checksum; semantics UNRESOLVED"
+    },
+    "frame_interior": {
+      "mode_byte": "none found (hypothesis refuted)",
+      "nibble_entropy": "hi/lo both 3.671 maximal in all files: nibble-symmetric dense bit packing",
+      "bit_position_bias": "budgtele bits 6-7 zero-biased (P(1) 0.368/0.375) suggests sub-byte codes e.g. 6-bit+2-bit tag; MSV bits 3-4 mild bias 0.397/0.403; TRC near-uniform",
+      "byte_entropy": "MSV 7.884, Pinkston 7.853, budgtele 7.802, taxis 7.936"
+    }
+  },
+  "silence": {
+    "finding": "no byte-identical repeated frames in any audio region; exact-repeat scan hits only trailing 0xFF pad",
+    "interpretation": "LPEC/TRC silence = per-frame comfort noise, fresh low-level code each frame; NO static silence code exists",
+    "f34_silence_floors": "low-entropy speech windows (lowest 384B H = 6.85-7.35), not deterministic frames",
+    "consequence": "known-plaintext attacks require real audio alignment (device WAV vs LPEC of same utterance), not silence anchors"
+  },
+  "hypotheses": {
+    "a_fixed_frame_container": "SUPPORTED (packet + fixed frames + exact totals)",
+    "b_byte_aligned_mode_byte": "REFUTED (no mode byte, maximal entropy)",
+    "c_purely_bit_packed": "PARTIAL (byte-aligned frame boundaries, bit-packed interior)"
+  },
+  "honest_negatives": [
+    "MSV 16k frame size unresolved among 24/48/128",
+    "6-byte packet trailer semantics unknown; reset-vs-straddle not definitively settled",
+    "NN counter semantics unknown",
+    "codec interior (quant tables, prediction, codebooks) untouched",
+    "sampling rate unverified (8 kHz assumed in prior art)",
+    "Windows DLLs not obtained/analyzed (mission boundary)"
+  ],
+  "next_levers": [
+    "PVoice.dll/STVoice.dll static analysis (Ghidra; extract LPEC codebooks from Sony Digital Voice Editor / ICS Converter installers)",
+    "known-audio Rosetta: device WAV + Sony-encoded DVF of same clip",
+    "6-byte trailer: brute CRC-16/32/48 against 1008B data areas (offline, existing samples)",
+    "MSV 16k frame size: longer ICD-BM1 recording with exact duration metadata"
+  ],
+  "scripts": "results/format-re/lpec-census/analyze_lpec.py (stdlib only; run with python3 -I <script> <sample_dir>)"
+}

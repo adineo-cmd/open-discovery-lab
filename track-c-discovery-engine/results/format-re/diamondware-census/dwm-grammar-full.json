@@ -1,0 +1,24 @@
+{
+  "finding": "F-53 DiamondWare .dwm complete event grammar (anchored-DFS finisher)",
+  "date": "2026-11-14",
+  "verdict": "FULL_GRAMMAR_DERIVED",
+  "ground_truth": {
+    "mid": "/tmp SDK SAMPLE.MID (format 1, div 240, tempo 600000us/qn, 35560 ticks)",
+    "dwm": "/tmp SDK SAMPLE.DWM (header 96 B, body 12686 B, 2613 events, rate 72.0 Hz)"
+  },
+  "record_model": "[delta:u8 heartbeats since previous event][type:u8][params...], stream is time-ordered, file ends after last event record (no end marker)",
+  "type_table": {
+    "0x00": {"size": 6, "shape": "[delta][00][voice][vol][pitch_lo][pitch_hi]", "semantics": "note-on", "vol": "MIDI velocity >> 1", "voice_melodic": "0..5 dynamically allocated (6 OPL2 melodic channels in rhythm mode)", "voice_drum": {"35": 6, "42": 7, "39": 9, "40": 9}, "pitch_pair": "pure function of MIDI note number; 12-bit f-num + block: fnum = ((hi & 3) << 8) | lo, block = hi >> 2"},
+    "0x02": {"size": 3, "shape": "[delta][02][voice]", "semantics": "note-off (melodic voices 0..5 only; drums have no note-offs)"},
+    "0x03": {"size": 4, "shape": "[delta][03][patch][voice]", "semantics": "patch/instrument assignment: header patch index (1=IBK slot 18, 2=38, 3=80; 0=drums) loaded onto melodic voice, emitted when a voice must switch instrument"}
+  },
+  "counts_SAMPLE_DWM": {"total_events": 2613, "type_0x00": 1575, "type_0x02": 916, "type_0x03": 122, "melodic_note_ons": 916, "melodic_note_offs": 916, "drum_note_ons": 659, "patch_assignments": 122},
+  "voice_allocation": {"melodic_voices": [0, 1, 2, 3, 4, 5], "per_voice_note_ons": {"0": 220, "1": 183, "2": 143, "3": 125, "4": 128, "5": 117}, "per_voice_note_offs": {"0": 220, "1": 183, "2": 143, "3": 125, "4": 128, "5": 117}, "note": "note-on count == note-off count per voice exactly"},
+  "drum_encoding": "659/659 MIDI drum onsets encoded; 652 carry the three dominant velocity quads (07 33 c9 07 / 06 3e 0f 03 / 09 39 60 07), the other 7 have different velocity bytes (final 3 events of the file at hb 6394: 09 3f 2f 07 = ch9 note 39, 09 1b 60 07 = snare vel 54, 06 3f 0f 03 = kick vel 127)",
+  "timing": {"heartbeat_hz": 72.0, "hb_per_tick": 0.18, "end_hb": 6394, "end_source": "last MIDI drum onset (tick 35520); MIDI end-of-track (35560 ticks -> 6401 hb) is NOT encoded"},
+  "f_states": ["652 quad anchors partition the body into 653 segments (233 empty, max 73 B)", "anchored chain DP over per-segment (delta-sum, count) options with per-note onset-time pointers", "single-parse segments force 0x00=6, 0x02=3; CSP over 3788 parses yields 0x03=4 (the 10-byte alternative is semantically inconsistent)", "count constraint 2613 exact; end 6394 exact"],
+  "pitch_fit": {"method": "fnum ladder at block 1: 769,815,864,915,969 = MIDI 38,39,40,41,42 (exact semitone ratios 1.0590-1.0601)", "constant_C": "f = C * fnum / 2^block with C ~ 0.1912-0.1917 Hz (pair-quantized; absolute C not pinned below ~0.9% - likely a rounded per-note table or 49716 Hz-derived constant; open)"},
+  "negatives": ["byte-exact re-encode not completed in session bound (voice allocation order + tie-breaks + drop policy for the 25 dropped melodic notes still to be recovered)", "MIDI melodic note-ons 941 vs encoded 916: 25 dropped under voice exhaustion (6 voices) - drop policy not yet characterized", "absolute pitch constant C not pinned"],
+  "scripts": ["scripts/finisher2.py", "scripts/chain.py", "scripts/phaseC.py", "scripts/phaseD.py", "scripts/phaseE.py (final pipeline)"],
+  "parse_dump": "/tmp/parse_v4.json (1961 non-anchor records with pos/delta/type/params/cum)"
+}

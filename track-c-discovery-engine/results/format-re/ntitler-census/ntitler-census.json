@@ -1,0 +1,1053 @@
+{
+ "task": "R-8 NTitler Animation (.nt) census + crack attempt",
+ "finding_id": "F-48-proposed",
+ "date": "2026-11-14",
+ "format": {
+  "name": "NTitler Animation (\"NTitler show\", Amiga)",
+  "extension": ".nt",
+  "family": "BTxx versioned show files (BT30..BT90); BT90 = NTitler Pro v2.2",
+  "platform": "AmigaOS m68k",
+  "tool": "NTitler Pro v2.2 (Aminet gfx/misc/ntpro, shareware, author Michiel den Outer, michiel@luna.nl)",
+  "purpose": "Realtime 3D text/vector titler shows: scenes of 3D text over IFF backdrops with copper/colour effects and IFF samples"
+ },
+ "prior_art": {
+  "dexvert": {
+   "source": "Sembiance/dexvert src/format/video/ntitler.js (retrieved 2026-11-14)",
+   "claims": {
+    "magic": "NTitler show",
+    "unsupported": true,
+    "note": "only 88 unique files on discmaster, all very small (most <1k)",
+    "converter": "none located as of retrieval"
+   }
+  },
+  "trid": {
+   "source": "digipres.github.io triddefs nt-show.trid.xml (TrIDScan/Py v2.02, 2018-06-09, FileNum 87)",
+   "signature": "ASCII \"BT90\" at offset 0"
+  },
+  "aminet": {
+   "source": "aminet.net/package/gfx/misc/ntpro readme (retrieved 2026-11-14)",
+   "version": "2.2",
+   "architecture": "m68k-amigaos",
+   "author": "Michiel den Outer",
+   "exports": "Anim5 animation files"
+  },
+  "verdict": "No public converter/extractor/description of the .nt grammar exists today (checked 2026-11-14). TrID and dexvert identify but do not decode. Prior-art rule satisfied with dates."
+ },
+ "magic_discrepancy": {
+  "observed": "All 88 corpus files begin with ASCII \"BT90\"; string \"NTitler show\" does NOT occur in any show file.",
+  "dexvert_magic_explained": "\"NTitler show\" occurs only inside the NTitler executable (NTitler binary offset 0xd090) as the tail of the error message \"This is not a\\nNTitler show file!\" shown when the BTxx version check fails (cmp chain at NTitler file offset 0x4c74). dexvert magic was evidently derived from identification metadata, not file content.",
+  "version_dispatch": "cmp.l BT30/BT40/BT50/BT60/BT70/BT80/BT90 chain in NTitler binary at 0x4c74..0x4cc2, per-version handlers 0x4d1a/0x4d7a/0x4db6/0x4dba/0x4dc4/0x4df8/0x4e86; fallthrough bra to not-a-show error at 0x521a."
+ },
+ "corpus": {
+  "source": "NTitlerPro archive from aminet.net/gfx/misc/ntpro.lha (LHA lh5, 634634 bytes, 172 entries) \u2014 same v2.2 program that produced the format; 88 .nt show files (matches dexvert discmaster count of 88)",
+  "file_count": 88,
+  "size_min": 698,
+  "size_median": 872,
+  "size_max": 1800,
+  "entropy_min": 1.355,
+  "entropy_median": 2.466,
+  "entropy_max": 3.995,
+  "samples_committed": false
+ },
+ "structure": {
+  "endian": "big-endian (Amiga)",
+  "layout": [
+   {
+    "offset": "0x000",
+    "size": 4,
+    "field": "magic ASCII \"BT90\" (version BT90)"
+   },
+   {
+    "offset": "0x004",
+    "size": 48,
+    "field": "24 x u16 BE header words w0..w23: w0-w8 byte-range params (0-255, likely colours/percent); w9-w13 28-1000 (speeds/percentages); w14-w15 32-bit effects bitmask (bit n enables effect flag n, btst #0..#19 chain at 0x4eee..0x5046, 20 effect-enable slots incl. $5fda..$5ff2/$45ae-$45b2/$b776); w16-w20 params; w21 skipped by reader (reserved); w22-w23 params"
+   },
+   {
+    "offset": "0x032",
+    "size": 2,
+    "field": "u16 -> $4aa0 (re-read of w23 region)"
+   },
+   {
+    "offset": "0x034",
+    "size": 47,
+    "field": "NUL-terminated backdrop IFF path (e.g. PROGDIR:Backdrops/Fire.IFF); empty in 22/88 files; reader copies 47 bytes to $4a20 and calls parse routine $87c6"
+   },
+   {
+    "offset": "0x063",
+    "size": 1,
+    "field": "unassigned byte (00 in corpus)"
+   },
+   {
+    "offset": "0x064",
+    "size": 30,
+    "field": "show title/author string XOR 0xFF, not.b-decoded at 0x512a; \"Michiel Den Outer\" in all 88 files"
+   },
+   {
+    "offset": "0x082",
+    "size": 50,
+    "field": "font path NUL-terminated (PROGDIR:Fonts/*.NFont: Plain 29, Straight 16, Clear 15, Freaky 6, empty 22)"
+   },
+   {
+    "offset": "0x0b4",
+    "size": 400,
+    "field": "8 x 50-byte sample-path slots, stride 50 (PROGDIR:Samples/*.SAM; Bang 9, Passing 7, String 5, Vinyl 4, ComingUp 3, Low 5). Artifact: in several files the slot first byte is 0x00 and the stored path is missing its first character (\"ROGDIR:...\" instead of \"PROGDIR:...\")"
+   },
+   {
+    "offset": "0x244",
+    "size": 33466,
+    "field": "scene records, stride 58 (0x3a) bytes, terminated by u16 >= 0x8000 (0xffff in corpus)"
+   },
+   {
+    "offset": "EOF-2",
+    "size": 2,
+    "field": "terminator u16 0xffff; file ends exactly here in 88/88 files (law: filesize == 0x244 + 0x3a*N + 2)"
+   }
+  ],
+  "scene_record": {
+   "size": 58,
+   "fields": [
+    {
+     "off": 0,
+     "type": "u16",
+     "name": "word0 ($9822)",
+     "observed": "0x0000 first record; e.g. 0x0096 later records"
+    },
+    {
+     "off": 2,
+     "type": "5 x s16 BE",
+     "name": "motion deltas",
+     "example_bye_nt": [
+      602,
+      -300,
+      -1379,
+      -624,
+      -320
+     ]
+    },
+    {
+     "off": 12,
+     "type": "2 x u16",
+     "name": "params (zero in corpus sample)"
+    },
+    {
+     "off": 18,
+     "type": "u16",
+     "name": "word12 (+0x12)",
+     "example": 151
+    },
+    {
+     "off": 20,
+     "type": "u16",
+     "name": "word14 (+0x14)"
+    },
+    {
+     "off": 22,
+     "type": "u16",
+     "name": "word16 (+0x16)",
+     "example": 640
+    },
+    {
+     "off": 24,
+     "type": "u16",
+     "name": "word18 (+0x18)"
+    },
+    {
+     "off": 26,
+     "type": "32 bytes",
+     "name": "scene text, NUL-padded; \"@\" = line break (multi-line 3D caption)"
+    }
+   ],
+   "reader": "scene-block walk at NTitler 0x51b4: move.w (a0) -> $9822, blt exit, lea 0x3a(a0); 0xffff terminator then exactly EOF"
+  },
+  "binary_reader_map": {
+   "note": "evidence from NTitler executable (Amiga HUNK, code hunk 0x5249 words, RELOC32 4361 entries)",
+   "header_words": "0x4e86: a0=file+4; w0-> $3284, w1-> $3286, w2-> $3288, w3-> $328a, w4-> $328c, w5-> $328e, w6-> $32a2, w7-> $32a4, w8-> $32a6, w9-> $6752, w10-> $67ba, w11-> $6822, w12-> $688a, w13-> $68f2, w14/w15 -> d0 (32-bit flags, btst #0..#19), w16-> $6002, w17-> $6004, w18-> $6006, w19-> $6008, w20-> $695a, skip 2 bytes, w22-> $5ff4, w23-> $5ffa",
+   "backdrop": "0x50f6: word@0x32 -> $4aa0; 47 bytes @0x34 -> $4a20; bsr $87c6",
+   "title": "0x5118: 30 bytes @0x64 -> $5204, not.b each byte",
+   "font": "0x5178: 50 bytes @0x82 -> $b0d8",
+   "samples": "0x5190: 8 x 50 bytes @0xb4 stride 50 -> $b420 slots",
+   "scenes": "0x51b4: block @0x244, stride 0x3a, word0 -> $9822, terminate on negative word"
+  }
+ },
+ "validation": {
+  "parser": "nt_decode.py (in this directory)",
+  "eof_law_ok": "88/88",
+  "titles": "88/88 \"Michiel Den Outer\" after XOR 0xFF",
+  "scene_records_total": 600,
+  "decoded_scene_text_examples": [
+   "Anim 5@Export !",
+   "use@IFF Pictures@as backdrops",
+   "24 bit@Copper@Effects",
+   "THANKS FOR@WATCHING@THIS DEMO"
+  ]
+ },
+ "crack_verdict": "RESOLVED (structural grammar). Full fixed-offset layout + scene record framing + EOF law verified on 88/88 corpus files. Remaining unknowns are semantic labels for individual header words (w0-w23 minus the bitmask position) and scene sub-words; the container itself is fully navigable and scene text is fully recoverable.",
+ "open_items": [
+  "exact semantics of header words w0-w8 (byte-range values; probable per-effect colour/level params)",
+  "scene word0 / word12 / word16 semantics (timing? positioning? 640 = PAL hires line count suggests x-position or width)",
+  "sample-slot leading-NUL artifact (first char of PROGDIR clobbered in some files) \u2014 save-time bug or intentional empty-slot marker",
+  "older BT30..BT80 handlers not fully mapped (0x4d1a..0x4e84); no BT30-BT80 files in corpus to cross-check",
+  "effects bitmask bit-to-effect-name mapping (20 btst slots identified, names not yet correlated to UI strings in NT.English locale)"
+ ],
+ "files": [
+  [
+   "NTitlerPro\\Shows\\Demo\\Anim5.NT",
+   1800,
+   21,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/Rotate.IFF",
+   [],
+   "Anim 5@Export !"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\Backdrop.NT",
+   756,
+   3,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/Cirkel.IFF",
+   [],
+   "use@IFF Pictures@as backdrops"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\Bye.NT",
+   698,
+   2,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "THANKS FOR@WATCHING@THIS DEMO"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\ColourCycling.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Clear.NFont",
+   "Progdir:Backdrops/Stars.IFF",
+   [],
+   "Colour@Cycling"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\Copper.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Straight.NFont",
+   "",
+   [
+    "PROGDIR:Samples/Passing.SAM"
+   ],
+   "24 bit@Copper@Effects"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\Explosions.NT",
+   988,
+   7,
+   "PROGDIR:Fonts/Freaky.NFont",
+   "",
+   [
+    "PROGDIR:Samples/Bang.SAM",
+    "PROGDIR:Samples/Passing.SAM"
+   ],
+   "Special@Effects"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\Fonts.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "5 DiFfErEnT@3D vEcToR FoNtS"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\Hires.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/Rotate.IFF",
+   [],
+   "High Res@Laced@Overscan"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\MMTitler.NT",
+   1510,
+   16,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [
+    "PROGDIR:Samples/Low.sam"
+   ],
+   "Michiel@den Outer"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\Samples.NT",
+   1046,
+   8,
+   "PROGDIR:Fonts/Clear.NFont",
+   "PROGDIR:Backdrops/Snow.IFF",
+   [
+    "PROGDIR:Samples/Bang.SAM",
+    "PROGDIR:Samples/Vinyl.SAM",
+    "PROGDIR:Samples/Low.sam"
+   ],
+   "IFF SAMPLES@CAN BE PLAYED"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\Seconds.NT",
+   1684,
+   19,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/Polygons.IFF",
+   [
+    "PROGDIR:Samples/Passing.SAM"
+   ],
+   "Create"
+  ],
+  [
+   "NTitlerPro\\Shows\\Demo\\Stencil.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Straight.NFont",
+   "Progdir:Backdrops/Fire.IFF",
+   [
+    "PROGDIR:Samples/String.SAM"
+   ],
+   "Great@Stencil@Effects"
+  ],
+  [
+   "NTitlerPro\\Shows\\HomeVideo\\Babette.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "BABETTE"
+  ],
+  [
+   "NTitlerPro\\Shows\\HomeVideo\\Birthday.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "My 23th@Birthday"
+  ],
+  [
+   "NTitlerPro\\Shows\\HomeVideo\\BlueParrot.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "BLUE PARROT"
+  ],
+  [
+   "NTitlerPro\\Shows\\HomeVideo\\Carmen.NT",
+   988,
+   7,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "HOLIDAY@1996"
+  ],
+  [
+   "NTitlerPro\\Shows\\HomeVideo\\Carolyn.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "CAROLYN'S@8TH@BIRTHDAY"
+  ],
+  [
+   "NTitlerPro\\Shows\\HomeVideo\\Credits.NT",
+   1278,
+   12,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/Snow.IFF",
+   [],
+   "This@Home Video"
+  ],
+  [
+   "NTitlerPro\\Shows\\HomeVideo\\Holiday.NT",
+   988,
+   7,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "Holiday 1996"
+  ],
+  [
+   "NTitlerPro\\Shows\\HomeVideo\\Jungle.NT",
+   1104,
+   9,
+   "PROGDIR:Fonts/Freaky.NFont",
+   "",
+   [],
+   "Our Jungle@Expedition@1996"
+  ],
+  [
+   "NTitlerPro\\Shows\\HomeVideo\\Rodos.NT",
+   988,
+   7,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "R\ufffdDOS"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\AmigaForever.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/IntelOut.IFF",
+   [
+    "PROGDIR:Samples/Passing.SAM"
+   ],
+   "AMIGA@4 EVER !"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Baboon.NT",
+   756,
+   3,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/Cirkel.IFF",
+   [],
+   "mindless@baboon !"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Boe.NT",
+   930,
+   6,
+   "",
+   "",
+   [
+    "PROGDIR:Samples/Bang.SAM",
+    "PROGDIR:Samples/String.SAM"
+   ],
+   "BOE !"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Chop.NT",
+   698,
+   2,
+   "PROGDIR:Fonts/Straight.NFont",
+   "",
+   [],
+   "       CHOP"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Dutch.NT",
+   1046,
+   8,
+   "",
+   "progdir:Backdrops/Polygons.IFF",
+   [],
+   "IT@AIN'T@MUCH"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\FZone.NT",
+   872,
+   5,
+   "",
+   "PROGDIR:Backdrops/Snow.IFF",
+   [],
+   "F-ZONE"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Flippo.NT",
+   1046,
+   8,
+   "PROGDIR:Fonts/Freaky.NFont",
+   "",
+   [],
+   "Flippo"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Fly.NT",
+   1568,
+   17,
+   "",
+   "",
+   [
+    "PROGDIR:Samples/Passing.SAM",
+    "PROGDIR:Samples/Bang.SAM"
+   ],
+   "FLY"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\GoBANG.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Clear.NFont",
+   "PROGDIR:Backdrops/LightSpeed.IFF",
+   [
+    "PROGDIR:Samples/Bang.SAM",
+    "PROGDIR:Samples/ComingUp.SAM"
+   ],
+   "GO@BANG!"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Leader.NT",
+   698,
+   2,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "DON'T@FOLLOW@LEADERS"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\LikeIt.NT",
+   988,
+   7,
+   "",
+   "",
+   [],
+   "Like IT"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Mistake.NT",
+   1104,
+   9,
+   "PROGDIR:Fonts/Freaky.NFont",
+   "",
+   [],
+   "i never@make@mistakes"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\OkeyDokey.NT",
+   872,
+   5,
+   "",
+   "",
+   [],
+   "Okey@Dokey"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\PingPong.NT",
+   1046,
+   8,
+   "",
+   "",
+   [],
+   "ping"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Smiley.NT",
+   988,
+   7,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "Funny    :-)"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Truth.NT",
+   756,
+   3,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/Cirkel.IFF",
+   [],
+   "The truth@is@out there"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\VR.NT",
+   872,
+   5,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/Cirkel.IFF",
+   [
+    "PROGDIR:Samples/Bang.SAM"
+   ],
+   "Music@=@VR"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\WeAreMad.NT",
+   930,
+   6,
+   "",
+   "",
+   [],
+   "WE"
+  ],
+  [
+   "NTitlerPro\\Shows\\Jokes\\Wild.NT",
+   814,
+   4,
+   "",
+   "",
+   [],
+   "YOU DRIVE@ME WILD !"
+  ],
+  [
+   "NTitlerPro\\Shows\\LocalTelevision\\LOR.NT",
+   1046,
+   8,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "LOR"
+  ],
+  [
+   "NTitlerPro\\Shows\\LocalTelevision\\LOR2.NT",
+   1104,
+   9,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "LOR"
+  ],
+  [
+   "NTitlerPro\\Shows\\LocalTelevision\\LOR3.NT",
+   1278,
+   12,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "LOR"
+  ],
+  [
+   "NTitlerPro\\Shows\\LocalTelevision\\LocalTV.NT",
+   872,
+   5,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "LOCAL TV@ROTTERDAM"
+  ],
+  [
+   "NTitlerPro\\Shows\\LocalTelevision\\NNN.NT",
+   1394,
+   14,
+   "PROGDIR:Fonts/Clear.NFont",
+   "PROGDIR:Backdrops/Bar.IFF",
+   [],
+   "NNN@"
+  ],
+  [
+   "NTitlerPro\\Shows\\LocalTelevision\\NewsFlash.NT",
+   814,
+   4,
+   "",
+   "",
+   [],
+   "newsflash"
+  ],
+  [
+   "NTitlerPro\\Shows\\LocalTelevision\\RTL.NT",
+   872,
+   5,
+   "",
+   "",
+   [],
+   "rtl 8"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\Better.NT",
+   1394,
+   14,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "THIS GREAT@ANIMATION"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\CyberTitler.NT",
+   1394,
+   14,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [
+    "PROGDIR:Samples/low.sam",
+    "PROGDIR:Samples/Vinyl.SAM"
+   ],
+   "This is NTitler"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\ExoticFonts.NT",
+   756,
+   3,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\Great.NT",
+   1104,
+   9,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/Snow.IFF",
+   [],
+   "NTitler"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\NTFiles.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [
+    "PROGDIR:Samples/String.SAM",
+    "PROGDIR:Samples/Passing.SAM"
+   ],
+   "The NT-Files"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\NTitler.NT",
+   1278,
+   12,
+   "",
+   "PROGDIR:Backdrops/IntelOut.IFF",
+   [
+    "progdir:Samples/Passing.SAM",
+    "progdir:Samples/low.sam"
+   ],
+   "Ntitler"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\NTitler2.NT",
+   814,
+   4,
+   "",
+   "",
+   [
+    "progdir:Samples/low.sam"
+   ],
+   "Navigator Titler"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\Navigator.NT",
+   872,
+   5,
+   "",
+   "PROGDIR:Backdrops/Bar.IFF",
+   [],
+   "NAVIGATOR"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\Navigator2.NT",
+   1104,
+   9,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/Snow.IFF",
+   [],
+   "NAVIGATOR"
+  ],
+  [
+   "NTitlerPro\\Shows\\NTitler\\RedHot.NT",
+   1452,
+   15,
+   "PROGDIR:Fonts/Freaky.NFont",
+   "",
+   [
+    "PROGDIR:Samples/ComingUp.SAM"
+   ],
+   "RED"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\4TUAL.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "4TUAL@BUSINESS@VISUALS"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\Christy.NT",
+   872,
+   5,
+   "PROGDIR:Fonts/Straight.NFont",
+   "",
+   [
+    "PROGDIR:Samples/String.SAM"
+   ],
+   "christy"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\HeavyMetal.NT",
+   814,
+   4,
+   "",
+   "",
+   [],
+   "heavy metal"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\IJsselBier.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Freaky.NFont",
+   "",
+   [],
+   "IJSSEL@BIER"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\MissUniverse.NT",
+   872,
+   5,
+   "PROGDIR:Fonts/Clear.NFont",
+   "",
+   [],
+   "MISS UNIVERSE"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\NiKea.NT",
+   814,
+   4,
+   "",
+   "",
+   [],
+   "NIKEA"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\Rotterdam.NT",
+   988,
+   7,
+   "",
+   "PROGDIR:Backdrops/Bar.IFF",
+   [],
+   "ROTTERDAM"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\RumbleForce.NT",
+   1104,
+   9,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/Bar.IFF",
+   [
+    "PROGDIR:Samples/Vinyl.SAM",
+    "PROGDIR:Samples/Bang.SAM"
+   ],
+   "RUMBLE@FORCE@RECORDS"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\Scope.NT",
+   814,
+   4,
+   "",
+   "",
+   [],
+   "SCOPE"
+  ],
+  [
+   "NTitlerPro\\Shows\\Presentation\\Soep.NT",
+   1626,
+   18,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "Soep@met@Ballen "
+  ],
+  [
+   "NTitlerPro\\Shows\\Rave\\DJTaco.NT",
+   1278,
+   12,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/Stars.IFF",
+   [],
+   "DJ"
+  ],
+  [
+   "NTitlerPro\\Shows\\Rave\\DreamHouse.NT",
+   988,
+   7,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "DrEaM@HoUsE"
+  ],
+  [
+   "NTitlerPro\\Shows\\Rave\\Fun.NT",
+   756,
+   3,
+   "",
+   "",
+   [],
+   "FUN"
+  ],
+  [
+   "NTitlerPro\\Shows\\Rave\\Gabber.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/Stars.IFF",
+   [],
+   "GABBER"
+  ],
+  [
+   "NTitlerPro\\Shows\\Rave\\Hardcore.NT",
+   756,
+   3,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/Cirkel.IFF",
+   [],
+   "HARDCORE"
+  ],
+  [
+   "NTitlerPro\\Shows\\Rave\\MegaDance.NT",
+   1104,
+   9,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/LightSpeed.IFF",
+   [],
+   "MegaDance@III"
+  ],
+  [
+   "NTitlerPro\\Shows\\Rave\\OneTwoThree.NT",
+   1104,
+   9,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/LightSpeed.IFF",
+   [],
+   "ONE"
+  ],
+  [
+   "NTitlerPro\\Shows\\Rave\\Peace.NT",
+   814,
+   4,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/Rotate.IFF",
+   [],
+   "P E A C E"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\3DScroller.NT",
+   698,
+   2,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "TYPE HERE ANY TEXT YOU LIKE"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\Acceleration.NT",
+   1046,
+   8,
+   "PROGDIR:Fonts/Straight.NFont",
+   "",
+   [],
+   "Acceleration"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\AlphaChannel.NT",
+   698,
+   2,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/Fire.IFF",
+   [],
+   "ALPHA@CHANNEL"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\ColourCycling.NT",
+   698,
+   2,
+   "PROGDIR:Fonts/Straight.NFont",
+   "PROGDIR:Backdrops/Stars.IFF",
+   [],
+   "Space@Titler"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\Exlosion.NT",
+   756,
+   3,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [
+    "PROGDIR:Samples/Bang.SAM",
+    "PROGDIR:Samples/low.sam"
+   ],
+   "I LOVE@EXPLODING@POLYGONS"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\RotationCentre.NT",
+   698,
+   2,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "|@|@           ----->@@"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\Samples.NT",
+   1046,
+   8,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/Fire.IFF",
+   [
+    "PROGDIR:Samples/Bang.SAM",
+    "PROGDIR:Samples/ComingUp.SAM",
+    "PROGDIR:Samples/Low.sam",
+    "PROGDIR:Samples/Passing.SAM",
+    "PROGDIR:Samples/Vinyl.SAM",
+    "PROGDIR:Samples/String.SAM"
+   ],
+   "Samples"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\SpotLight.NT",
+   1278,
+   12,
+   "",
+   "PROGDIR:Backdrops/Faces.IFF",
+   [],
+   "|"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\StarWars.NT",
+   1394,
+   14,
+   "PROGDIR:Fonts/Plain.NFont",
+   "PROGDIR:Backdrops/FadingOut.IFF",
+   [
+    "PROGDIR:Samples/low.sam"
+   ],
+   "DESIGN@by@MICKEY"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\Stencil.NT",
+   872,
+   5,
+   "PROGDIR:Fonts/Plain.NFont",
+   "progdir:Backdrops/Polygons.IFF",
+   [],
+   "STENCIL@MAPPING"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\Stretching.NT",
+   698,
+   2,
+   "",
+   "",
+   [],
+   "stretching"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\TargetO.NT",
+   930,
+   6,
+   "",
+   "",
+   [],
+   "I LOVE YOGHURT"
+  ],
+  [
+   "NTitlerPro\\Shows\\SpecialEffects\\WireFrame.NT",
+   930,
+   6,
+   "PROGDIR:Fonts/Plain.NFont",
+   "",
+   [],
+   "Wireframe@looks@Difficult"
+  ]
+ ],
+ "files_schema": [
+  "name",
+  "bytes",
+  "scenes",
+  "font",
+  "backdrop",
+  "samples",
+  "first_scene_text"
+ ]
+}

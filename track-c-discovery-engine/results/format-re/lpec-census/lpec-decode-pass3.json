@@ -1,0 +1,1043 @@
+{
+ "budgtele.dvf": {
+  "file": "budgtele.dvf",
+  "mode": "LpecLp",
+  "file_size": 2451456,
+  "packets": 2393,
+  "packet_sizes_first_last": [
+   1024,
+   718
+  ],
+  "audio_bytes": 2426196,
+  "container_model": "continuous-bitstream-frames-straddle-packets",
+  "packet_straddle": {
+   "packet_boundaries": 2393,
+   "frames_straddling_boundary": 2393,
+   "boundaries_on_frame_end": 300
+  },
+  "summary": {
+   "frames": 50545,
+   "type_hist": {
+    "0": 43479,
+    "1": 573,
+    "2": 576,
+    "3": 5917
+   },
+   "invalid": 0,
+   "size_matches_expected": 50545,
+   "tail_skip_map": {
+    "(0, 3)": 29423,
+    "(2, 0)": 576,
+    "(3, 0)": 5917,
+    "(1, 0)": 573,
+    "(0, 17)": 3934,
+    "(0, 9)": 10122
+   },
+   "gain_zero_rate": 0.1387,
+   "lag_min": 0,
+   "lag_max": 127,
+   "lag_continuity": {
+    "mean_abs_delta": 16.703,
+    "delta_le_2": 0.15208607617923459
+   },
+   "excitation_present_rate": 0.2069
+  },
+  "byte_closure": {
+   "frame_bytes_sum": 2426196,
+   "audio_bytes": 2426196,
+   "exact": true
+  },
+  "frames_detail_last8": [
+   {
+    "i": 50537,
+    "t": 3,
+    "bytes": 48
+   },
+   {
+    "i": 50538,
+    "t": 3,
+    "bytes": 48
+   },
+   {
+    "i": 50539,
+    "t": 3,
+    "bytes": 48
+   },
+   {
+    "i": 50540,
+    "t": 3,
+    "bytes": 48
+   },
+   {
+    "i": 50541,
+    "t": 3,
+    "bytes": 48
+   },
+   {
+    "i": 50542,
+    "t": 3,
+    "bytes": 48
+   },
+   {
+    "i": 50543,
+    "t": 3,
+    "bytes": 48
+   },
+   {
+    "i": 50544,
+    "t": 3,
+    "bytes": 48
+   }
+  ],
+  "type_seq_head": [
+   0,
+   0,
+   0,
+   2,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   1,
+   0,
+   0,
+   0,
+   0,
+   2,
+   3,
+   3,
+   3,
+   1,
+   0,
+   0,
+   0,
+   0,
+   2,
+   3,
+   3,
+   1,
+   0,
+   0,
+   0,
+   0,
+   0,
+   2,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "type_hist_full": {
+   "0": 43479,
+   "1": 573,
+   "2": 576,
+   "3": 5917
+  },
+  "bitrate_check": {
+   "frame_ms": 64,
+   "mean_bits_per_frame": 384.01,
+   "implied_bps": 6000.1
+  },
+  "frames_detail_first8": [
+   {
+    "i": 0,
+    "t": 0,
+    "bytes": 48,
+    "block": 1,
+    "lsp": [
+     [
+      35,
+      45,
+      49
+     ],
+     [
+      0,
+      53,
+      2
+     ]
+    ],
+    "gains": [
+     [
+      16,
+      3
+     ],
+     [
+      17,
+      59
+     ]
+    ],
+    "exc": [
+     [
+      0,
+      null
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch0": [
+     33,
+     21,
+     3
+    ],
+    "pitch1": [
+     21,
+     1,
+     42
+    ],
+    "tail_skip": 3
+   },
+   {
+    "i": 1,
+    "t": 0,
+    "bytes": 48,
+    "block": 0,
+    "lsp": [
+     [
+      25,
+      36,
+      52
+     ]
+    ],
+    "gains": [
+     [
+      17,
+      6
+     ],
+     [
+      18,
+      6
+     ]
+    ],
+    "exc": [
+     [
+      0,
+      null
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch0": [
+     43,
+     48,
+     48
+    ],
+    "pitch1": [
+     18,
+     48,
+     2
+    ],
+    "tail_skip": 3
+   },
+   {
+    "i": 2,
+    "t": 0,
+    "bytes": 48,
+    "block": 0,
+    "lsp": [
+     [
+      25,
+      36,
+      7
+     ]
+    ],
+    "gains": [
+     [
+      17,
+      6
+     ],
+     [
+      17,
+      14
+     ]
+    ],
+    "exc": [
+     [
+      0,
+      null
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch0": [
+     40,
+     45,
+     47
+    ],
+    "pitch1": [
+     17,
+     23,
+     53
+    ],
+    "tail_skip": 3
+   },
+   {
+    "i": 3,
+    "t": 2,
+    "bytes": 60,
+    "lsp": [
+     [
+      25,
+      36,
+      17
+     ]
+    ],
+    "gains": [
+     [
+      30,
+      39
+     ],
+     [
+      32,
+      33
+     ]
+    ],
+    "pitch0": [
+     34,
+     45,
+     43
+    ],
+    "pitch1": [
+     41,
+     30,
+     47
+    ],
+    "tail_skip": 0
+   },
+   {
+    "i": 4,
+    "t": 3,
+    "bytes": 48,
+    "lsp": [
+     [
+      23,
+      58,
+      53
+     ]
+    ],
+    "gains": [
+     [
+      null,
+      null
+     ],
+     [
+      25,
+      24
+     ]
+    ],
+    "pitch1": [
+     52,
+     38,
+     53
+    ],
+    "tail_skip": 0
+   },
+   {
+    "i": 5,
+    "t": 3,
+    "bytes": 48,
+    "lsp": [
+     [
+      23,
+      0,
+      52
+     ]
+    ],
+    "gains": [
+     [
+      null,
+      null
+     ],
+     [
+      24,
+      24
+     ]
+    ],
+    "pitch1": [
+     53,
+     30,
+     3
+    ],
+    "tail_skip": 0
+   },
+   {
+    "i": 6,
+    "t": 3,
+    "bytes": 48,
+    "lsp": [
+     [
+      25,
+      36,
+      17
+     ]
+    ],
+    "gains": [
+     [
+      null,
+      null
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch1": [
+     48,
+     18,
+     22
+    ],
+    "tail_skip": 0
+   },
+   {
+    "i": 7,
+    "t": 3,
+    "bytes": 48,
+    "lsp": [
+     [
+      23,
+      29,
+      52
+     ]
+    ],
+    "gains": [
+     [
+      null,
+      null
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch1": [
+     42,
+     51,
+     53
+    ],
+    "tail_skip": 0
+   }
+  ]
+ },
+ "07011600.MSV": {
+  "file": "07011600.MSV",
+  "mode": "LpecSp",
+  "file_size": 22528,
+  "packets": 21,
+  "packet_sizes_first_last": [
+   1024,
+   82
+  ],
+  "audio_bytes": 20352,
+  "container_model": "continuous-bitstream-frames-straddle-packets",
+  "packet_straddle": {
+   "packet_boundaries": 21,
+   "frames_straddling_boundary": 21,
+   "boundaries_on_frame_end": 1
+  },
+  "summary": {
+   "frames": 159,
+   "type_hist": {
+    "0": 152,
+    "1": 2,
+    "2": 2,
+    "3": 3
+   },
+   "invalid": 0,
+   "size_matches_expected": 159,
+   "tail_skip_map": {
+    "(0, 3)": 73,
+    "(0, 9)": 41,
+    "(2, 0)": 2,
+    "(3, 0)": 3,
+    "(1, 0)": 2,
+    "(0, 17)": 38
+   },
+   "gain_zero_rate": 0.0735,
+   "lag_min": 0,
+   "lag_max": 127,
+   "lag_continuity": {
+    "mean_abs_delta": 7.431,
+    "delta_le_2": 0.5294117647058824
+   },
+   "excitation_present_rate": 0.3849
+  },
+  "byte_closure": {
+   "frame_bytes_sum": 20352,
+   "audio_bytes": 20352,
+   "exact": true
+  },
+  "frames_detail_last8": [
+   {
+    "i": 151,
+    "t": 0,
+    "bytes": 128
+   },
+   {
+    "i": 152,
+    "t": 0,
+    "bytes": 128
+   },
+   {
+    "i": 153,
+    "t": 0,
+    "bytes": 128
+   },
+   {
+    "i": 154,
+    "t": 0,
+    "bytes": 128
+   },
+   {
+    "i": 155,
+    "t": 0,
+    "bytes": 128
+   },
+   {
+    "i": 156,
+    "t": 0,
+    "bytes": 128
+   },
+   {
+    "i": 157,
+    "t": 0,
+    "bytes": 128
+   },
+   {
+    "i": 158,
+    "t": 0,
+    "bytes": 128
+   }
+  ],
+  "type_seq_head": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   2,
+   3,
+   3,
+   3,
+   1,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "type_hist_full": {
+   "0": 152,
+   "1": 2,
+   "2": 2,
+   "3": 3
+  },
+  "bitrate_check": {
+   "frame_ms": 64,
+   "mean_bits_per_frame": 1024.0,
+   "implied_bps": 16000.0
+  },
+  "frames_detail_first8": [
+   {
+    "i": 0,
+    "t": 0,
+    "bytes": 128,
+    "block": 1,
+    "lsp": [
+     [
+      3,
+      45,
+      44,
+      23
+     ],
+     [
+      3,
+      0,
+      0,
+      0
+     ]
+    ],
+    "gains": [
+     [
+      15,
+      63
+     ],
+     [
+      16,
+      60
+     ]
+    ],
+    "exc": [
+     [
+      0,
+      null
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch0": [
+     0,
+     54,
+     33
+    ],
+    "pitch1": [
+     0,
+     26,
+     7
+    ],
+    "tail_skip": 3
+   },
+   {
+    "i": 1,
+    "t": 0,
+    "bytes": 128,
+    "block": 0,
+    "lsp": [
+     [
+      3,
+      0,
+      0,
+      0
+     ]
+    ],
+    "gains": [
+     [
+      14,
+      60
+     ],
+     [
+      15,
+      60
+     ]
+    ],
+    "exc": [
+     [
+      0,
+      null
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch0": [
+     0,
+     34,
+     4
+    ],
+    "pitch1": [
+     64,
+     30,
+     7
+    ],
+    "tail_skip": 3
+   },
+   {
+    "i": 2,
+    "t": 0,
+    "bytes": 128,
+    "block": 0,
+    "lsp": [
+     [
+      3,
+      30,
+      63,
+      49
+     ]
+    ],
+    "gains": [
+     [
+      14,
+      4
+     ],
+     [
+      14,
+      63
+     ]
+    ],
+    "exc": [
+     [
+      0,
+      null
+     ],
+     [
+      1,
+      70
+     ]
+    ],
+    "pitch0": [
+     1,
+     50,
+     31
+    ],
+    "pitch1": [
+     112,
+     7,
+     20
+    ],
+    "tail_skip": 9
+   },
+   {
+    "i": 3,
+    "t": 0,
+    "bytes": 128,
+    "block": 1,
+    "lsp": [
+     [
+      39,
+      33,
+      24,
+      36
+     ],
+     [
+      26,
+      31,
+      36,
+      33
+     ]
+    ],
+    "gains": [
+     [
+      15,
+      41
+     ],
+     [
+      196,
+      10
+     ]
+    ],
+    "exc": [
+     [
+      1,
+      92
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch0": [
+     2,
+     36,
+     52
+    ],
+    "pitch1": [
+     96,
+     10,
+     22
+    ],
+    "tail_skip": 9
+   },
+   {
+    "i": 4,
+    "t": 0,
+    "bytes": 128,
+    "block": 0,
+    "lsp": [
+     [
+      5,
+      36,
+      37,
+      7
+     ]
+    ],
+    "gains": [
+     [
+      213,
+      5
+     ],
+     [
+      163,
+      5
+     ]
+    ],
+    "exc": [
+     [
+      0,
+      null
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch0": [
+     3,
+     29,
+     62
+    ],
+    "pitch1": [
+     1,
+     9,
+     29
+    ],
+    "tail_skip": 3
+   },
+   {
+    "i": 5,
+    "t": 0,
+    "bytes": 128,
+    "block": 0,
+    "lsp": [
+     [
+      5,
+      36,
+      37,
+      34
+     ]
+    ],
+    "gains": [
+     [
+      135,
+      10
+     ],
+     [
+      149,
+      63
+     ]
+    ],
+    "exc": [
+     [
+      0,
+      null
+     ],
+     [
+      0,
+      null
+     ]
+    ],
+    "pitch0": [
+     2,
+     18,
+     40
+    ],
+    "pitch1": [
+     2,
+     25,
+     63
+    ],
+    "tail_skip": 3
+   },
+   {
+    "i": 6,
+    "t": 2,
+    "bytes": 160,
+    "lsp": [
+     [
+      45,
+      31,
+      36,
+      50
+     ]
+    ],
+    "gains": [
+     [
+      18,
+      5
+     ],
+     [
+      19,
+      5
+     ]
+    ],
+    "pitch0": [
+     4,
+     18,
+     21
+    ],
+    "pitch1": [
+     9,
+     43,
+     25
+    ],
+    "tail_skip": 0
+   },
+   {
+    "i": 7,
+    "t": 3,
+    "bytes": 128,
+    "lsp": [
+     [
+      5,
+      23,
+      37,
+      56
+     ]
+    ],
+    "gains": [
+     [
+      null,
+      null
+     ],
+     [
+      108,
+      5
+     ]
+    ],
+    "pitch1": [
+     14,
+     52,
+     45
+    ],
+    "tail_skip": 0
+   }
+  ]
+ },
+ "layout": {
+  "bit_order": "MSB-first (FUN_1000ef20: byte idx pump+0x404, bit idx pump+0x410)",
+  "frame_type_field": "2 bits; per-type bit target T: LpecLp {0:384,1:288,2:480,3:384} = 48/36/60/48 B, LpecSp {0:1024,1:768,2:1280,3:1024} = 128/96/160/128 B (== CUnitter nibble tables)",
+  "mode_config": {
+   "LpecLp_fs8000": {
+    "lpc_order": 10,
+    "lsp_groups": 3,
+    "lsp_bits": 6,
+    "gain_bits": 7,
+    "bands": 8,
+    "pitch_bits_per_subframe": "7 lag-scale + 6 rowA + 6 rowB"
+   },
+   "LpecSp_fs16000": {
+    "lpc_order": 16,
+    "lsp_groups": 4,
+    "lsp_bits": 6,
+    "gain_bits": 8,
+    "bands": 10,
+    "pitch_bits_per_subframe": "7 lag-scale + 6 rowA + 6 rowB"
+   }
+  },
+  "type0_fields": [
+   "2 type",
+   "1 lsp-mode (0=shared set, 1=two sets)",
+   "LSP set(s) 3x6/4x6",
+   "gain sub1 7/8 bits [0=muted, else +6-bit shape idx]",
+   "gain sub2 same",
+   "exc sub1 1 presence [+7-bit page idx]",
+   "exc sub2 same",
+   "sub1 pitch 7+6+6",
+   "sub1 pulses floor((T-C)/2)-exc_cost-19 bits (opaque: N0x8+N1x8+N2x8+N3x1 via FUN_10004450/10003d80/100060e0)",
+   "sub2 pitch 7+6+6",
+   "sub2 pulses",
+   "tail pad (T-C mod 2)+exc_cost"
+  ],
+  "type1_fields": [
+   "2 type",
+   "LSP set",
+   "gain sub2 only 7/8[+6]",
+   "sub2 pitch 7+6+6",
+   "sub2 pulses T-C-19",
+   "pad 0"
+  ],
+  "type2_fields": [
+   "2 type",
+   "LSP set",
+   "gain sub1",
+   "gain sub2",
+   "sub1 pitch+pulses floor((384/1024 - C)/2)-19",
+   "sub2 pitch+pulses (480/1280)-C2-19",
+   "pad 0"
+  ],
+  "type3_fields": [
+   "2 type",
+   "LSP set",
+   "gain sub2 only",
+   "sub2 pitch 7+6+6",
+   "sub2 pulses T-C-19",
+   "pad 0"
+  ],
+  "constants": {
+   "pitch_bits_per_subframe": 19,
+   "state_0x14": "0x13=19 subtracted inside FUN_10004450",
+   "excitation_cost": "8 if page present else 1"
+  },
+  "provenance": "LPEC.dll FUN_10005040/10005bf0/10005ca0/10005d50/100060e0/10004450/10003e60/1000df10 (derived facts only)"
+ },
+ "derived_facts": {
+  "tail_skip_signature": "type-0 tail pads observed only {3,9,17} bits = derived (rem mod 2)+(exc cost 2/9/16), parity from excitation presence count; types 1/2/3 pad 0",
+  "per_packet_reset_refuted": "1014-B packet areas cannot tile by {48,36,60} nor {128,96,160} (parity); continuous stream closes byte-exact on both samples",
+  "f47_6B_trailer_explained": "6 leftover bytes per packet are the head of the frame straddling into the next packet",
+  "msv_16k_frame_size_resolved": "128 B type-0 (with 96/160 B type-1/2); F-47 open item closed"
+ },
+ "_note": "full per-frame parameter tables for all 50545+159 frames are regenerable with: python3 -I lpec_decoder.py <sample_dir> out.json (see frames_detail_first8 for the table schema)"
+}

@@ -1,0 +1,131 @@
+{
+ "id": "lpec-dll-analysis",
+ "ledger_label": "F-48-or-next-free",
+ "date": "2026-11-14",
+ "claim": "Sony's LPEC reference implementation (LPEC.dll from Digital Voice Editor 3.3.01) is obtained and statically analyzed at census level: full C++ codec API mapped, decode entry chain identified, codec confirmed CELP-family (per-frame pitch lag + codebook page index), and the complete per-mode codebook table inventory extracted (two table sets selected by sample rate 8000/16000 Hz, with bitrate 6000 bps special-cased inside the 8000 Hz set). Frame sizes 24/48/128 are NOT immediate constants in LPEC.dll: codec framing lives in the container-layer DLLs (STVoice.dll/PVoice.dll CUnitter* classes), so F-47's MSV 16k frame-size question stays open from this pass.",
+ "provenance": {
+  "container": "Sony Digital Voice Editor Ver. 3.3.01 (ICD-PX820 CD-ROM, internal file dates 2009-11-24)",
+  "source_item": "archive.org item dve3301icdpx820, file 'DVE_3301 ICD-PX820.iso' (112668672 B)",
+  "extraction_chain": "ISO extracted with 7zz 26.06; InstallShield v6 'ISc(' cabs Setup/DVE/data1.cab (10900003 B) + data1.hdr extracted with unshield (github.com/twogood/unshield, gcc-built from source, no repo modification)",
+  "binaries_obtained_not_committed": {
+   "System/LPEC.dll": 329064,
+   "DefaultComponent32bit/STVoice.dll": 669032,
+   "DefaultComponent32bit/SXVoice.dll": 689512,
+   "WMF/PVoice.dll": 693608,
+   "WMF/BPVoice.dll": 591208,
+   "System/dsp_trc.dll": 81920,
+   "DirectShowFilter/lpecde.ax": 69632,
+   "DirectShowFilter/trcde.ax": 69632,
+   "DirectShowFilter/msvdec.ax": 102400,
+   "WMF/msvtrcw.spi": 122880
+  },
+  "binary_format": "all PE32 i386 (e_machine 0x14c), 5-6 sections; policy: no Sony binaries or decompiled code committed - derived facts only"
+ },
+ "tooling": "Ghidra 12.2 PUBLIC headless via PyGhidra (JDK 25.0.5+8), processor x86:LE:32:default; LPEC.dll analyzed (402 functions), msvdec.ax analyzed (718 functions); capstone x86 32-bit for targeted disassembly",
+ "lpec_dll": {
+  "image_base": "0x10000000",
+  "sections": {
+   "text": [4096, 90390],
+   "rdata": [98304, 4093],
+   "data": [102400, 334532],
+   "data1": [438272, 5040],
+   "rsrc": [446464, 904],
+   "reloc": [450560, 6016]
+  },
+  "function_count": 402,
+  "exports_named": 22,
+  "api_demangled": [
+   {"name": "LPEC::InitCodec(int,int,int)", "va": "0x10002f20"},
+   {"name": "LPEC::Decode(unsigned short*, char*, int)", "va": "0x100032b0"},
+   {"name": "LPEC::Encode(char*, unsigned short*, int)", "va": "0x10003950"},
+   {"name": "LPEC::ResetDecoder()", "va": "0x100039a0"},
+   {"name": "LPEC::ResetEncoder()", "va": "0x100039d0"},
+   {"name": "LPEC::getEncBlockSize()", "va": "0x10003a00"},
+   {"name": "LPECDecoder::InitDecoder(int,int)", "va": "0x100035e0"},
+   {"name": "LPECDecoder::Decode(unsigned short*, char*, int)", "va": "0x10003820"},
+   {"name": "LPECDecoder::ResetDecoder()", "va": "0x100038b0"},
+   {"name": "LPECEncoder::InitEncoder(int,int,int)", "va": "0x10003380"},
+   {"name": "LPECEncoder::Encode(char*, unsigned short*, int)", "va": "0x100038f0"},
+   {"name": "LPECEncoder::getEncBlockSize()", "va": "0x10003940"}
+  ],
+  "decode_flow": "LPEC::Decode(out_ushort, in_char, count) -> copies input pointer/count into decoder state (offsets +0x538/+0x53c, clears +0x404) -> virtual call vtable+0x14 (bitstream pump) -> FUN_100059e0(wrapper, out) synthesizes PCM; Decode(out, NULL, 0) zero-fills (buffer-bytes/4) shorts = silence path",
+  "initcodec_buffer_sizing": "param_1 <= 11025 -> 1024 B; 11026..22050 -> 2048 B; >= 22051 -> 4096 B (thresholds 0x2b12/0x5623); this+0x10 = bytes/2",
+  "mode_selection_FUN_1000df10": {
+   "signature": "(state, param_1, param_2) called from engine init FUN_100065b0(state, alloc, param_1, 0, 0, param_2)",
+   "param_1_values": [16000, 8000],
+   "param_2_special": "6000 (inside 8000 set: 6000 picks DAT_100388b0/DAT_10038cb0 pair, else DAT_10038cc0/DAT_100390c0)",
+   "interpretation": "param_1 = sample rate in Hz, param_2 = bitrate in bps; census-level, semantics consistent with F-47 variants (LPEC 6000 bps @ 8 kHz = budgtele/STVoice; ICD-BM1 MSV = the 16000 Hz set)",
+   "state_fields_set": {"0xec": "DAT from mode table", "0xf0/0xf4": "x*3/2", "0xf8": "x*2"}
+  },
+  "engine_params_FUN_10003e60": {
+   "rate_lt_8001": {"state_0x2c": 8, "state_0xa4": 10, "state_0xac": 6, "state_0xb0": 3},
+   "rate_8001_to_32000": {"state_0x2c": 10, "state_0xa4": 16, "state_0xac": 6, "state_0xb0": 4},
+   "state_0xa8": "1 << 6 (64)",
+   "bitrate_6000_case": "0 < bitrate < 0x1771 (6001) -> local_30=0x20, param_2=0xdac (3504)",
+   "rate_gt_32000": "error 'Invalid FS %d' at 0x1006b3af",
+   "default_param_2_formula": "param_2 = ((rate*15) rounded) >> 5 (rate*15/512)"
+  },
+  "celp_indicators": {
+   "diagnostic_string": "Error in frame %d(lag = %d, pgidx = %d)",
+   "string_va": "0x1006b54f",
+   "meaning": "per-frame decode errors report pitch lag and codebook page/grid index - analysis-by-synthesis CELP-family structure"
+  },
+  "const_census_hits": {
+   "FUN_1000df10": ["br16000", "br6000", "sr8000"],
+   "FUN_10003e60": ["sr8000", "br6000", "sr32000", "sr22050", "sr11025"],
+   "LPEC::InitCodec": ["sr22050", "sr11025", "pkt1024"],
+   "FUN_100065b0": ["sr8000"]
+  },
+  "frame_size_note": "immediates 24/48/128/192/384 as imul/mul/lea factors: ZERO hits in all of LPEC.dll - codec frame lengths are computed, not hardcoded; container DLLs own the framing"
+ },
+ "codebook_inventory": {
+  "format": "per-mode table pointer sets installed at fixed decoder-state offsets; sizes below are address-delta upper bounds (tables may share padding); values are signed 16-bit fixed-point (spot-checked)",
+  "rate_16000_set": [
+   {"state_off": "0x114..0x120", "addrs": ["0x10019040", "0x10019840", "0x1001a040", "0x1001a840"], "each_bytes": 2048},
+   {"state_off": "0xb4..0xc0", "addrs": ["0x1001b040", "0x1001d040", "0x1001f040", "0x10021040"], "each_bytes": 8192},
+   {"state_off": "0xc4", "addr": "0x10021040", "span_bytes": 33792},
+   {"state_off": "0xe0", "addr": "0x10029440", "span_bytes": 4096},
+   {"state_off": "0xe4", "addr": "0x1002a440", "span_bytes": 8192},
+   {"state_off": "0xe8", "addr": "0x1002c440", "span_bytes": 52368},
+   {"state_off": "0xcc", "addr": "0x100390d0", "span_bytes": 7168},
+   {"state_off": "0xd0", "addr": "0x1003acd0", "span_bytes": 13312},
+   {"state_off": "0xd4", "addr": "0x1003e0d0", "span_bytes": 512},
+   {"state_off": "0xd8", "addr": "0x1003e2d0", "span_bytes": 512}
+  ],
+  "rate_8000_set": [
+   {"state_off": "0x114..0x11c", "addrs": ["0x10023040", "0x10023540", "0x10023a40"], "each_bytes": [1280, 1280, 2560]},
+   {"state_off": "0xb4..0xc0", "addrs": ["0x10024440", "0x10025840", "0x10026c40", "0x10028040"], "each_bytes": 5120},
+   {"state_off": "0xc0_span", "addr": "0x10028040", "span_bytes": 33792},
+   {"state_off": "0xe0", "addr": "0x10030440", "span_bytes": 4096},
+   {"state_off": "0xe4", "addr": "0x10031440", "span_bytes": 8192},
+   {"state_off": "0xe8", "addr": "0x10033440", "span_bytes": 24720},
+   {"state_off": "0xcc", "addr": "0x100394d0", "span_bytes": 11264},
+   {"state_off": "0xd0", "addr": "0x1003c0d0", "span_bytes": 4096},
+   {"state_off": "0xd4", "addr": "0x1003d0d0", "span_bytes": 5120},
+   {"state_off": "0xd8", "addr": "0x1003e4d0", "span_bytes": 512},
+   {"state_off": "0xdc", "addr": "0x1003e6d0", "span_bytes": 512}
+  ],
+  "br6000_subselection": ["0x100388b0 (state 0x10c)", "0x10038cb0 (short scalar)"],
+  "other_br_subselection": ["0x10038cc0 (state 0x10c)", "0x100390c0 (short scalar)"]
+ },
+ "container_layer": {
+  "voice_dll_classes": ["CUnitterLpecLp", "CUnitterLpecSp", "CUnitterTrc", "CUnitterTrcHq", "CUnitterTrcHqPage", "CUnitterTrcLp", "CUnitterTrcLpPage", "CUnitterTrcSpPage", "CMetaDataMsv", "CMsveRegistory"],
+  "codec_mode_strings": ["ADPCM LP", "ADPCM SP", "LPEC(for ICD-BPx20 series) LP", "LPEC(for ICD-BPx20 series) SP", "LPEC(for ICD-MX series) LP", "LPEC(for ICD-MX series) SP"],
+  "msvdec_ax_role": "DirectShow transform filter CMSVDecryptFilter / IMSVDecrypt; strings 'This is a MSV Format', 'MSVDEC module' - container/transport layer for MSV",
+  "msvdec_1024_1014_note": "const census hits of 1024 and 1014 exist (FUN_100054d0, FUN_10005670) but the 1014 site decompiles as a property-page dialog proc - weak evidence, not confirmatory of the F-47 packet header at this level"
+ },
+ "f47_bridges": {
+  "confirmed": [
+   "reference implementation located and API-mapped (the 'Windows-only boundary' of F-34/F-47 is now crossed at static-census level)",
+   "codec is CELP-family with fixed-point codebook tables (explains 7.8-7.9 bits/byte dense packing and per-frame comfort-noise structure)",
+   "mode selection by (sample rate 8000/16000, bitrate with 6000 special case) matches F-47's LPEC 6000 bps variant arithmetic"
+  ],
+  "unconfirmed": [
+   "frame sizes 24/48/128 not found as immediates in LPEC.dll",
+   "MSV 16000 (ICD-BM1) frame size stays unresolved from this pass",
+   "bit unpacking order (MSB/LSB-first) not yet extracted - lives in the bitstream pump (vtable+0x14 callee) and FUN_100059e0, not yet decompiled"
+  ]
+ },
+ "next_lever_named": "Decompile LPEC.dll bitstream pump + FUN_100059e0 (PCM synthesis) and the STVoice.dll/PVoice.dll CUnitter* framing functions: extract the bit reader order and per-frame bit allocation, then dump the mode-specific codebook tables as raw shorts for a Python decoder prototype",
+ "policy": "No Sony binaries, no decompiled code dumps committed; all facts here are derived static-analysis facts (signatures, constants, table addresses/sizes, control structure)"
+}

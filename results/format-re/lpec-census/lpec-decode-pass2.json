@@ -1,0 +1,65 @@
+{
+  "id": "lpec-decode-pass2",
+  "ledger_label": "F-49",
+  "date": "2026-11-14",
+  "claim": "LPEC decode chain resolved at structural level: MSB-first bit pump FUN_1000ef20 (byte idx pump+0x404, bit-in-byte +0x410, input refill via pump vtable+0x14), synthesis core FUN_10005040 reads 2-bit frame type + 1-bit block flag + per-subframe (1-bit presence, 7-bit codebook page index) pairs feeding codebook pages at state+0xcc family, double-precision overlap-add with per-mode LPC window (order 10 @8k, 16 @16k), FUN_100059e0 = double-to-PCM16 saturator only. CUnitter frame-length formulas extracted from code; MSV 16k frame size RESOLVED = 128 B (CUnitterLpecSp mode 0x00/C0), confirmed on 07011600.MSV (exactly 159.0 continuous 1024-bit frames, 96.2% type-0). LP 6k = 48 B per-packet-reset (integrality-forced), LP bit layout NOT confirmed (honest negative). Python frame/parameter parser built and validated.",
+  "provenance": {
+    "binaries": "same Sony DLLs as F-48 (LPEC.dll 329064 B, STVoice.dll 669032 B from DVE 3.3.01 ISO); not committed",
+    "tooling": "PyGhidra reuse of F-48 project (no re-analysis) for LPEC.dll; fresh Ghidra analysis of STVoice.dll (2219 funcs); RTTI vtable walk done in plain Python on PE sections",
+    "policy": "no Sony binaries or decompiled code committed; derived facts only"
+  },
+  "bit_pump": {
+    "refill": "pump vtable+0x14 = FUN_1000ee10: copies input bytes to pump+4, count to pump+0x40c; SetFormat FUN_1000efe0 stores rate@+0x414, bitrate@+0x428",
+    "accessor": "FUN_1000ef20(pump,nbits): total bits at +0x408, byte idx +0x404, bit-in-byte +0x410; extracts (byte & (0xff>>pos)) >> (8-pos-n) => MSB-FIRST packing",
+    "byte_advance": "FUN_1000f060: idx++ until buffer end then refill via vtable+0x14",
+    "order": "MSB-first confirmed (matches F-47 dense-bit-packing evidence)"
+  },
+  "synthesis_structure": {
+    "objects": "LPEC{engine 0xd00 (FUN_100065b0), wrapper 0x3a0 (FUN_10004c50), pump 0x540 vtable@0x100469e0, enc-pump 0x540 vtable@0x100469c0}",
+    "decode_flow": "Decode(out,in,n): in->pump+0x538, n->+0x53c, clear +0x404, call vtable+0x14 refill, then FUN_100059e0(wrapper,out)",
+    "core_FUN_10005040": "per frame: pump vtable+8 reset; 2-bit type; type0: 1-bit block, then 2x(1-bit presence + [7-bit pgidx]); page ptr = idx*0x40 + state+0xc8; presence0 -> empty-page marker DAT_10046a00; FUN_10004960 excitation build; FUN_1000f430/f1c0 windowed overlap-add into double buffer wrapper+0x380; final FUN_1000ef20(n_rest) consumes frame remainder with per-type budgets at wrapper+0x1c/0x20/0x24/0x28; FUN_100059e0 rounds/clips to PCM16 (saturate 0x7fff/0x8000)",
+    "frame_types": "0 = normal speech; 1/3 = degraded single-block (state +0x8c table); 2 = CNG/hold paths",
+    "setparams_FUN_10003e60": "per-type budgets: nominal N, +0x20 = N*3/4, +0x24 = N*5/4; engine +0x2c=8/10, +0xa4=10/16 (LPC window order), +0xac=6, +0xb0=3/4; 6000 bps special case local_30=0x20 param_2=0xdac",
+    "tables_used": "window DAT_10049f7c (0x1004f840 8k / 0x100628a0 16k) -> state+0x150; page tables state+0xcc family (0x100390d0 16k / 0x100394d0 8k per F-48 inventory); LSF/window DAT_10049bb0 at +0x368"
+  },
+  "cunitter_framing": {
+    "classes_rtti": "CUnitter base + CUnitterLpecSp/LpecLp/Atx96/64/48/24/16/Trc/TrcLp/TrcHq (STVoice.dll)",
+    "vtable_slot7_frame_size": {
+      "CUnitterLpecLp": {"mode_0x00": 48, "mode_0x40": 36, "mode_0x80": 60, "mode_0xC0": 48},
+      "CUnitterLpecSp": {"mode_0x00": 128, "mode_0x40": 96, "mode_0x80": 160, "mode_0xC0": 128},
+      "note": "selector f(mode_byte & 0xC0); SP/LP ratio exactly 8/3 in all modes; returns -1 on impossible values"
+    },
+    "packet_walker": "base FUN_1001aa81 walks be16 size fields; 0x400 = 10-byte header consumed (independent confirmation of F-47 header model)",
+    "helpers": "Sp v10=x*4*y/3, v11=x*2; Lp v10=x*4*y/3, v11=3*x/4 (operand semantics unpinned)",
+    "msv_16k": "RESOLVED: 128 B/frame @ 15.625 fps = 16000 bps exact (F-47 leading hypothesis, now from code)"
+  },
+  "validation": {
+    "msv_07011600_SP16k": {
+      "model": "continuous straddle, 1024-bit frames",
+      "result": "21 packets -> exactly 159.0 frames; type hist {0:153,2:3,1:2,3:1} = 96.2% speech; pgidx n=89, min 4, max 124, mean 67.5 (7-bit range respected); layout CONFIRMED",
+      "arithmetic": "data 20352 B = 159x128 exact; 1014 not divisible by 128 => straddle arithmetically forced for SP"
+    },
+    "budgtele_LP6k": {
+      "model": "per-packet reset, 384-bit frames, 21 per full packet",
+      "result": "50246 frames (2392x21+14) matching 1014=21x48+6; continuous model gives 50545.75 (non-integral) => LP resets per packet, integrality-forced",
+      "negative": "leading 2-bit field near-uniform {0:18014,1:11357,2:10143,3:10732} => LP bit layout NOT confirmed by field test (grid phase, different field order, or variable per-type budgets)"
+    }
+  },
+  "prototype": {
+    "path": "results/format-re/lpec-census/lpec_decoder.py",
+    "scope": "stdlib-only container + frame parser; outputs per-frame {type, block, subframe pgidx[]}; both packing models implemented",
+    "not_implemented": "codebook page table lookup into LPEC.dll data, excitation build, LPC synthesis, PCM output"
+  },
+  "honest_negatives": [
+    "LP 6k bit layout unresolved (SP layout does not transfer verbatim)",
+    "pitch lag field not located at frame level; likely embedded in codebook page rows or inside FUN_10004960 (not decompiled this pass)",
+    "synthesis interior below FUN_10005040 not decompiled (FUN_10004960/f430/f1c0/5ca0/5bf0/5d50/ab80)",
+    "per-type budget bit-vs-sample unit ambiguity in the core's final skip",
+    "no PCM output yet; validation is structural plausibility only, not spectral"
+  ],
+  "next_levers": [
+    "decompile FUN_10004960 + FUN_1000f430/f1c0 and enumerate all FUN_1000ef20 widths per frame type to close LP layout and find lag fields",
+    "extract +0xcc page-table rows and correlate pgidx distribution with pulse patterns (VSELP-style fixed codebook hypothesis)",
+    "Wine-run Sony encoder on known WAV for frame-aligned known-plaintext Rosetta"
+  ]
+}
